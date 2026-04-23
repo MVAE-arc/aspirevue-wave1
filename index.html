@@ -170,6 +170,7 @@ body {
 }
 .hero-sub { font-size: 0.9375rem; font-weight: 400; color: var(--subtle); margin-bottom: 8px; }
 .hero-tertiary { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--subtle); letter-spacing: 0.04em; margin-bottom: 40px; }
+@media (max-width: 320px) { .hero-tertiary { margin-bottom: 12px; } }
 .scroll-cue {
   font-family: var(--font-mono); font-size: 0.8125rem; letter-spacing: 0.04em;
   color: var(--subtle); animation: pulse-scroll 2s ease-in-out infinite; display: inline-block;
@@ -678,7 +679,7 @@ mark.prose-highlight {
           <text x="50" y="343" class="node-text-secondary" fill="#6B7280">Research · intelligence</text>
 
           <!-- Swarm hint: STRATEGOS ↔ RECON -->
-          <line x1="130" y1="269" x2="130" y2="295" class="swarm-hint"/>
+          <line x1="130" y1="269" x2="130" y2="295" class="swarm-hint" data-lane="strategy"/>
         </g>
 
         <!-- BUILD agents (Edit A: CANVAS y=215, SIGNAL y=273, FORGE y=331, STUDIO y=389) -->
@@ -708,8 +709,8 @@ mark.prose-highlight {
           <text x="300" y="435" class="node-text-secondary" fill="#6B7280">3D · audio · media</text>
 
           <!-- Swarm hints: Build lane inter-agent -->
-          <path d="M560,239 C580,239 580,295 560,295" class="swarm-hint"/>
-          <path d="M560,297 C580,297 580,353 560,353" class="swarm-hint"/>
+          <path d="M560,239 C580,239 580,295 560,295" class="swarm-hint" data-lane="build"/>
+          <path d="M560,297 C580,297 580,353 560,353" class="swarm-hint" data-lane="build"/>
         </g>
 
         <!-- OPS agent (Edit A: x=610 data-lane) -->
@@ -1173,8 +1174,8 @@ mark.prose-highlight {
       <text x="726" y="670" text-anchor="middle" class="map-text-tool" fill="#6B7280" font-size="7">briefs · copy · refs</text>
 
       <!-- 20_Client-Facing -->
-      <rect x="798" y="638" width="120" height="40" rx="2" class="map-node-folder" stroke="#FFAB40"/>
-      <text x="858" y="655" text-anchor="middle" class="map-text-tool" fill="#FFAB40">20_Client-Facing</text>
+      <rect x="798" y="638" width="120" height="40" rx="2" class="map-node-folder" stroke="#6B7280"/>
+      <text x="858" y="655" text-anchor="middle" class="map-text-tool" fill="#6B7280">20_Client-Facing</text>
       <text x="858" y="670" text-anchor="middle" class="map-text-tool" fill="#6B7280" font-size="7">deliverables</text>
 
       <!-- Memory flow lines: agents → vault (dotted drops) -->

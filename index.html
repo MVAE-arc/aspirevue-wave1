@@ -25,12 +25,12 @@
   --page-pad: 24px;
 
   /* Lane color system */
-  --lane-command-fg:   #EDE9E1;
-  --lane-strategy:     #A8B5C7;
-  --lane-build:        #C9B391;
-  --lane-ops:          #9FB8A3;
-  --lane-life:         #BFA7C4;
-  --lane-atlas:        #FFAB40;
+  --lane-strategy:   #A8B5C7;
+  --lane-build:      #C9B391;
+  --lane-ops:        #9FB8A3;
+  --lane-life:       #BFA7C4;
+  --lane-command:    #EDE9E1;
+  --lane-engagement: #FFAB40;
 }
 @media (prefers-color-scheme: light) {
   :root {
@@ -42,26 +42,18 @@
     --hover:  #ECEAE6;
     --focus:  #B8590A;
 
-    --lane-command-fg:   #111113;
-    --lane-strategy:     #5A6676;
-    --lane-build:        #8A6F3E;
-    --lane-ops:          #4D6B52;
-    --lane-life:         #6B5072;
-    --lane-atlas:        #B8590A;
+    --lane-strategy:   #5A6676;
+    --lane-build:      #8A6F3E;
+    --lane-ops:        #4D6B52;
+    --lane-life:       #6B5072;
+    --lane-command:    #111113;
+    --lane-engagement: #B8590A;
   }
 }
 
 /* === RESET + BASE === */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-html {
-  font-size: 16px;
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
   background: var(--bg);
   color: var(--fg);
@@ -72,16 +64,8 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
 }
-
-/* === FOCUS RING === */
-:focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
-  border-radius: 3px;
-}
-:focus:not(:focus-visible) {
-  outline: none;
-}
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
+:focus:not(:focus-visible) { outline: none; }
 
 /* === ANIMATIONS === */
 @keyframes arrive {
@@ -97,55 +81,33 @@ body {
   to   { transform: translateY(0); }
 }
 @keyframes swarm-pulse {
-  0%, 100% { stroke-opacity: 0.15; stroke-dashoffset: 0; }
-  50%       { stroke-opacity: 0.4; stroke-dashoffset: -20; }
+  0%   { stroke-dashoffset: 0; opacity: 0.18; }
+  50%  { opacity: 0.45; }
+  100% { stroke-dashoffset: -40; opacity: 0.18; }
 }
-@keyframes swarm-pulse-b {
-  0%, 100% { stroke-opacity: 0.12; stroke-dashoffset: 0; }
-  50%       { stroke-opacity: 0.35; stroke-dashoffset: -16; }
+@keyframes input-pulse {
+  0%   { stroke-dashoffset: 0; opacity: 0; }
+  20%  { opacity: 0.6; }
+  80%  { opacity: 0.6; }
+  100% { stroke-dashoffset: -60; opacity: 0; }
 }
-@keyframes input-fire {
-  0%   { stroke-opacity: 0; }
-  20%  { stroke-opacity: 0.7; }
-  80%  { stroke-opacity: 0.7; }
-  100% { stroke-opacity: 0; }
+@keyframes gate-glow {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(255,171,64,0.3)); }
+  50%       { filter: drop-shadow(0 0 10px rgba(255,171,64,0.65)); }
 }
 
-.arrive {
-  opacity: 0;
-  transform: translateY(20px);
-}
-.arrive.is-visible {
-  animation: arrive 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
+.arrive { opacity: 0; transform: translateY(20px); }
+.arrive.is-visible { animation: arrive 480ms cubic-bezier(0.22, 1, 0.36, 1) both; }
 .arrive.delay-1.is-visible { animation-delay: 80ms; }
 .arrive.delay-2.is-visible { animation-delay: 160ms; }
 .arrive.delay-3.is-visible { animation-delay: 240ms; }
 .arrive.delay-4.is-visible { animation-delay: 320ms; }
 .arrive.delay-5.is-visible { animation-delay: 400ms; }
-.arrive.delay-6.is-visible { animation-delay: 480ms; }
 
-.reveal-wrapper {
-  overflow: hidden;
-  display: block;
-}
-.reveal-inner {
-  display: block;
-  transform: translateY(100%);
-  opacity: 0;
-}
-.reveal-inner.is-visible {
-  animation: reveal-in 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  opacity: 1;
-}
-.reveal-inner.reveal-sub.is-visible {
-  animation-duration: 400ms;
-  animation-delay: 200ms;
-}
-.reveal-inner.reveal-tertiary.is-visible {
-  animation-duration: 350ms;
-  animation-delay: 380ms;
-}
+.reveal-wrapper { overflow: hidden; display: block; }
+.reveal-inner { display: block; transform: translateY(100%); opacity: 0; }
+.reveal-inner.is-visible { animation: reveal-in 600ms cubic-bezier(0.16, 1, 0.3, 1) both; opacity: 1; }
+.reveal-inner.reveal-sub.is-visible { animation-duration: 400ms; animation-delay: 200ms; }
 
 /* === REDUCED MOTION === */
 @media (prefers-reduced-motion: reduce) {
@@ -155,667 +117,385 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  .arrive {
-    opacity: 1;
-    transform: none;
-  }
+  .arrive { opacity: 1; transform: none; }
   .arrive.is-visible { animation: none; }
   .reveal-wrapper { clip-path: none; }
-  .reveal-inner {
-    transform: none;
-    opacity: 1;
-    animation: none !important;
-  }
-  .map-swarm-line,
-  .map-input-line {
-    animation: none !important;
-    stroke-opacity: 0.25 !important;
-  }
+  .reveal-inner { transform: none; opacity: 1; animation: none !important; }
+  .swarm-edge { animation: none !important; stroke-dashoffset: 0 !important; }
+  .input-edge  { animation: none !important; opacity: 0.5 !important; }
+  .taste-gate-group { animation: none !important; }
 }
 
 /* === NAV === */
 .nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: var(--bg);
-  border-bottom: 1px solid var(--rule);
-  display: flex;
-  align-items: center;
-  padding: 0 var(--page-pad);
+  position: sticky; top: 0; z-index: 100;
+  background: var(--bg); border-bottom: 1px solid var(--rule);
+  display: flex; align-items: center; padding: 0 var(--page-pad);
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
 }
 .nav-brand {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.6875rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--subtle);
-  padding: 14px 0;
-  user-select: none;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--subtle); padding: 14px 0; margin-right: auto; user-select: none; white-space: nowrap;
 }
 .nav-brand span { color: var(--accent); }
+.nav-links { display: flex; gap: 0; }
+.nav-link {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--subtle); text-decoration: none;
+  border-bottom: 2px solid transparent;
+  padding: 14px 12px; white-space: nowrap;
+  transition: color 180ms ease-out, border-color 180ms ease-out;
+  position: relative; bottom: -1px;
+}
+.nav-link:hover { color: var(--fg); }
+.nav-link.active { color: var(--fg); border-bottom-color: var(--accent); }
 
 /* === HERO === */
 .hero {
-  padding: 72px var(--page-pad) 60px;
+  padding: 64px var(--page-pad) 56px;
   max-width: calc(var(--max-w) + var(--page-pad) * 2);
   margin: 0 auto;
 }
 .hero-eyebrow {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.6875rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--subtle);
-  margin-bottom: 6px;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--subtle); margin-bottom: 4px;
 }
-.hero-rule {
-  width: 100%;
-  height: 1px;
-  background: var(--accent);
-  margin-bottom: 36px;
-  opacity: 0.6;
-}
+.hero-rule { width: 100%; height: 1px; background: var(--accent); margin-bottom: 32px; opacity: 0.7; }
 .hero h1 {
-  font-family: var(--font-sans);
-  font-size: 3rem;
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  line-height: 1.05;
-  color: var(--fg);
-  margin-bottom: 20px;
+  font-family: var(--font-sans); font-size: 2.5rem; font-weight: 600;
+  letter-spacing: -0.02em; line-height: 1.1; color: var(--fg); margin-bottom: 20px;
 }
-.hero-sub {
-  font-family: var(--font-sans);
-  font-size: 1.0625rem;
-  font-weight: 400;
-  color: var(--subtle);
-  line-height: 1.5;
-  margin-bottom: 10px;
-}
-.hero-tertiary {
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
-  font-weight: 400;
-  color: var(--subtle);
-  opacity: 0.7;
-  line-height: 1.5;
-  margin-bottom: 40px;
-}
+.hero-sub { font-size: 0.9375rem; font-weight: 400; color: var(--subtle); margin-bottom: 8px; }
+.hero-tertiary { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--subtle); letter-spacing: 0.04em; margin-bottom: 40px; }
 .scroll-cue {
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  letter-spacing: 0.04em;
-  color: var(--subtle);
-  animation: pulse-scroll 2s ease-in-out infinite;
-  display: inline-block;
+  font-family: var(--font-mono); font-size: 0.8125rem; letter-spacing: 0.04em;
+  color: var(--subtle); animation: pulse-scroll 2s ease-in-out infinite; display: inline-block;
 }
 @media (max-width: 639px) {
-  .hero h1 { font-size: 2rem; }
-  .hero { padding: 52px var(--page-pad) 40px; }
+  .hero h1 { font-size: 1.875rem; }
+  .hero { padding: 48px var(--page-pad) 40px; }
 }
 
-/* === SECTION 0 — DISMISSABLE CARD === */
-.s0-card {
+/* === SECTION 0 — HOW TO READ THIS === */
+.section-0-wrapper {
   max-width: calc(var(--max-w) + var(--page-pad) * 2);
   margin: 0 auto;
-  padding: 0 var(--page-pad) 0;
+  padding: 0 var(--page-pad) 32px;
 }
-.s0-inner {
+.section-0-card {
   background: var(--hover);
   border: 1px solid var(--rule);
   border-left: 3px solid var(--accent);
   border-radius: 4px;
   padding: 24px 28px;
   position: relative;
-  margin-bottom: 0;
 }
+.section-0-card.dismissed { display: none; }
 .s0-eyebrow {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.625rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--accent);
-  display: block;
-  margin-bottom: 10px;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 10px; display: block;
 }
 .s0-heading {
-  font-family: var(--font-sans);
-  font-size: 1.0625rem;
-  font-weight: 600;
-  color: var(--fg);
-  margin-bottom: 14px;
-  letter-spacing: -0.01em;
+  font-family: var(--font-sans); font-size: 1.125rem; font-weight: 600;
+  color: var(--fg); margin-bottom: 14px; letter-spacing: -0.01em;
 }
-.s0-body {
-  font-size: 0.9375rem;
-  color: var(--fg);
-  line-height: 1.65;
-  margin-bottom: 12px;
-}
-.s0-body:last-of-type { margin-bottom: 18px; }
+.s0-body p { font-size: 0.9375rem; color: var(--fg); line-height: 1.6; margin-bottom: 12px; }
+.s0-body p:last-child { margin-bottom: 0; }
 .s0-dismiss {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.625rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--subtle);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px 0;
-  transition: color 160ms ease-out;
+  display: inline-block; margin-top: 16px;
+  font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.04em;
+  color: var(--subtle); background: none; border: none; cursor: pointer;
+  transition: color 180ms ease-out; padding: 0;
 }
 .s0-dismiss:hover { color: var(--fg); }
-.s0-card.hidden { display: none; }
 
 /* === SECTION BASE === */
 .section {
-  padding: 72px var(--page-pad);
+  padding: 64px var(--page-pad);
   max-width: calc(var(--max-w) + var(--page-pad) * 2);
   margin: 0 auto;
 }
-.section + .section,
-.section-map + .section,
-.section + .section-map {
-  border-top: 1px solid var(--rule);
-}
+.section + .section, .section-full + .section, .section + .section-full { border-top: 1px solid var(--rule); }
 .eyebrow {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.6875rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 12px;
-  display: block;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 12px; display: block;
 }
 .section-heading {
-  font-family: var(--font-sans);
-  font-size: 1.625rem;
-  font-weight: 600;
-  letter-spacing: -0.015em;
-  line-height: 1.2;
-  color: var(--fg);
-  margin-bottom: 24px;
+  font-family: var(--font-sans); font-size: 1.5rem; font-weight: 600;
+  letter-spacing: -0.01em; line-height: 1.25; color: var(--fg); margin-bottom: 20px;
 }
-.section-heading.large {
-  font-size: 2.25rem;
-  letter-spacing: -0.025em;
-  line-height: 1.1;
+.section-heading.large { font-size: 2rem; letter-spacing: -0.02em; line-height: 1.15; }
+@media (max-width: 639px) {
+  .section-heading.large { font-size: 1.5rem; }
+  .section { padding: 48px var(--page-pad); }
 }
-.section-heading.closer-h {
-  font-size: 1.75rem;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  margin-bottom: 28px;
-}
-p {
-  margin-bottom: 16px;
-  color: var(--fg);
-  font-size: 0.9375rem;
-  line-height: 1.65;
-}
+p { margin-bottom: 16px; color: var(--fg); }
 p:last-child { margin-bottom: 0; }
-p.last-line {
-  margin-top: 28px;
-  font-weight: 600;
-  letter-spacing: -0.005em;
-}
-
-/* === SECTION 1 — THE WHY === */
-.s1-body {
-  max-width: 680px;
-}
-
-/* === SECTION 7 — CLOSER === */
-.section-closer {
-  padding: 80px var(--page-pad) 96px;
-  max-width: calc(var(--max-w) + var(--page-pad) * 2);
-  margin: 0 auto;
+.prose-block p { max-width: 680px; }
+.prose-block .last-line {
+  margin-top: 32px; padding-top: 24px;
   border-top: 1px solid var(--rule);
-  text-align: center;
-}
-.section-closer .eyebrow { justify-content: center; }
-.closer-body {
-  font-size: 0.9375rem;
-  color: var(--subtle);
-  margin-top: 20px;
-  display: block;
+  font-weight: 600; font-size: 1rem; letter-spacing: -0.01em;
 }
 
-/* === SECTION 6 — OBSIDIAN === */
-.s6-body {
-  max-width: 660px;
-}
+/* === §2 ROSTER === */
+.roster-wrap { margin-top: 40px; }
+.roster-svg-container { width: 100%; overflow-x: auto; }
 
-/* === SECTION 2 — ARCHITECTURE ROSTER === */
-.roster-container {
-  margin-top: 36px;
-  overflow-x: auto;
-}
-.roster-svg-wrap {
-  min-width: 560px;
-}
-.roster-prose {
-  margin-top: 40px;
-  max-width: 680px;
-}
-/* Lane chip */
-.lane-chip {
-  display: inline-block;
-  font-family: var(--font-display);
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  padding: 2px 7px;
-  border-radius: 2px;
-  border: 1px solid currentColor;
-  vertical-align: middle;
-  margin-left: 6px;
-  position: relative;
-  top: -1px;
-}
-.chip-strategy { color: var(--lane-strategy); border-color: var(--lane-strategy); }
-.chip-build    { color: var(--lane-build);    border-color: var(--lane-build); }
-.chip-ops      { color: var(--lane-ops);      border-color: var(--lane-ops); }
-.chip-life     { color: var(--lane-life);     border-color: var(--lane-life); }
-.chip-atlas    { color: var(--lane-atlas);    border-color: var(--lane-atlas); }
+/* Lane color accents on roster nodes */
+.lane-strategy-accent { stroke: var(--lane-strategy); fill: none; }
+.lane-build-accent    { stroke: var(--lane-build);    fill: none; }
+.lane-ops-accent      { stroke: var(--lane-ops);      fill: none; }
+.lane-life-accent     { stroke: var(--lane-life);      fill: none; }
+.lane-command-fill    { fill: var(--hover); stroke: var(--lane-command); }
+.lane-command-text    { fill: var(--lane-command); }
+.lane-strategy-bg     { fill: rgba(168,181,199,0.08); stroke: var(--lane-strategy); stroke-width: 1; }
+.lane-build-bg        { fill: rgba(201,179,145,0.08); stroke: var(--lane-build);    stroke-width: 1; }
+.lane-ops-bg          { fill: rgba(159,184,163,0.08); stroke: var(--lane-ops);      stroke-width: 1; }
+.lane-life-bg         { fill: rgba(191,167,196,0.08); stroke: var(--lane-life);     stroke-width: 1; }
+.atlas-bg             { fill: rgba(255,171,64,0.06);  stroke: var(--lane-engagement); stroke-width: 1; stroke-dasharray: 4 3; }
+.node-bg              { fill: var(--hover); }
+.node-text-primary    { fill: var(--fg); font-family: 'Space Grotesk', sans-serif; font-weight: 600; }
+.node-text-secondary  { fill: var(--subtle); font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 10px; }
+.node-eyebrow         { fill: var(--subtle); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; }
+.edge-command         { stroke: var(--lane-command); stroke-width: 1.5; fill: none; opacity: 0.6; }
+.edge-route           { stroke: var(--rule); stroke-width: 1; fill: none; stroke-dasharray: 3 3; opacity: 0.6; }
+.swarm-hint           { stroke: var(--lane-build); stroke-width: 1; fill: none; stroke-dasharray: 2 4; opacity: 0.4; }
+.lane-header-text     { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; }
 
-/* === SECTION 3 — TOOLS === */
+/* §2 prose below roster */
+.roster-prose { margin-top: 40px; max-width: 680px; }
+.roster-prose p { margin-bottom: 16px; }
+
+/* === §3 TOOLS === */
 .tools-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   margin-top: 32px;
 }
-@media (max-width: 900px) {
-  .tools-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 560px) {
-  .tools-grid { grid-template-columns: 1fr; }
-}
+@media (max-width: 899px) { .tools-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 599px) { .tools-grid { grid-template-columns: 1fr; } }
 .tool-group {
   background: var(--hover);
   border-radius: 4px;
   border: 1px solid var(--rule);
-  padding: 20px 20px 18px;
+  padding: 20px;
 }
 .tool-group-header {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.625rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--subtle);
-  display: block;
-  margin-bottom: 16px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--rule);
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 14px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule); display: block;
 }
-.tool-line {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 10px;
-  font-size: 0.875rem;
-  line-height: 1.45;
-}
+.tool-line { margin-bottom: 10px; }
 .tool-line:last-child { margin-bottom: 0; }
-.tool-line strong {
-  font-weight: 600;
-  color: var(--fg);
-  flex-shrink: 0;
-}
-.tool-line-role {
-  color: var(--subtle);
-}
-.tool-sep {
-  color: var(--subtle);
-  flex-shrink: 0;
-  opacity: 0.5;
-}
+.tool-name-bold { font-weight: 600; color: var(--fg); }
+.tool-desc { font-size: 0.875rem; color: var(--subtle); }
 
-/* === SECTION 4 — WORKFLOW === */
-.workflow-blocks {
-  margin-top: 36px;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
-.workflow-block-heading {
-  font-family: var(--font-sans);
-  font-size: 1.0625rem;
-  font-weight: 600;
-  color: var(--fg);
-  margin-bottom: 16px;
-  letter-spacing: -0.01em;
+/* === §4 WORKFLOW === */
+.workflow-subblock { margin-top: 40px; }
+.workflow-subblock + .workflow-subblock { margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--rule); }
+.subblock-heading {
+  font-family: var(--font-sans); font-size: 1.125rem; font-weight: 600;
+  color: var(--fg); margin-bottom: 20px; letter-spacing: -0.01em;
 }
 .input-cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px;
 }
-@media (max-width: 639px) {
-  .input-cards { grid-template-columns: 1fr; }
-}
+@media (max-width: 767px) { .input-cards { grid-template-columns: 1fr; } }
 .input-card {
-  background: var(--hover);
-  border-radius: 4px;
-  border: 1px solid var(--rule);
-  padding: 18px 18px 16px;
+  background: var(--hover); border: 1px solid var(--rule); border-radius: 4px; padding: 18px;
 }
 .input-card-label {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.625rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent);
-  display: block;
-  margin-bottom: 10px;
+  font-family: var(--font-display); font-weight: 700; font-size: 0.6875rem;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);
+  margin-bottom: 8px; display: block;
 }
-.input-card p {
-  font-size: 0.875rem;
-  line-height: 1.55;
-  color: var(--fg);
-  margin-bottom: 0;
+.surfaces-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px;
 }
-.surface-cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-@media (max-width: 639px) {
-  .surface-cards { grid-template-columns: 1fr; }
-}
+@media (max-width: 767px) { .surfaces-grid { grid-template-columns: 1fr; } }
 .surface-card {
-  background: var(--hover);
-  border-radius: 4px;
-  border: 1px solid var(--rule);
-  border-top: 3px solid var(--rule);
-  padding: 18px 18px 16px;
+  background: var(--hover); border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent); border-radius: 4px; padding: 18px;
 }
-.surface-card.primary { border-top-color: var(--accent); }
-.surface-card-label {
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--fg);
-  display: block;
-  margin-bottom: 8px;
+.surface-name {
+  font-weight: 600; color: var(--fg); margin-bottom: 6px; font-size: 0.9375rem;
 }
-.surface-card p {
-  font-size: 0.875rem;
-  line-height: 1.55;
-  color: var(--subtle);
-  margin-bottom: 0;
+.timeline { margin-top: 24px; position: relative; padding-left: 0; }
+.end-to-end-flow {
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 20px;
 }
-.workflow-end-to-end {
-  background: var(--hover);
-  border-radius: 4px;
-  border: 1px solid var(--rule);
-  padding: 24px 24px 20px;
+.flow-beat {
+  background: var(--hover); border: 1px solid var(--rule); border-radius: 4px;
+  padding: 10px 14px; font-size: 0.875rem; font-weight: 600; color: var(--fg);
+  white-space: nowrap;
 }
-.workflow-end-to-end p {
-  font-size: 0.9375rem;
-  line-height: 1.65;
-  color: var(--fg);
+.flow-arrow { color: var(--subtle); font-size: 0.875rem; flex-shrink: 0; }
+.flow-gate {
+  background: rgba(255,171,64,0.08); border: 1px solid var(--accent);
+  border-radius: 4px; padding: 10px 14px; font-size: 0.875rem;
+  font-weight: 600; color: var(--accent); white-space: nowrap;
 }
+.end-to-end-prose { margin-top: 24px; max-width: 680px; }
 
-/* === WORKFLOW TIMELINE === */
-.wf-timeline {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  position: relative;
-}
-.wf-timeline::before {
-  content: '';
-  position: absolute;
-  left: 17px;
-  top: 20px;
-  bottom: 20px;
-  width: 1px;
-  background: var(--rule);
-}
-.wf-beat {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  padding: 10px 0;
-}
-.wf-node {
-  flex-shrink: 0;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: var(--bg);
-  border: 1px solid var(--rule);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  color: var(--accent);
-  letter-spacing: 0.04em;
-  z-index: 1;
-  position: relative;
-}
-.wf-node.taste-gate {
-  border-radius: 0;
-  transform: rotate(45deg);
-  border-color: var(--accent);
-}
-.wf-node.taste-gate span {
-  transform: rotate(-45deg);
-  display: block;
-}
-.wf-content {
-  padding-top: 6px;
-}
-.wf-label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--fg);
-  margin-bottom: 2px;
-}
-.wf-desc {
-  font-size: 0.8125rem;
-  color: var(--subtle);
-  line-height: 1.45;
-}
-
-/* === SECTION 5 — ECOSYSTEM MAP === */
-.section-map {
-  padding: 72px var(--page-pad);
-  border-top: 1px solid var(--rule);
-}
-.section-map-inner {
+/* === §5 ECOSYSTEM MAP — FULL VIEWPORT === */
+.section-full {
+  padding: 64px var(--page-pad) 0;
   max-width: calc(var(--max-w) + var(--page-pad) * 2);
   margin: 0 auto;
 }
-.map-intro {
-  max-width: 640px;
-  margin-bottom: 40px;
-}
+.section-full.border-top { border-top: 1px solid var(--rule); }
+.map-intro { max-width: 680px; margin-bottom: 40px; }
+.map-intro p { margin-bottom: 12px; }
 .map-container {
   width: 100%;
-  min-height: 600px;
-  background: var(--hover);
-  border-radius: 4px;
-  border: 1px solid var(--rule);
-  overflow: hidden;
-  position: relative;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 40px;
 }
 .map-svg {
-  width: 100%;
-  height: auto;
   display: block;
+  min-width: 900px;
 }
 .map-caption {
-  margin-top: 16px;
-  font-size: 0.8125rem;
-  color: var(--subtle);
-  line-height: 1.5;
-  max-width: 640px;
+  margin-top: 20px; padding-bottom: 48px;
+  font-family: var(--font-mono); font-size: 0.75rem;
+  letter-spacing: 0.03em; color: var(--subtle);
+  max-width: 780px;
 }
-
-/* SVG map type styles */
-.map-node-label {
-  font-family: 'Space Grotesk', Arial, sans-serif;
-  font-weight: 600;
-  fill: var(--fg, #EDE9E1);
-  font-size: 12px;
-}
-.map-node-sub {
-  font-family: 'Space Grotesk', Arial, sans-serif;
-  font-weight: 400;
-  fill: var(--subtle, #6B7280);
-  font-size: 10px;
-}
-.map-eyebrow {
-  font-family: 'Syne', Arial, sans-serif;
-  font-weight: 700;
-  fill: var(--subtle, #6B7280);
-  font-size: 8px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-.map-number {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 500;
-  fill: var(--accent, #FFAB40);
-  font-size: 10px;
-}
-.map-lane-label {
-  font-family: 'Syne', Arial, sans-serif;
-  font-weight: 700;
-  font-size: 8px;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-}
-.map-swarm-line {
+/* Map SVG element styles */
+.map-node-agent   { fill: var(--hover); stroke-width: 1; rx: 5; }
+.map-node-folder  { fill: var(--hover); stroke-width: 1; stroke-dasharray: 4 2; }
+.map-node-tool    { fill: var(--hover); stroke-width: 1; rx: 10; }
+.map-node-gate    { fill: rgba(255,171,64,0.08); stroke: var(--accent); stroke-width: 1.5; }
+.map-node-beat    { fill: var(--hover); stroke: var(--subtle); stroke-width: 1; }
+.map-text-name    { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 11px; }
+.map-text-role    { font-family: 'Space Grotesk', sans-serif; font-weight: 400; font-size: 9px; }
+.map-text-eyebrow { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 7.5px; letter-spacing: 0.12em; text-transform: uppercase; }
+.map-text-tool    { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 8px; }
+.map-text-beat    { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; }
+.map-edge-command { stroke: var(--lane-command); stroke-width: 1.5; fill: none; opacity: 0.7; }
+.map-edge-route   { stroke: var(--rule); stroke-width: 1; fill: none; stroke-dasharray: 3 3; opacity: 0.7; marker-end: url(#arrow-route); }
+.map-edge-memory  { stroke: var(--subtle); stroke-width: 0.75; fill: none; stroke-dasharray: 2 4; opacity: 0.45; }
+.map-edge-ship    { stroke: var(--lane-command); stroke-width: 1.5; fill: none; opacity: 0.6; marker-end: url(#arrow-ship); }
+.swarm-edge {
+  fill: none; stroke: var(--accent); stroke-width: 1.5;
+  stroke-dasharray: 8 6; opacity: 0.2;
   animation: swarm-pulse 3.5s ease-in-out infinite;
 }
-.map-swarm-line-b {
-  animation: swarm-pulse-b 4.2s ease-in-out infinite 0.8s;
+.swarm-edge.d1 { animation-delay: 0s; }
+.swarm-edge.d2 { animation-delay: 0.7s; }
+.swarm-edge.d3 { animation-delay: 1.4s; }
+.swarm-edge.d4 { animation-delay: 2.1s; }
+.input-edge {
+  fill: none; stroke: var(--accent); stroke-width: 1.5;
+  stroke-dasharray: 10 8; opacity: 0;
 }
-.map-input-line {
-  stroke-opacity: 0;
-}
-.map-input-line.fired {
-  animation: input-fire 1.8s ease-in-out forwards;
-}
-.map-input-line-b.fired {
-  animation: input-fire 1.8s ease-in-out 0.3s forwards;
-}
-.map-input-line-c.fired {
-  animation: input-fire 1.8s ease-in-out 0.6s forwards;
-}
+.input-edge.fired { animation: input-pulse 1.8s ease-out forwards; }
+.input-edge.i1 { animation-delay: 0.1s; }
+.input-edge.i2 { animation-delay: 0.4s; }
+.input-edge.i3 { animation-delay: 0.7s; }
+.taste-gate-group { animation: gate-glow 3s ease-in-out infinite; }
+.map-lane-bg-strategy { fill: rgba(168,181,199,0.05); }
+.map-lane-bg-build    { fill: rgba(201,179,145,0.05); }
+.map-lane-bg-ops      { fill: rgba(159,184,163,0.05); }
+.map-lane-bg-life     { fill: rgba(191,167,196,0.05); }
+.map-lane-label { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.5; }
+.map-vault-bg { fill: rgba(255,171,64,0.03); stroke: var(--accent); stroke-width: 0.75; stroke-dasharray: 3 4; opacity: 0.5; }
+.map-atlas-zone { fill: rgba(255,171,64,0.04); stroke: var(--accent); stroke-width: 0.75; stroke-dasharray: 4 3; }
 
-/* === APPENDIX — HARDWARE === */
-.appendix-blocks {
-  margin-top: 36px;
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
+/* === §6 OBSIDIAN === */
+.obsidian-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; margin-top: 8px; }
+@media (max-width: 767px) { .obsidian-layout { grid-template-columns: 1fr; gap: 32px; } }
+.obsidian-prose p { margin-bottom: 16px; }
+.vault-tree {
+  background: var(--hover); border: 1px solid var(--rule); border-radius: 4px;
+  padding: 20px 24px; font-family: var(--font-mono); font-size: 0.8125rem;
+  color: var(--subtle); line-height: 1.8;
 }
-.hw-block {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 32px;
-  align-items: start;
-}
-@media (max-width: 639px) {
-  .hw-block {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-}
-.hw-illustration {
-  width: 120px;
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--hover);
-  border-radius: 4px;
-  border: 1px solid var(--rule);
-  flex-shrink: 0;
-}
-.hw-illustration svg {
-  width: 80px;
-  height: 80px;
-}
-.hw-content {}
-.hw-caption {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.6875rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent);
-  display: block;
-  margin-bottom: 8px;
-}
-.hw-content p {
-  font-size: 0.9375rem;
-  line-height: 1.65;
-  color: var(--fg);
-  margin-bottom: 0;
-}
-.hw-block + .hw-block {
-  padding-top: 40px;
-  border-top: 1px solid var(--rule);
-}
+.vault-folder { color: var(--fg); font-weight: 500; }
+.vault-file   { color: var(--subtle); font-size: 0.75rem; padding-left: 16px; display: block; }
+.vault-accent { color: var(--accent); }
 
-/* === COLOPHON === */
-.colophon {
-  padding: 32px var(--page-pad);
+/* === §7 CLOSER === */
+.closer-section {
+  padding: 96px var(--page-pad) 96px;
+  max-width: calc(var(--max-w) + var(--page-pad) * 2);
+  margin: 0 auto;
   text-align: center;
   border-top: 1px solid var(--rule);
 }
-.colophon-line {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  color: var(--subtle);
-  opacity: 0.6;
+.closer-eyebrow { margin-bottom: 24px; }
+.closer-heading {
+  font-family: var(--font-sans); font-size: 1.625rem; font-weight: 600;
+  letter-spacing: -0.02em; line-height: 1.25; color: var(--fg);
+  max-width: 640px; margin: 0 auto 32px;
+}
+@media (max-width: 639px) { .closer-heading { font-size: 1.25rem; } }
+.closer-body {
+  font-size: 0.9375rem; color: var(--subtle); max-width: 400px; margin: 0 auto;
+}
+
+/* === APPENDIX === */
+.appendix-section {
+  padding: 64px var(--page-pad) 64px;
+  max-width: calc(var(--max-w) + var(--page-pad) * 2);
+  margin: 0 auto;
+  border-top: 1px solid var(--rule);
+}
+.hardware-blocks { display: flex; flex-direction: column; gap: 40px; margin-top: 40px; }
+.hw-block {
+  display: grid; grid-template-columns: 80px 1fr; gap: 28px; align-items: start;
+  padding-bottom: 40px; border-bottom: 1px solid var(--rule);
+}
+.hw-block:last-child { border-bottom: none; padding-bottom: 0; }
+@media (max-width: 639px) { .hw-block { grid-template-columns: 1fr; gap: 16px; } }
+.hw-icon { flex-shrink: 0; }
+.hw-title { font-weight: 600; font-size: 1rem; color: var(--fg); margin-bottom: 8px; letter-spacing: -0.01em; }
+.hw-body { font-size: 0.9375rem; color: var(--fg); line-height: 1.6; }
+
+/* === COLOPHON === */
+.colophon {
+  text-align: center; padding: 24px var(--page-pad);
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-mono); font-size: 0.6875rem;
+  letter-spacing: 0.08em; color: var(--subtle);
 }
 
 /* === UTILITY === */
 .visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0,0,0,0);
-  white-space: nowrap;
-}
-.rule-gap {
-  height: 1px;
-  background: var(--rule);
-  margin: 0 var(--page-pad);
+  position: absolute; width: 1px; height: 1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap;
 }
 </style>
 </head>
 <body>
 
 <!-- NAV -->
-<nav class="nav" role="navigation" aria-label="Site navigation">
-  <div class="nav-brand">Arc'kin <span>Endeavors</span></div>
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-brand" aria-hidden="true">Arc'kin <span>—</span></div>
+  <div class="nav-links">
+    <a class="nav-link active" href="#section-0">Start</a>
+    <a class="nav-link" href="#section-1">Why</a>
+    <a class="nav-link" href="#section-2">Team</a>
+    <a class="nav-link" href="#section-3">Tools</a>
+    <a class="nav-link" href="#section-4">Workflow</a>
+    <a class="nav-link" href="#section-5">Map</a>
+    <a class="nav-link" href="#section-6">Memory</a>
+    <a class="nav-link" href="#section-7">Close</a>
+  </div>
 </nav>
 
 <!-- HERO -->
 <header class="hero" role="banner">
-  <div class="hero-eyebrow" aria-hidden="true">ARC'KIN ENDEAVORS · WAVE 1</div>
+  <div class="hero-eyebrow">ARC'KIN ENDEAVORS · WAVE 1</div>
   <div class="hero-rule" aria-hidden="true"></div>
   <h1>
     <span class="reveal-wrapper"><span class="reveal-inner" id="hero-h1">Arc'kin Agency — how it runs</span></span>
@@ -823,32 +503,29 @@ p.last-line {
   <p class="hero-sub">
     <span class="reveal-wrapper"><span class="reveal-inner reveal-sub" id="hero-sub">The system underneath the ship.</span></span>
   </p>
-  <p class="hero-tertiary">
-    <span class="reveal-wrapper"><span class="reveal-inner reveal-tertiary" id="hero-tertiary">Ten minutes. No presenter. Read at your own speed.</span></span>
-  </p>
+  <p class="hero-tertiary">Ten minutes. No presenter. Read at your own speed.</p>
   <div class="scroll-cue" aria-hidden="true">&#8595;</div>
 </header>
 
 <!-- SECTION 0 — HOW TO READ THIS -->
-<div class="s0-card arrive" data-observe id="s0-card" role="complementary" aria-label="How to read this deck">
-  <div class="s0-inner">
+<div class="section-0-wrapper" id="section-0">
+  <div class="section-0-card arrive" data-observe id="s0-card">
     <span class="s0-eyebrow">START HERE · 30 SECONDS</span>
     <h2 class="s0-heading">What you're looking at.</h2>
-    <p class="s0-body">This is Wave 1. It covers the foundations — the philosophy, the team, the tools, the workflow, and the ecosystem map that ties it together. One pass, eight sections plus a hardware appendix. Ten minutes if you read it linearly, less if you skim the map.</p>
-    <p class="s0-body">The sections stand alone. You can drop in and out. The ecosystem map in Section 5 is the hero of the deck; everything before it earns its color-coding, everything after it pays off on what it names.</p>
-    <p class="s0-body">No presenter, no audio, no meeting attached. Read it when you have the window. Close it when you're done.</p>
-    <button class="s0-dismiss" id="s0-dismiss" aria-label="Dismiss this guide">Got it — hide this</button>
+    <div class="s0-body">
+      <p>This is Wave 1. It covers the foundations — the philosophy, the team, the tools, the workflow, and the ecosystem map that ties it together. One pass, eight sections plus a hardware appendix. Ten minutes if you read it linearly, less if you skim the map.</p>
+      <p>The sections stand alone. You can drop in and out. The ecosystem map in Section 5 is the hero of the deck; everything before it earns its color-coding, everything after it pays off on what it names.</p>
+      <p>No presenter, no audio, no meeting attached. Read it when you have the window. Close it when you're done.</p>
+    </div>
+    <button class="s0-dismiss" id="s0-dismiss-btn" aria-label="Dismiss this orientation card">Got it — hide this</button>
   </div>
 </div>
 
-<!-- SECTION DIVIDER -->
-<div class="rule-gap" style="margin-top:40px;" aria-hidden="true"></div>
-
 <!-- SECTION 1 — THE WHY -->
-<section class="section" id="s1" aria-labelledby="s1-heading">
+<section class="section" id="section-1" aria-labelledby="s1-heading">
   <span class="eyebrow arrive" data-observe>THE WHY</span>
   <h2 class="section-heading large arrive" id="s1-heading" data-observe>An Arc'kin Agency is a small, disciplined system.</h2>
-  <div class="s1-body arrive" data-observe>
+  <div class="prose-block arrive" data-observe>
     <p>One operator. A named roster of specialist personas, each with a lane. A vault that holds the memory across sessions. A routing discipline that keeps the right specialist on the right question. That's it. No dashboard. No subscription layer. No product to buy.</p>
     <p>The reason it exists: most people using AI are scattered across tools, contexts, and sessions that don't talk to each other. Every prompt starts from zero. Every insight gets retyped. Every decision that compounded on Monday is gone by Friday. You already know this because you've been building the inverse on your own side of this.</p>
     <p>Arc'kin is that instinct, turned into a repeatable operating system — with one rule that doesn't bend: the AI does not originate. It does not ideate without instruction, decide without scope, or architect without authorization. Every creative and strategic direction comes from the operator. SOPs, scorecards, and style gates carry that intent into the execution layer so it doesn't get lost in translation. Personas where chat would drift. Memory where sessions would reset. Taste gates where quality would slip. A boss who still decides.</p>
@@ -856,106 +533,141 @@ p.last-line {
   </div>
 </section>
 
-<!-- SECTION 7 — THE CLOSER (built early per brief order) -->
-<section class="section-closer" id="s7" aria-labelledby="s7-heading">
-  <span class="eyebrow arrive" data-observe style="display:block;text-align:center;">THE CLOSER</span>
-  <h2 class="section-heading closer-h arrive" id="s7-heading" data-observe>Wave 1 is foundations. Wave 2 is the next beat — same cadence, deeper instrumentation.</h2>
-  <span class="closer-body arrive" data-observe>Built for one reader. Shipped because the cadence said to.</span>
-</section>
-
-<!-- SECTION 6 — OBSIDIAN -->
-<section class="section" id="s6" aria-labelledby="s6-heading">
-  <span class="eyebrow arrive" data-observe>THE MEMORY LAYER</span>
-  <h2 class="section-heading arrive" id="s6-heading" data-observe>Obsidian holds everything.</h2>
-  <div class="s6-body arrive" data-observe>
-    <p>Every agent, every SOP, every decision, every piece of engagement memory lives in the vault as plain markdown. Folders for active projects. Folders for personas. A MOC for the memory index. Date-stamped notes for sessions and handoffs. Nothing proprietary to a cloud app. Nothing locked behind a subscription that could deprecate under you.</p>
-    <p>The reason this matters is practical. Continuity across sessions: when the next Code session opens, the relevant files are already the context, not an upload ritual. Token economy: you pay for signal, not for reintroducing yourself to the system. Organizational sanity: if a decision was authorized, it's in a file with a date; if it wasn't, you can see that too.</p>
-    <p>The vault looks spare on purpose. No dashboards, no color themes, no cover images. It is a working surface. The aesthetic is legibility under load, not demo polish. When you're in it at five in the morning, you want it to get out of your way.</p>
-  </div>
-</section>
-
 <!-- SECTION 2 — THE ARCHITECTURE -->
-<section class="section" id="s2" aria-labelledby="s2-heading">
+<section class="section" id="section-2" aria-labelledby="s2-heading">
   <span class="eyebrow arrive" data-observe>THE ARCHITECTURE</span>
   <h2 class="section-heading arrive" id="s2-heading" data-observe>The team.</h2>
-  <p class="arrive" data-observe style="color:var(--subtle);max-width:600px;">Ten positions. One boss. Four lanes — Strategy, Build, Ops, Life. Every engagement also gets a dedicated account steward — that's the last row, and it's engagement-specific, not a standing seat.</p>
+  <p class="arrive" data-observe>Ten positions. One boss. Four lanes — Strategy, Build, Ops, Life. Every engagement also gets a dedicated account steward — that's the last row, and it's engagement-specific, not a standing seat.</p>
 
-  <!-- Roster Visual -->
-  <div class="roster-container arrive" data-observe>
-    <div class="roster-svg-wrap">
-      <svg viewBox="0 0 760 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Agent roster hierarchy diagram" class="map-svg" style="max-width:760px;">
+  <div class="roster-wrap arrive" data-observe>
+    <div class="roster-svg-container" role="img" aria-label="Agent roster hierarchy: Boss commands ORIENT, ORIENT routes to Strategy, Build, Ops, and Life lanes. ATLAS is the engagement steward for AspireVue.">
+      <!-- §2 ROSTER SVG — 900×540, responsive -->
+      <svg class="roster-svg" viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" style="max-width:900px;display:block;">
         <defs>
-          <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-            <path d="M0,0 L0,6 L8,3 z" fill="#6B7280" opacity="0.5"/>
+          <marker id="arr-cmd" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#EDE9E1" opacity="0.6"/>
+          </marker>
+          <marker id="arr-route" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#6B7280" opacity="0.6"/>
           </marker>
         </defs>
-        <!-- BOSS -->
-        <rect x="280" y="12" width="200" height="56" rx="4" fill="none" stroke="#EDE9E1" stroke-opacity="0.25" stroke-width="1"/>
-        <rect x="280" y="12" width="200" height="3" rx="2" fill="#EDE9E1" opacity="0.5"/>
-        <text x="380" y="35" text-anchor="middle" class="map-node-label" font-size="13">BOSS</text>
-        <text x="380" y="52" text-anchor="middle" class="map-node-sub">Michael Landi · Field Operator</text>
-        <!-- Arrow BOSS→ORIENT -->
-        <line x1="380" y1="68" x2="380" y2="96" stroke="#6B7280" stroke-opacity="0.4" stroke-width="1" marker-end="url(#arrow)"/>
-        <!-- ORIENT -->
-        <rect x="265" y="100" width="230" height="56" rx="4" fill="none" stroke="#EDE9E1" stroke-opacity="0.18" stroke-width="1"/>
-        <rect x="265" y="100" width="230" height="3" rx="2" fill="#EDE9E1" opacity="0.35"/>
-        <text x="380" y="123" text-anchor="middle" class="map-node-label" font-size="13">ORIENT</text>
-        <text x="380" y="140" text-anchor="middle" class="map-node-sub">Consigliere · Briefing · Routing</text>
-        <!-- Routing lines from ORIENT to lanes -->
-        <line x1="280" y1="156" x2="100" y2="196" stroke="#6B7280" stroke-opacity="0.3" stroke-width="1" marker-end="url(#arrow)"/>
-        <line x1="340" y1="156" x2="280" y2="196" stroke="#6B7280" stroke-opacity="0.3" stroke-width="1" marker-end="url(#arrow)"/>
-        <line x1="420" y1="156" x2="480" y2="196" stroke="#6B7280" stroke-opacity="0.3" stroke-width="1" marker-end="url(#arrow)"/>
-        <line x1="480" y1="156" x2="650" y2="196" stroke="#6B7280" stroke-opacity="0.3" stroke-width="1" marker-end="url(#arrow)"/>
 
-        <!-- STRATEGY LANE -->
-        <rect x="14" y="200" width="160" height="168" rx="4" fill="none" stroke="#A8B5C7" stroke-opacity="0.3" stroke-width="1"/>
-        <rect x="14" y="200" width="160" height="3" rx="2" fill="#A8B5C7" opacity="0.5"/>
-        <text x="94" y="221" text-anchor="middle" class="map-lane-label" fill="#A8B5C7" opacity="0.8">Strategy</text>
-        <text x="94" y="247" text-anchor="middle" class="map-node-label" font-size="11">STRATEGOS</text>
-        <text x="94" y="262" text-anchor="middle" class="map-node-sub">Revenue · GTM</text>
-        <line x1="94" y1="270" x2="94" y2="278" stroke="#A8B5C7" stroke-opacity="0.2" stroke-width="1"/>
-        <text x="94" y="298" text-anchor="middle" class="map-node-label" font-size="11">RECON</text>
-        <text x="94" y="313" text-anchor="middle" class="map-node-sub">Research · Intel</text>
+        <!-- Lane column backgrounds -->
+        <!-- Strategy lane -->
+        <rect x="20" y="180" width="190" height="260" rx="4" class="lane-strategy-bg"/>
+        <!-- Build lane -->
+        <rect x="230" y="180" width="240" height="260" rx="4" class="lane-build-bg"/>
+        <!-- Ops lane -->
+        <rect x="490" y="180" width="130" height="160" rx="4" class="lane-ops-bg"/>
+        <!-- Life lane -->
+        <rect x="640" y="180" width="130" height="160" rx="4" class="lane-life-bg"/>
 
-        <!-- BUILD LANE -->
-        <rect x="196" y="200" width="166" height="168" rx="4" fill="none" stroke="#C9B391" stroke-opacity="0.3" stroke-width="1"/>
-        <rect x="196" y="200" width="166" height="3" rx="2" fill="#C9B391" opacity="0.5"/>
-        <text x="279" y="221" text-anchor="middle" class="map-lane-label" fill="#C9B391" opacity="0.8">Build</text>
-        <text x="279" y="243" text-anchor="middle" class="map-node-label" font-size="11">CANVAS · SIGNAL</text>
-        <text x="279" y="257" text-anchor="middle" class="map-node-sub">Creative · Copy</text>
-        <text x="279" y="278" text-anchor="middle" class="map-node-label" font-size="11">FORGE · STUDIO</text>
-        <text x="279" y="292" text-anchor="middle" class="map-node-sub">Build · Media</text>
-        <!-- Swarm line within Build -->
-        <line x1="230" y1="300" x2="330" y2="300" stroke="#C9B391" stroke-opacity="0.3" stroke-width="1" stroke-dasharray="4 3" class="map-swarm-line"/>
+        <!-- Lane headers -->
+        <text x="115" y="200" text-anchor="middle" class="lane-header-text" fill="#A8B5C7" opacity="0.9">STRATEGY</text>
+        <text x="350" y="200" text-anchor="middle" class="lane-header-text" fill="#C9B391" opacity="0.9">BUILD</text>
+        <text x="555" y="200" text-anchor="middle" class="lane-header-text" fill="#9FB8A3" opacity="0.9">OPS</text>
+        <text x="705" y="200" text-anchor="middle" class="lane-header-text" fill="#BFA7C4" opacity="0.9">LIFE</text>
 
-        <!-- OPS LANE -->
-        <rect x="384" y="200" width="138" height="100" rx="4" fill="none" stroke="#9FB8A3" stroke-opacity="0.3" stroke-width="1"/>
-        <rect x="384" y="200" width="138" height="3" rx="2" fill="#9FB8A3" opacity="0.5"/>
-        <text x="453" y="221" text-anchor="middle" class="map-lane-label" fill="#9FB8A3" opacity="0.8">Ops</text>
-        <text x="453" y="247" text-anchor="middle" class="map-node-label" font-size="11">CIRCUIT</text>
-        <text x="453" y="262" text-anchor="middle" class="map-node-sub">Automations · Plumbing</text>
+        <!-- BOSS node -->
+        <rect x="340" y="20" width="220" height="68" rx="4" fill="#1A1C1F" stroke="#EDE9E1" stroke-width="1.5"/>
+        <rect x="340" y="20" width="220" height="3" rx="2" fill="#EDE9E1" opacity="0.8"/>
+        <text x="450" y="44" text-anchor="middle" class="node-eyebrow" fill="#6B7280">BOSS</text>
+        <text x="450" y="60" text-anchor="middle" class="node-text-primary" font-size="13">Michael Landi</text>
+        <text x="450" y="76" text-anchor="middle" class="node-text-secondary" fill="#6B7280">Field Operator · Sets direction</text>
 
-        <!-- LIFE LANE -->
-        <rect x="540" y="200" width="200" height="100" rx="4" fill="none" stroke="#BFA7C4" stroke-opacity="0.3" stroke-width="1"/>
-        <rect x="540" y="200" width="200" height="3" rx="2" fill="#BFA7C4" opacity="0.5"/>
-        <text x="640" y="221" text-anchor="middle" class="map-lane-label" fill="#BFA7C4" opacity="0.8">Life</text>
-        <text x="640" y="247" text-anchor="middle" class="map-node-label" font-size="11">ANCHOR</text>
-        <text x="640" y="262" text-anchor="middle" class="map-node-sub">Personal pillars · Integration</text>
+        <!-- ORIENT node -->
+        <rect x="305" y="120" width="290" height="68" rx="4" fill="#1A1C1F" stroke="#EDE9E1" stroke-width="1.5"/>
+        <rect x="305" y="120" width="290" height="3" rx="2" fill="#EDE9E1" opacity="0.8"/>
+        <text x="450" y="144" text-anchor="middle" class="node-eyebrow" fill="#6B7280">CONSIGLIERE</text>
+        <text x="450" y="161" text-anchor="middle" class="node-text-primary" font-size="13">ORIENT</text>
+        <text x="450" y="176" text-anchor="middle" class="node-text-secondary" fill="#6B7280">Briefing · Coordination · Routing</text>
 
-        <!-- ATLAS — engagement steward -->
-        <rect x="240" y="388" width="280" height="22" rx="2" fill="none" stroke="#FFAB40" stroke-opacity="0.15" stroke-dasharray="5 3" stroke-width="1"/>
-        <text x="380" y="383" text-anchor="middle" class="map-eyebrow" fill="#6B7280" opacity="0.6">— engagement steward —</text>
-        <rect x="245" y="386" width="270" height="32" rx="3" fill="none" stroke="#FFAB40" stroke-opacity="0.4" stroke-width="1"/>
-        <rect x="245" y="386" width="270" height="3" rx="1" fill="#FFAB40" opacity="0.6"/>
-        <text x="380" y="404" text-anchor="middle" class="map-node-label" font-size="11" fill="#FFAB40">ATLAS — AspireVue</text>
-        <text x="380" y="416" text-anchor="middle" class="map-node-sub">Promise Ledger · Correspondence Memory</text>
+        <!-- Command line: BOSS → ORIENT -->
+        <line x1="450" y1="88" x2="450" y2="120" class="edge-command" marker-end="url(#arr-cmd)"/>
+
+        <!-- Route lines: ORIENT → lane columns -->
+        <path d="M380,188 C380,188 115,210 115,210" class="edge-route" marker-end="url(#arr-route)"/>
+        <path d="M430,188 C430,188 350,210 350,210" class="edge-route" marker-end="url(#arr-route)"/>
+        <path d="M490,188 C490,188 555,210 555,210" class="edge-route" marker-end="url(#arr-route)"/>
+        <path d="M520,188 C520,188 705,210 705,210" class="edge-route" marker-end="url(#arr-route)"/>
+
+        <!-- STRATEGY agents -->
+        <rect x="30" y="215" width="170" height="52" rx="3" class="node-bg" stroke="#A8B5C7" stroke-width="0.75"/>
+        <rect x="30" y="215" width="3" height="52" rx="1" fill="#A8B5C7"/>
+        <text x="50" y="234" class="node-eyebrow" fill="#A8B5C7">STRATEGY</text>
+        <text x="50" y="249" class="node-text-primary" font-size="11" fill="#EDE9E1">STRATEGOS</text>
+        <text x="50" y="261" class="node-text-secondary" fill="#6B7280">Revenue architecture · GTM</text>
+
+        <rect x="30" y="278" width="170" height="52" rx="3" class="node-bg" stroke="#A8B5C7" stroke-width="0.75"/>
+        <rect x="30" y="278" width="3" height="52" rx="1" fill="#A8B5C7"/>
+        <text x="50" y="297" class="node-eyebrow" fill="#A8B5C7">STRATEGY</text>
+        <text x="50" y="312" class="node-text-primary" font-size="11" fill="#EDE9E1">RECON</text>
+        <text x="50" y="324" class="node-text-secondary" fill="#6B7280">Research · intelligence</text>
+
+        <!-- Swarm hint: STRATEGOS ↔ RECON -->
+        <line x1="115" y1="267" x2="115" y2="278" class="swarm-hint"/>
+
+        <!-- BUILD agents -->
+        <rect x="240" y="215" width="210" height="48" rx="3" class="node-bg" stroke="#C9B391" stroke-width="0.75"/>
+        <rect x="240" y="215" width="3" height="48" rx="1" fill="#C9B391"/>
+        <text x="260" y="233" class="node-eyebrow" fill="#C9B391">BUILD</text>
+        <text x="260" y="249" class="node-text-primary" font-size="11" fill="#EDE9E1">CANVAS</text>
+        <text x="260" y="261" class="node-text-secondary" fill="#6B7280">Creative direction · brand</text>
+
+        <rect x="240" y="273" width="210" height="48" rx="3" class="node-bg" stroke="#C9B391" stroke-width="0.75"/>
+        <rect x="240" y="273" width="3" height="48" rx="1" fill="#C9B391"/>
+        <text x="260" y="291" class="node-eyebrow" fill="#C9B391">BUILD</text>
+        <text x="260" y="307" class="node-text-primary" font-size="11" fill="#EDE9E1">SIGNAL</text>
+        <text x="260" y="319" class="node-text-secondary" fill="#6B7280">Copy · content · voice</text>
+
+        <rect x="240" y="331" width="210" height="48" rx="3" class="node-bg" stroke="#C9B391" stroke-width="0.75"/>
+        <rect x="240" y="331" width="3" height="48" rx="1" fill="#C9B391"/>
+        <text x="260" y="349" class="node-eyebrow" fill="#C9B391">BUILD</text>
+        <text x="260" y="365" class="node-text-primary" font-size="11" fill="#EDE9E1">FORGE</text>
+        <text x="260" y="377" class="node-text-secondary" fill="#6B7280">Web dev · builds</text>
+
+        <rect x="240" y="389" width="210" height="48" rx="3" class="node-bg" stroke="#C9B391" stroke-width="0.75"/>
+        <rect x="240" y="389" width="3" height="48" rx="1" fill="#C9B391"/>
+        <text x="260" y="407" class="node-eyebrow" fill="#C9B391">BUILD</text>
+        <text x="260" y="423" class="node-text-primary" font-size="11" fill="#EDE9E1">STUDIO</text>
+        <text x="260" y="435" class="node-text-secondary" fill="#6B7280">3D · audio · media</text>
+
+        <!-- Swarm hints: Build lane inter-agent -->
+        <path d="M460,239 C480,239 480,295 460,295" class="swarm-hint"/>
+        <path d="M460,297 C480,297 480,353 460,353" class="swarm-hint"/>
+
+        <!-- OPS agent -->
+        <rect x="500" y="215" width="110" height="52" rx="3" class="node-bg" stroke="#9FB8A3" stroke-width="0.75"/>
+        <rect x="500" y="215" width="3" height="52" rx="1" fill="#9FB8A3"/>
+        <text x="520" y="234" class="node-eyebrow" fill="#9FB8A3">OPS</text>
+        <text x="520" y="249" class="node-text-primary" font-size="11" fill="#EDE9E1">CIRCUIT</text>
+        <text x="520" y="261" class="node-text-secondary" fill="#6B7280">Automations · integrations</text>
+
+        <!-- LIFE agent -->
+        <rect x="650" y="215" width="110" height="52" rx="3" class="node-bg" stroke="#BFA7C4" stroke-width="0.75"/>
+        <rect x="650" y="215" width="3" height="52" rx="1" fill="#BFA7C4"/>
+        <text x="670" y="234" class="node-eyebrow" fill="#BFA7C4">LIFE</text>
+        <text x="670" y="249" class="node-text-primary" font-size="11" fill="#EDE9E1">ANCHOR</text>
+        <text x="670" y="261" class="node-text-secondary" fill="#6B7280">Personal pillars</text>
+
+        <!-- ANCHOR ↔ ORIENT collab line -->
+        <path d="M650,241 C630,241 600,188 520,188" stroke="#BFA7C4" stroke-width="0.75" stroke-dasharray="3 3" fill="none" opacity="0.4"/>
+
+        <!-- ATLAS engagement zone -->
+        <rect x="200" y="480" width="500" height="68" rx="4" class="atlas-bg"/>
+        <text x="450" y="498" text-anchor="middle" font-family="'Syne',sans-serif" font-weight="700" font-size="7.5" letter-spacing="0.14em" fill="#FFAB40" opacity="0.8">ENGAGEMENT STEWARD · ASPIREVUE</text>
+        <rect x="330" y="505" width="240" height="36" rx="3" fill="#1A1C1F" stroke="#FFAB40" stroke-width="1"/>
+        <rect x="330" y="505" width="3" height="36" rx="1" fill="#FFAB40"/>
+        <text x="422" y="520" text-anchor="middle" class="node-text-primary" font-size="11" fill="#EDE9E1">ATLAS</text>
+        <text x="422" y="534" text-anchor="middle" class="node-text-secondary" fill="#6B7280">Promise ledger · correspondence memory</text>
+        <!-- Dashed line ORIENT → ATLAS -->
+        <path d="M450,188 L450,480" stroke="#FFAB40" stroke-width="0.75" stroke-dasharray="3 5" fill="none" opacity="0.3"/>
       </svg>
     </div>
   </div>
 
-  <!-- Roster prose -->
   <div class="roster-prose arrive" data-observe>
-    <h3 class="workflow-block-heading" style="margin-top:0;">How it actually moves.</h3>
+    <h3 class="subblock-heading">How it actually moves.</h3>
     <p>The boss talks to ORIENT. ORIENT routes. Most work runs as a swarm: a question about positioning pulls STRATEGOS and RECON together; a landing page pulls CANVAS, SIGNAL, and FORGE in parallel; a voice note gets caught by CIRCUIT and handed to whoever owns the subject. Agents collaborate directly across lanes when the work calls for it.</p>
     <p>ANCHOR sits alongside ORIENT, not inside the work stack. Its job is to keep the life side visible while the work side compounds, so the operator doesn't accidentally trade one for the other.</p>
     <p>ATLAS joins on a per-engagement basis. For AspireVue, ATLAS keeps the promise ledger, the cadence, the running memory of every exchange. It's a quiet function. You notice it when something you mentioned four weeks ago shows up in a draft without you having to remind anyone.</p>
@@ -963,605 +675,711 @@ p.last-line {
 </section>
 
 <!-- SECTION 3 — THE TOOLS -->
-<section class="section" id="s3" aria-labelledby="s3-heading">
+<section class="section" id="section-3" aria-labelledby="s3-heading">
   <span class="eyebrow arrive" data-observe>THE TOOLS</span>
   <h2 class="section-heading arrive" id="s3-heading" data-observe>The stack, grouped by role.</h2>
-  <p class="arrive" data-observe style="color:var(--subtle);max-width:600px;">Every tool in this deck earns a specific seat. Some do core work. Some extend one capability past its ceiling. None are here because they're popular. The groupings below are the mental model, not a buy-list.</p>
+  <p class="arrive" data-observe>Every tool in this deck earns a specific seat. Some do core work. Some extend one capability past its ceiling. None are here because they're popular. The groupings below are the mental model, not a buy-list.</p>
 
-  <div class="tools-grid" aria-label="Tool groups">
+  <div class="tools-grid" role="list">
 
-    <div class="tool-group arrive" data-observe>
+    <div class="tool-group arrive" data-observe role="listitem">
       <span class="tool-group-header">Core</span>
       <div class="tool-line">
-        <strong>Claude Max</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">the session engine. Hosts Claude Code and Claude Cowork. Roughly eighty percent of the work runs through here.</span>
+        <span class="tool-name-bold">Claude Max</span>
+        <span class="tool-desc"> — the session engine. Hosts Claude Code (terminal, full file-system access, the execution surface) and Claude Cowork (project-scoped chat that mirrors the same vault). Roughly eighty percent of the work runs through here.</span>
       </div>
     </div>
 
-    <div class="tool-group arrive delay-1" data-observe>
+    <div class="tool-group arrive delay-1" data-observe role="listitem">
       <span class="tool-group-header">Memory</span>
       <div class="tool-line">
-        <strong>Obsidian</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">the vault. Source of truth for agents, folders, SOPs, decisions, and session memory. See Section 6.</span>
+        <span class="tool-name-bold">Obsidian</span>
+        <span class="tool-desc"> — the vault. Source of truth for agents, folders, SOPs, decisions, and session memory. See Section 6 for why this is load-bearing.</span>
       </div>
     </div>
 
-    <div class="tool-group arrive delay-2" data-observe>
+    <div class="tool-group arrive delay-2" data-observe role="listitem">
       <span class="tool-group-header">Capture</span>
       <div class="tool-line">
-        <strong>Plaud</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">hardware voice capture. Routes transcripts into the vault automatically so voice becomes operable input, not a note to review later.</span>
+        <span class="tool-name-bold">Plaud</span>
+        <span class="tool-desc"> — hardware voice capture. Records meetings, calls, stray thoughts. Routes transcripts into the vault automatically so voice becomes operable input, not a note to review later.</span>
       </div>
     </div>
 
-    <div class="tool-group arrive delay-3" data-observe>
+    <div class="tool-group arrive delay-3" data-observe role="listitem">
       <span class="tool-group-header">Sidekick LLMs</span>
-      <div class="tool-line">
-        <strong>Gemini (AI Pro)</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">extended context window, Workspace-native.</span>
-      </div>
-      <div class="tool-line">
-        <strong>NotebookLM</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">closed-world synthesis across a bounded corpus.</span>
-      </div>
-      <div class="tool-line">
-        <strong>Perplexity</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">fast open-web research with sourcing.</span>
-      </div>
+      <div class="tool-line"><span class="tool-name-bold">Gemini (AI Pro)</span><span class="tool-desc"> — Google's paid tier. Extended context window, Workspace-native when your environment catches up to it.</span></div>
+      <div class="tool-line"><span class="tool-name-bold">NotebookLM</span><span class="tool-desc"> — closed-world synthesis across a bounded corpus. The second-brain reader to Claude's builder role.</span></div>
+      <div class="tool-line"><span class="tool-name-bold">Perplexity</span><span class="tool-desc"> — fast open-web research with sourcing. Used for pulls that don't warrant a full RECON brief.</span></div>
     </div>
 
-    <div class="tool-group arrive delay-4" data-observe>
+    <div class="tool-group arrive delay-4" data-observe role="listitem">
       <span class="tool-group-header">IDE / Launcher</span>
       <div class="tool-line">
-        <strong>Google Antigravity</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">the IDE that launches Claude Code sessions. VS Code-compatible, terminal-friendly.</span>
+        <span class="tool-name-bold">Google Antigravity</span>
+        <span class="tool-desc"> — the IDE that launches Claude Code sessions. VS Code-compatible, terminal-friendly, the surface where execution lives.</span>
       </div>
     </div>
 
-    <div class="tool-group arrive delay-5" data-observe>
+    <div class="tool-group arrive delay-5" data-observe role="listitem">
       <span class="tool-group-header">Build &amp; Design</span>
-      <div class="tool-line">
-        <strong>Figma</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">design system and interface work.</span>
-      </div>
-      <div class="tool-line">
-        <strong>Figma Weave</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">AI-native motion and canvas inside Figma.</span>
-      </div>
-      <div class="tool-line">
-        <strong>Make</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">high-fidelity visual prototypes, fast.</span>
-      </div>
-      <div class="tool-line">
-        <strong>Framer</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">production landing pages, premium surfaces.</span>
-      </div>
-      <div class="tool-line">
-        <strong>Spline</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">3D scenes and embeds.</span>
-      </div>
-      <div class="tool-line">
-        <strong>Stitch</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">AI UI/UX generation.</span>
-      </div>
-      <div class="tool-line">
-        <strong>Gemini Canvas</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">interactive data visualization.</span>
-      </div>
-      <div class="tool-line">
-        <strong>Flow (powered by Veo)</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">Google's AI filmmaking surface for video work.</span>
-      </div>
-      <div class="tool-line">
-        <strong>Remotion</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">programmatic video via React, for pipelines that need code-level control.</span>
-      </div>
+      <div class="tool-line"><span class="tool-name-bold">Figma</span><span class="tool-desc"> — design system and interface work.</span></div>
+      <div class="tool-line"><span class="tool-name-bold">Figma Weave</span><span class="tool-desc"> — AI-native motion and canvas inside Figma.</span></div>
+      <div class="tool-line"><span class="tool-name-bold">Make</span><span class="tool-desc"> — high-fidelity visual prototypes, fast.</span></div>
+      <div class="tool-line"><span class="tool-name-bold">Framer</span><span class="tool-desc"> — production landing pages, premium surfaces.</span></div>
+      <div class="tool-line"><span class="tool-name-bold">Spline</span><span class="tool-desc"> — 3D scenes and embeds.</span></div>
+      <div class="tool-line"><span class="tool-name-bold">Stitch</span><span class="tool-desc"> — AI UI/UX generation.</span></div>
+      <div class="tool-line"><span class="tool-name-bold">Gemini Canvas</span><span class="tool-desc"> — interactive data visualization, versatile in professional contexts.</span></div>
+      <div class="tool-line"><span class="tool-name-bold">Flow (powered by Veo)</span><span class="tool-desc"> — Google's AI filmmaking surface for video work.</span></div>
+      <div class="tool-line"><span class="tool-name-bold">Remotion</span><span class="tool-desc"> — programmatic video via React, for pipelines that need code-level control.</span></div>
     </div>
 
-    <div class="tool-group arrive" data-observe>
+    <div class="tool-group arrive" data-observe role="listitem">
       <span class="tool-group-header">Ops</span>
-      <div class="tool-line">
-        <strong>Make · n8n · Zapier</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">automation and routing. Same role, different tiers of complexity.</span>
-      </div>
-      <div class="tool-line">
-        <strong>Jira</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">project management, engagement tracking, epic-to-task decomposition.</span>
-      </div>
+      <div class="tool-line"><span class="tool-name-bold">Make · n8n · Zapier</span><span class="tool-desc"> — automation and routing. Same role, different tiers of complexity.</span></div>
+      <div class="tool-line"><span class="tool-name-bold">Jira</span><span class="tool-desc"> — project management, engagement tracking, epic-to-task decomposition.</span></div>
     </div>
 
-    <div class="tool-group arrive delay-1" data-observe>
+    <div class="tool-group arrive delay-1" data-observe role="listitem">
       <span class="tool-group-header">Browser</span>
-      <div class="tool-line">
-        <strong>Claude for Chrome</strong>
-        <span class="tool-sep">·</span>
-        <strong>Comet</strong>
-        <span class="tool-sep">—</span>
-        <span class="tool-line-role">in-browser agent surfaces. Same mental model as terminal agents, different input envelope.</span>
-      </div>
+      <div class="tool-line"><span class="tool-name-bold">Claude for Chrome</span><span class="tool-desc"> — in-browser agent surface.</span></div>
+      <div class="tool-line"><span class="tool-name-bold">Comet</span><span class="tool-desc"> — same mental model as terminal agents, different input envelope.</span></div>
     </div>
 
   </div>
 </section>
 
 <!-- SECTION 4 — THE WORKFLOW -->
-<section class="section" id="s4" aria-labelledby="s4-heading">
+<section class="section" id="section-4" aria-labelledby="s4-heading">
   <span class="eyebrow arrive" data-observe>THE WORKFLOW</span>
   <h2 class="section-heading arrive" id="s4-heading" data-observe>How the work actually moves.</h2>
 
-  <div class="workflow-blocks">
-
-    <!-- Sub-block 1: Three input channels -->
-    <div class="arrive" data-observe>
-      <h3 class="workflow-block-heading">Three input channels.</h3>
-      <div class="input-cards">
-        <div class="input-card">
-          <span class="input-card-label">Local</span>
-          <p>Typed prompts at the terminal. Voice-to-text via native dictation. Files dragged directly into a session as the assignment — no explanation needed, the drop is the ask.</p>
-        </div>
-        <div class="input-card">
-          <span class="input-card-label">Remote</span>
-          <p>Claude remote-control for taking over a live session from anywhere. Claude Dispatch for quick retrievals — a precision question against the vault, answer back, done. Plaud transcripts routing through automation into agent pickup, so a voice memo in the car becomes a primed prompt by the time the laptop opens.</p>
-        </div>
-        <div class="input-card">
-          <span class="input-card-label">Exterior</span>
-          <p>Google Antigravity summoning and triggering sessions externally. Automations that fire scheduled work. Remote triggers from calendar, inbox, or vault events.</p>
-        </div>
+  <div class="workflow-subblock arrive" data-observe>
+    <h3 class="subblock-heading">Three input channels.</h3>
+    <div class="input-cards">
+      <div class="input-card">
+        <span class="input-card-label">Local</span>
+        <p style="font-size:0.9375rem;margin:0;">Typed prompts at the terminal. Voice-to-text via native dictation. Files dragged directly into a session as the assignment — no explanation needed, the drop is the ask.</p>
+      </div>
+      <div class="input-card">
+        <span class="input-card-label">Remote</span>
+        <p style="font-size:0.9375rem;margin:0;">Claude remote-control for taking over a live session from anywhere. Claude Dispatch for quick retrievals that don't need a conversation. Plaud transcripts routing through automation into agent pickup, so a voice memo in the car becomes a primed prompt by the time the laptop opens.</p>
+      </div>
+      <div class="input-card">
+        <span class="input-card-label">Exterior</span>
+        <p style="font-size:0.9375rem;margin:0;">Google Antigravity summoning and triggering sessions externally. Automations that fire scheduled work. Remote triggers from calendar, inbox, or vault events.</p>
       </div>
     </div>
+  </div>
 
-    <!-- Sub-block 2: Three Claude surfaces -->
-    <div class="arrive" data-observe>
-      <h3 class="workflow-block-heading">Three doors, same vault.</h3>
-      <div class="surface-cards">
-        <div class="surface-card primary">
-          <span class="surface-card-label">Claude Code (via Antigravity)</span>
-          <p>The execution surface. Full Claude Max capacity. Reads and writes files directly. Spawns specialist agents in parallel, which is how the swarming pattern actually runs. Where things happen.</p>
-        </div>
-        <div class="surface-card">
-          <span class="surface-card-label">Claude Cowork</span>
-          <p>Project-scoped chat that mirrors the Code environment. Same vault, same agents, different register. Quieter. Useful when a session wants room to think but still needs to write home.</p>
-        </div>
-        <div class="surface-card">
-          <span class="surface-card-label">Claude chat (desktop/app)</span>
-          <p>The familiar interface. Best for ideation, early shaping, refining a brief before it enters the working system. When a spec is ready, it moves to Obsidian as a note.</p>
-        </div>
+  <div class="workflow-subblock arrive" data-observe>
+    <h3 class="subblock-heading">Three doors, same vault.</h3>
+    <div class="surfaces-grid">
+      <div class="surface-card">
+        <div class="surface-name">Claude Code (via Antigravity)</div>
+        <p style="font-size:0.9375rem;margin:0;color:var(--fg);">The execution surface. Full Claude Max capacity. Reads and writes files directly. Spawns specialist agents in parallel, which is how the swarming pattern actually runs. Where things happen.</p>
+      </div>
+      <div class="surface-card">
+        <div class="surface-name">Claude Cowork</div>
+        <p style="font-size:0.9375rem;margin:0;color:var(--fg);">Project-scoped chat that mirrors the Code environment. Same vault, same agents, different register. Quieter. Useful when a session wants room to think but still needs to write home.</p>
+      </div>
+      <div class="surface-card">
+        <div class="surface-name">Claude chat (desktop/app)</div>
+        <p style="font-size:0.9375rem;margin:0;color:var(--fg);">The familiar interface. Best for ideation, early shaping, refining a brief before it enters the working system. When a spec is ready, it moves to Obsidian as a note, and the next Code session opens on that note.</p>
       </div>
     </div>
+  </div>
 
-    <!-- Sub-block 3: End-to-end -->
-    <div class="arrive" data-observe>
-      <h3 class="workflow-block-heading">How a pass actually runs.</h3>
-      <div class="workflow-end-to-end">
-        <div class="wf-timeline" role="list">
-          <div class="wf-beat" role="listitem">
-            <div class="wf-node" aria-label="Step 1">01</div>
-            <div class="wf-content">
-              <div class="wf-label">Ideation in chat</div>
-              <div class="wf-desc">The idea takes shape in Claude chat. Loose, fast, no scope yet.</div>
-            </div>
-          </div>
-          <div class="wf-beat" role="listitem">
-            <div class="wf-node" aria-label="Step 2">02</div>
-            <div class="wf-content">
-              <div class="wf-label">Spec written into Obsidian</div>
-              <div class="wf-desc">The spec becomes a file. The vault holds it.</div>
-            </div>
-          </div>
-          <div class="wf-beat" role="listitem">
-            <div class="wf-node" aria-label="Step 3">03</div>
-            <div class="wf-content">
-              <div class="wf-label">Code session opens on the spec</div>
-              <div class="wf-desc">ORIENT routes. Context is already there.</div>
-            </div>
-          </div>
-          <div class="wf-beat" role="listitem">
-            <div class="wf-node taste-gate" aria-label="Taste gate"><span>&#9670;</span></div>
-            <div class="wf-content">
-              <div class="wf-label" style="color:var(--accent);">Strategy swarm — always first</div>
-              <div class="wf-desc">STRATEGOS and RECON (or whoever owns the question) produce the execution brief. Strategy before execution, every time.</div>
-            </div>
-          </div>
-          <div class="wf-beat" role="listitem">
-            <div class="wf-node" aria-label="Step 5">05</div>
-            <div class="wf-content">
-              <div class="wf-label">Execution swarm opens</div>
-              <div class="wf-desc">CANVAS sets direction, SIGNAL writes, FORGE builds, STUDIO produces. Parallel where the work allows.</div>
-            </div>
-          </div>
-          <div class="wf-beat" role="listitem">
-            <div class="wf-node taste-gate" aria-label="Taste gate"><span>&#9670;</span></div>
-            <div class="wf-content">
-              <div class="wf-label" style="color:var(--accent);">Operator decides</div>
-              <div class="wf-desc">Ideation scorecards and style gates carry the operator's intent through the execution layer. The creative and strategic direction originates with the operator and stays there.</div>
-            </div>
-          </div>
-          <div class="wf-beat" role="listitem">
-            <div class="wf-node" aria-label="Step 7">07</div>
-            <div class="wf-content">
-              <div class="wf-label">The artifact ships</div>
-              <div class="wf-desc">Scoped to one beat. Nothing left open that needs to stay open.</div>
-            </div>
-          </div>
-        </div>
-        <p style="margin-top:20px;color:var(--subtle);font-size:0.875rem;">The discipline is in the sequence. Strategy always before execution. Ideation separated from implementation. Each session scoped to one beat, so nothing drifts.</p>
-      </div>
+  <div class="workflow-subblock arrive" data-observe>
+    <h3 class="subblock-heading">How a pass actually runs.</h3>
+    <div class="end-to-end-flow" role="list" aria-label="End-to-end workflow sequence">
+      <div class="flow-beat" role="listitem">Ideation in chat</div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="flow-beat" role="listitem">Spec into Obsidian</div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="flow-beat" role="listitem">Code session opens</div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="flow-beat" role="listitem">ORIENT routes</div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="flow-beat" role="listitem">Strategy swarm</div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="flow-gate" role="listitem">Taste gate</div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="flow-beat" role="listitem">Execution swarm</div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="flow-gate" role="listitem">Taste gate</div>
+      <span class="flow-arrow" aria-hidden="true">→</span>
+      <div class="flow-beat" role="listitem">Ships</div>
     </div>
-
+    <div class="end-to-end-prose">
+      <p>The discipline is in the sequence. Strategy always before execution. Ideation separated from implementation. Each session scoped to one beat, so nothing drifts. Ideation scorecards and style gates are how the operator's intent survives handoff — they're not checkboxes, they're the documented standard every execution agent works against. The creative and strategic direction originates with the operator and stays there.</p>
+    </div>
   </div>
 </section>
 
-<!-- SECTION 5 — ECOSYSTEM MAP -->
-<div class="section-map" id="s5" role="region" aria-labelledby="s5-heading">
-  <div class="section-map-inner">
-    <span class="eyebrow arrive" data-observe>THE HERO ARTIFACT</span>
-    <h2 class="section-heading large arrive" id="s5-heading" data-observe>The ecosystem, in one view.</h2>
-    <div class="map-intro arrive" data-observe>
-      <p>Everything in the four sections above, shown as a single coordinated system. Agents, vault, tools, workflows, taste gates. Directional flow lines show how work actually moves. Swarming lines pulse between collaborating agents. Taste-gate nodes mark the points where the operator decides.</p>
-      <p style="color:var(--subtle);">The map doesn't need a legend. If the sections above did their job, it reads on its own. Sit with it.</p>
-    </div>
-
-    <div class="map-container arrive" data-observe id="map-container">
-      <svg viewBox="0 0 900 680" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Arc'kin Agency ecosystem map showing agents, vault, tools, workflows, and taste gates" class="map-svg" id="ecosystem-map">
-        <defs>
-          <marker id="m-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-            <path d="M0,0 L0,6 L8,3 z" fill="#6B7280" opacity="0.5"/>
-          </marker>
-          <marker id="m-arrow-ember" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-            <path d="M0,0 L0,6 L8,3 z" fill="#FFAB40" opacity="0.6"/>
-          </marker>
-          <filter id="glow-ember">
-            <feGaussianBlur stdDeviation="3" result="blur"/>
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-          <filter id="glow-soft">
-            <feGaussianBlur stdDeviation="2" result="blur"/>
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
-
-        <!-- MAP BACKGROUND ZONES -->
-        <!-- Input zone label -->
-        <text x="450" y="24" text-anchor="middle" class="map-eyebrow" fill="#6B7280" opacity="0.5">INPUT CHANNELS</text>
-
-        <!-- INPUT NODES (three entry points at top) -->
-        <!-- Local -->
-        <rect x="80" y="32" width="90" height="36" rx="3" fill="#1A1C1F" stroke="#1F2937" stroke-width="1"/>
-        <text x="125" y="50" text-anchor="middle" class="map-node-label" font-size="10">Local</text>
-        <text x="125" y="62" text-anchor="middle" class="map-node-sub" font-size="8">Typed · Voice · Drop</text>
-        <!-- Remote -->
-        <rect x="405" y="32" width="90" height="36" rx="3" fill="#1A1C1F" stroke="#1F2937" stroke-width="1"/>
-        <text x="450" y="50" text-anchor="middle" class="map-node-label" font-size="10">Remote</text>
-        <text x="450" y="62" text-anchor="middle" class="map-node-sub" font-size="8">Dispatch · Control · Plaud</text>
-        <!-- Exterior -->
-        <rect x="730" y="32" width="90" height="36" rx="3" fill="#1A1C1F" stroke="#1F2937" stroke-width="1"/>
-        <text x="775" y="50" text-anchor="middle" class="map-node-label" font-size="10">Exterior</text>
-        <text x="775" y="62" text-anchor="middle" class="map-node-sub" font-size="8">Antigravity · Triggers</text>
-
-        <!-- Input arrows to ORIENT -->
-        <line x1="125" y1="68" x2="370" y2="138" stroke="#FFAB40" stroke-width="1" stroke-opacity="0" marker-end="url(#m-arrow-ember)" class="map-input-line" id="input-local"/>
-        <line x1="450" y1="68" x2="430" y2="138" stroke="#FFAB40" stroke-width="1" stroke-opacity="0" marker-end="url(#m-arrow-ember)" class="map-input-line map-input-line-b" id="input-remote"/>
-        <line x1="775" y1="68" x2="490" y2="138" stroke="#FFAB40" stroke-width="1" stroke-opacity="0" marker-end="url(#m-arrow-ember)" class="map-input-line map-input-line-c" id="input-exterior"/>
-
-        <!-- BOSS NODE -->
-        <rect x="355" y="90" width="190" height="48" rx="4" fill="#1A1C1F" stroke="#EDE9E1" stroke-opacity="0.2" stroke-width="1"/>
-        <rect x="355" y="90" width="190" height="3" rx="2" fill="#EDE9E1" opacity="0.4"/>
-        <text x="450" y="110" text-anchor="middle" class="map-node-label" font-size="11">BOSS — Michael Landi</text>
-        <text x="450" y="125" text-anchor="middle" class="map-node-sub">Field Operator · Sets direction</text>
-        <!-- BOSS→ORIENT arrow -->
-        <line x1="450" y1="138" x2="450" y2="162" stroke="#EDE9E1" stroke-opacity="0.25" stroke-width="1" marker-end="url(#m-arrow)"/>
-
-        <!-- ORIENT NODE -->
-        <rect x="340" y="166" width="220" height="52" rx="4" fill="#1A1C1F" stroke="#EDE9E1" stroke-opacity="0.3" stroke-width="1.5"/>
-        <rect x="340" y="166" width="220" height="3" rx="2" fill="#EDE9E1" opacity="0.5"/>
-        <text x="450" y="188" text-anchor="middle" class="map-node-label" font-size="12">ORIENT</text>
-        <text x="450" y="204" text-anchor="middle" class="map-node-sub">Consigliere · Briefing · Routing · Coordination</text>
-
-        <!-- ORIENT routing arrows to lanes -->
-        <line x1="380" y1="218" x2="130" y2="268" stroke="#A8B5C7" stroke-opacity="0.3" stroke-width="1" marker-end="url(#m-arrow)"/>
-        <line x1="420" y1="218" x2="310" y2="268" stroke="#C9B391" stroke-opacity="0.3" stroke-width="1" marker-end="url(#m-arrow)"/>
-        <line x1="480" y1="218" x2="590" y2="268" stroke="#C9B391" stroke-opacity="0.3" stroke-width="1" marker-end="url(#m-arrow)"/>
-        <line x1="510" y1="218" x2="720" y2="268" stroke="#9FB8A3" stroke-opacity="0.3" stroke-width="1" marker-end="url(#m-arrow)"/>
-        <!-- ANCHOR line from ORIENT (lateral, not routing) -->
-        <line x1="340" y1="192" x2="230" y2="192" stroke="#BFA7C4" stroke-opacity="0.2" stroke-width="1" stroke-dasharray="4 3"/>
-
-        <!-- ANCHOR NODE (beside ORIENT) -->
-        <rect x="100" y="178" width="128" height="48" rx="4" fill="#1A1C1F" stroke="#BFA7C4" stroke-opacity="0.25" stroke-width="1"/>
-        <rect x="100" y="178" width="128" height="3" rx="2" fill="#BFA7C4" opacity="0.4"/>
-        <text x="164" y="198" text-anchor="middle" class="map-node-label" font-size="10">ANCHOR</text>
-        <text x="164" y="211" text-anchor="middle" class="map-node-sub" font-size="8.5">Personal pillars · Integration</text>
-        <text x="164" y="222" text-anchor="middle" class="map-node-sub" font-size="7.5" fill="#BFA7C4" opacity="0.7">Life lane</text>
-
-        <!-- STRATEGY LANE agents -->
-        <rect x="30" y="272" width="200" height="44" rx="4" fill="#1A1C1F" stroke="#A8B5C7" stroke-opacity="0.25" stroke-width="1"/>
-        <rect x="30" y="272" width="200" height="3" rx="2" fill="#A8B5C7" opacity="0.4"/>
-        <text x="130" y="291" text-anchor="middle" class="map-node-label" font-size="10">STRATEGOS</text>
-        <text x="130" y="306" text-anchor="middle" class="map-node-sub">Revenue architecture · GTM</text>
-
-        <rect x="30" y="328" width="200" height="44" rx="4" fill="#1A1C1F" stroke="#A8B5C7" stroke-opacity="0.2" stroke-width="1"/>
-        <rect x="30" y="328" width="200" height="3" rx="2" fill="#A8B5C7" opacity="0.3"/>
-        <text x="130" y="347" text-anchor="middle" class="map-node-label" font-size="10">RECON</text>
-        <text x="130" y="362" text-anchor="middle" class="map-node-sub">Research · Intelligence</text>
-
-        <!-- STRATEGOS↔RECON swarm line -->
-        <line x1="130" y1="316" x2="130" y2="328" stroke="#A8B5C7" stroke-dasharray="3 3" stroke-width="1.5" class="map-swarm-line" stroke-opacity="0.2"/>
-
-        <!-- BUILD LANE agents (left side: CANVAS, SIGNAL) -->
-        <rect x="248" y="272" width="130" height="44" rx="4" fill="#1A1C1F" stroke="#C9B391" stroke-opacity="0.25" stroke-width="1"/>
-        <rect x="248" y="272" width="130" height="3" rx="2" fill="#C9B391" opacity="0.4"/>
-        <text x="313" y="291" text-anchor="middle" class="map-node-label" font-size="10">CANVAS</text>
-        <text x="313" y="306" text-anchor="middle" class="map-node-sub">Creative · Brand · Visual</text>
-
-        <rect x="248" y="328" width="130" height="44" rx="4" fill="#1A1C1F" stroke="#C9B391" stroke-opacity="0.2" stroke-width="1"/>
-        <rect x="248" y="328" width="130" height="3" rx="2" fill="#C9B391" opacity="0.3"/>
-        <text x="313" y="347" text-anchor="middle" class="map-node-label" font-size="10">SIGNAL</text>
-        <text x="313" y="362" text-anchor="middle" class="map-node-sub">Copy · Content · Voice</text>
-
-        <!-- BUILD LANE agents (right side: FORGE, STUDIO) -->
-        <rect x="522" y="272" width="130" height="44" rx="4" fill="#1A1C1F" stroke="#C9B391" stroke-opacity="0.25" stroke-width="1"/>
-        <rect x="522" y="272" width="130" height="3" rx="2" fill="#C9B391" opacity="0.4"/>
-        <text x="587" y="291" text-anchor="middle" class="map-node-label" font-size="10">FORGE</text>
-        <text x="587" y="306" text-anchor="middle" class="map-node-sub">Web dev · Builds · Code</text>
-
-        <rect x="522" y="328" width="130" height="44" rx="4" fill="#1A1C1F" stroke="#C9B391" stroke-opacity="0.2" stroke-width="1"/>
-        <rect x="522" y="328" width="130" height="3" rx="2" fill="#C9B391" opacity="0.3"/>
-        <text x="587" y="347" text-anchor="middle" class="map-node-label" font-size="10">STUDIO</text>
-        <text x="587" y="362" text-anchor="middle" class="map-node-sub">3D · Audio · Media</text>
-
-        <!-- Build lane swarm pulses (CANVAS↔FORGE, CANVAS↔SIGNAL, FORGE↔STUDIO) -->
-        <line x1="378" y1="293" x2="522" y2="293" stroke="#FFAB40" stroke-dasharray="6 4" stroke-width="1.5" class="map-swarm-line" stroke-opacity="0.15"/>
-        <line x1="313" y1="316" x2="313" y2="328" stroke="#C9B391" stroke-dasharray="3 3" stroke-width="1" class="map-swarm-line-b" stroke-opacity="0.2"/>
-        <line x1="587" y1="316" x2="587" y2="328" stroke="#C9B391" stroke-dasharray="3 3" stroke-width="1" class="map-swarm-line-b" stroke-opacity="0.2"/>
-
-        <!-- OPS LANE -->
-        <rect x="670" y="272" width="200" height="44" rx="4" fill="#1A1C1F" stroke="#9FB8A3" stroke-opacity="0.25" stroke-width="1"/>
-        <rect x="670" y="272" width="200" height="3" rx="2" fill="#9FB8A3" opacity="0.4"/>
-        <text x="770" y="291" text-anchor="middle" class="map-node-label" font-size="10">CIRCUIT</text>
-        <text x="770" y="306" text-anchor="middle" class="map-node-sub">Automations · Integrations · Plumbing</text>
-
-        <!-- Tool chips — CANVAS orbiting tools -->
-        <rect x="248" y="386" width="56" height="18" rx="9" fill="#1A1C1F" stroke="#C9B391" stroke-opacity="0.3" stroke-width="1"/>
-        <text x="276" y="399" text-anchor="middle" class="map-node-sub" font-size="7.5" fill="#C9B391">Figma</text>
-        <rect x="310" y="386" width="68" height="18" rx="9" fill="#1A1C1F" stroke="#C9B391" stroke-opacity="0.3" stroke-width="1"/>
-        <text x="344" y="399" text-anchor="middle" class="map-node-sub" font-size="7.5" fill="#C9B391">Figma Weave</text>
-
-        <!-- Tool chips — FORGE orbiting tools -->
-        <rect x="522" y="386" width="72" height="18" rx="9" fill="#1A1C1F" stroke="#C9B391" stroke-opacity="0.3" stroke-width="1"/>
-        <text x="558" y="399" text-anchor="middle" class="map-node-sub" font-size="7.5" fill="#C9B391">Claude Code</text>
-        <rect x="600" y="386" width="52" height="18" rx="9" fill="#1A1C1F" stroke="#C9B391" stroke-opacity="0.3" stroke-width="1"/>
-        <text x="626" y="399" text-anchor="middle" class="map-node-sub" font-size="7.5" fill="#C9B391">Framer</text>
-
-        <!-- Tool chips — CIRCUIT -->
-        <rect x="690" y="328" width="44" height="18" rx="9" fill="#1A1C1F" stroke="#9FB8A3" stroke-opacity="0.3" stroke-width="1"/>
-        <text x="712" y="341" text-anchor="middle" class="map-node-sub" font-size="7.5" fill="#9FB8A3">Make</text>
-        <rect x="740" y="328" width="40" height="18" rx="9" fill="#1A1C1F" stroke="#9FB8A3" stroke-opacity="0.3" stroke-width="1"/>
-        <text x="760" y="341" text-anchor="middle" class="map-node-sub" font-size="7.5" fill="#9FB8A3">n8n</text>
-        <rect x="786" y="328" width="46" height="18" rx="9" fill="#1A1C1F" stroke="#9FB8A3" stroke-opacity="0.3" stroke-width="1"/>
-        <text x="809" y="341" text-anchor="middle" class="map-node-sub" font-size="7.5" fill="#9FB8A3">Zapier</text>
-
-        <!-- TASTE GATE NODES (two diamonds) -->
-        <!-- Gate 1: before execution swarm -->
-        <rect x="432" y="274" width="36" height="36" rx="2" fill="#1A1C1F" stroke="#FFAB40" stroke-width="1.5" transform="rotate(45 450 292)" filter="url(#glow-soft)"/>
-        <text x="450" y="294" text-anchor="middle" class="map-eyebrow" fill="#FFAB40" font-size="7">GATE</text>
-        <text x="450" y="305" text-anchor="middle" class="map-node-sub" font-size="7" fill="#FFAB40" opacity="0.8">Strategy check</text>
-
-        <!-- Gate 2: before ship -->
-        <rect x="432" y="350" width="36" height="36" rx="2" fill="#1A1C1F" stroke="#FFAB40" stroke-width="1.5" transform="rotate(45 450 368)" filter="url(#glow-soft)"/>
-        <text x="450" y="370" text-anchor="middle" class="map-eyebrow" fill="#FFAB40" font-size="7">GATE</text>
-        <text x="450" y="381" text-anchor="middle" class="map-node-sub" font-size="7" fill="#FFAB40" opacity="0.8">Operator decides</text>
-
-        <!-- OBSIDIAN VAULT LAYER -->
-        <rect x="16" y="428" width="868" height="72" rx="4" fill="#1A1C1F" stroke="#1F2937" stroke-width="1" stroke-dasharray="6 4"/>
-        <text x="450" y="448" text-anchor="middle" class="map-eyebrow" fill="#6B7280" opacity="0.7">OBSIDIAN VAULT — SOURCE OF TRUTH</text>
-        <text x="450" y="464" text-anchor="middle" class="map-node-sub">Agents · SOPs · Decisions · Session Memory · Active Projects · Plain Markdown</text>
-        <!-- Dotted memory lines from agents to vault -->
-        <line x1="130" y1="372" x2="130" y2="428" stroke="#6B7280" stroke-dasharray="3 4" stroke-width="1" stroke-opacity="0.2"/>
-        <line x1="313" y1="372" x2="280" y2="428" stroke="#6B7280" stroke-dasharray="3 4" stroke-width="1" stroke-opacity="0.2"/>
-        <line x1="450" y1="390" x2="450" y2="428" stroke="#6B7280" stroke-dasharray="3 4" stroke-width="1" stroke-opacity="0.15"/>
-        <line x1="587" y1="372" x2="620" y2="428" stroke="#6B7280" stroke-dasharray="3 4" stroke-width="1" stroke-opacity="0.2"/>
-        <line x1="770" y1="316" x2="770" y2="428" stroke="#6B7280" stroke-dasharray="3 4" stroke-width="1" stroke-opacity="0.15"/>
-        <!-- Vault label items -->
-        <text x="130" y="488" text-anchor="middle" class="map-node-sub" font-size="7.5" opacity="0.5">01_AGENTS</text>
-        <text x="250" y="488" text-anchor="middle" class="map-node-sub" font-size="7.5" opacity="0.5">02_ARCKIN_CORE</text>
-        <text x="400" y="488" text-anchor="middle" class="map-node-sub" font-size="7.5" opacity="0.5">03_ACTIVE_PROJECTS</text>
-        <text x="560" y="488" text-anchor="middle" class="map-node-sub" font-size="7.5" opacity="0.5">06_SYSTEM_DOCS</text>
-        <text x="710" y="488" text-anchor="middle" class="map-node-sub" font-size="7.5" opacity="0.5">_MOCs</text>
-
-        <!-- ATLAS — engagement steward zone -->
-        <rect x="300" y="516" width="300" height="48" rx="4" fill="#1A1C1F" stroke="#FFAB40" stroke-opacity="0.35" stroke-width="1" stroke-dasharray="5 3"/>
-        <rect x="300" y="516" width="300" height="3" rx="1" fill="#FFAB40" opacity="0.5"/>
-        <text x="450" y="512" text-anchor="middle" class="map-eyebrow" fill="#6B7280" opacity="0.5">ENGAGEMENT STEWARD</text>
-        <text x="450" y="537" text-anchor="middle" class="map-node-label" font-size="11" fill="#FFAB40">ATLAS — AspireVue</text>
-        <text x="450" y="553" text-anchor="middle" class="map-node-sub">Promise Ledger · Cadence · Correspondence Memory</text>
-
-        <!-- SHIP node -->
-        <rect x="398" y="578" width="104" height="32" rx="3" fill="none" stroke="#EDE9E1" stroke-opacity="0.15" stroke-width="1"/>
-        <text x="450" y="591" text-anchor="middle" class="map-eyebrow" fill="#6B7280" opacity="0.5">SHIPS</text>
-        <text x="450" y="603" text-anchor="middle" class="map-node-sub" font-size="8">Artifact → Larry → Next beat</text>
-        <line x1="450" y1="610" x2="450" y2="577" stroke="#6B7280" stroke-opacity="0.2" stroke-width="1" marker-end="url(#m-arrow)"/>
-        <line x1="450" y1="564" x2="450" y2="578" stroke="#FFAB40" stroke-opacity="0.3" stroke-width="1" marker-end="url(#m-arrow-ember)"/>
-
-        <!-- Legend row -->
-        <text x="16" y="644" class="map-eyebrow" fill="#6B7280" opacity="0.5">Legend:</text>
-        <line x1="70" y1="640" x2="100" y2="640" stroke="#EDE9E1" stroke-opacity="0.3" stroke-width="1.5"/>
-        <text x="106" y="644" class="map-node-sub" font-size="8" opacity="0.6">Work handoff</text>
-        <line x1="180" y1="640" x2="210" y2="640" stroke="#6B7280" stroke-dasharray="3 3" stroke-opacity="0.4" stroke-width="1.5"/>
-        <text x="216" y="644" class="map-node-sub" font-size="8" opacity="0.6">Memory flow</text>
-        <line x1="300" y1="640" x2="330" y2="640" stroke="#FFAB40" stroke-dasharray="6 4" stroke-opacity="0.5" stroke-width="1.5"/>
-        <text x="336" y="644" class="map-node-sub" font-size="8" opacity="0.6">Swarming pulse</text>
-        <line x1="430" y1="640" x2="460" y2="640" stroke="#FFAB40" stroke-opacity="0.6" stroke-width="1.5" marker-end="url(#m-arrow-ember)"/>
-        <text x="466" y="644" class="map-node-sub" font-size="8" opacity="0.6">Input / handoff</text>
-        <rect x="560" y="634" width="10" height="10" rx="1" fill="none" stroke="#FFAB40" stroke-width="1.2" transform="rotate(45 565 639)"/>
-        <text x="578" y="644" class="map-node-sub" font-size="8" opacity="0.6">Taste gate</text>
-      </svg>
-    </div>
-
-    <p class="map-caption arrive" data-observe>Color lanes match Section 2. Node shapes match Section 3 tool groups. Dotted lines are memory/context flows. Solid lines are active work handoffs. Pulsed edges are live swarming between agents.</p>
+<!-- SECTION 5 — THE ECOSYSTEM MAP -->
+<section class="section-full border-top" id="section-5" aria-labelledby="s5-heading">
+  <span class="eyebrow arrive" data-observe>THE HERO ARTIFACT</span>
+  <h2 class="section-heading large arrive" id="s5-heading" data-observe>The ecosystem, in one view.</h2>
+  <div class="map-intro arrive" data-observe>
+    <p>Everything in the four sections above, shown as a single coordinated system. Agents, vault, tools, workflows, taste gates. Directional flow lines show how work actually moves. Swarming lines pulse between collaborating agents. Taste-gate nodes mark the points where the operator decides.</p>
+    <p>The map doesn't need a legend. If the sections above did their job, it reads on its own. Sit with it.</p>
   </div>
-</div>
+
+  <div class="map-container" id="map-container">
+    <svg class="map-svg" id="ecosystem-map" viewBox="0 0 1100 820" width="1100" height="820" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Arc'kin Agency ecosystem map showing agents, tools, vault, workflows, and taste gates">
+      <defs>
+        <!-- Arrow markers -->
+        <marker id="arrow-route" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <path d="M0,0 L7,3.5 L0,7 Z" fill="#6B7280" opacity="0.7"/>
+        </marker>
+        <marker id="arrow-ship" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <path d="M0,0 L7,3.5 L0,7 Z" fill="#EDE9E1" opacity="0.7"/>
+        </marker>
+        <marker id="arrow-cmd" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <path d="M0,0 L7,3.5 L0,7 Z" fill="#EDE9E1" opacity="0.7"/>
+        </marker>
+        <marker id="arrow-lane" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="#6B7280" opacity="0.5"/>
+        </marker>
+        <!-- Glow filter for taste gates -->
+        <filter id="gate-glow-filter" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- ===== LANE BACKGROUND COLUMNS ===== -->
+      <rect x="18" y="145" width="170" height="330" rx="4" class="map-lane-bg-strategy"/>
+      <rect x="200" y="145" width="310" height="330" rx="4" class="map-lane-bg-build"/>
+      <rect x="522" y="145" width="150" height="180" rx="4" class="map-lane-bg-ops"/>
+      <rect x="684" y="145" width="150" height="180" rx="4" class="map-lane-bg-life"/>
+
+      <!-- Lane labels -->
+      <text x="103" y="162" text-anchor="middle" class="map-lane-label" fill="#A8B5C7">STRATEGY</text>
+      <text x="355" y="162" text-anchor="middle" class="map-lane-label" fill="#C9B391">BUILD</text>
+      <text x="597" y="162" text-anchor="middle" class="map-lane-label" fill="#9FB8A3">OPS</text>
+      <text x="759" y="162" text-anchor="middle" class="map-lane-label" fill="#BFA7C4">LIFE</text>
+
+      <!-- ===== INPUT CHANNELS (top) ===== -->
+      <!-- Three input nodes at top -->
+      <rect x="100" y="20" width="80" height="36" rx="10" class="map-node-tool" stroke="#A8B5C7" stroke-width="0.75"/>
+      <text x="140" y="34" text-anchor="middle" class="map-text-tool" fill="#A8B5C7">LOCAL</text>
+      <text x="140" y="47" text-anchor="middle" class="map-text-tool" fill="#6B7280">typed · voice · drop</text>
+
+      <rect x="470" y="20" width="80" height="36" rx="10" class="map-node-tool" stroke="#C9B391" stroke-width="0.75"/>
+      <text x="510" y="34" text-anchor="middle" class="map-text-tool" fill="#C9B391">REMOTE</text>
+      <text x="510" y="47" text-anchor="middle" class="map-text-tool" fill="#6B7280">dispatch · control</text>
+
+      <rect x="840" y="20" width="80" height="36" rx="10" class="map-node-tool" stroke="#9FB8A3" stroke-width="0.75"/>
+      <text x="880" y="34" text-anchor="middle" class="map-text-tool" fill="#9FB8A3">EXTERIOR</text>
+      <text x="880" y="47" text-anchor="middle" class="map-text-tool" fill="#6B7280">antigravity · triggers</text>
+
+      <!-- Input → ORIENT arrows (animated) -->
+      <path class="input-edge i1" d="M140,56 L140,80 Q140,96 440,96 Q490,96 490,100"/>
+      <path class="input-edge i2" d="M510,56 L510,96 Q510,100 490,100"/>
+      <path class="input-edge i3" d="M880,56 L880,80 Q880,96 560,96 Q510,96 510,100"/>
+
+      <!-- ===== BOSS NODE ===== -->
+      <rect x="400" y="20" width="180" height="56" rx="4" fill="#1A1C1F" stroke="#EDE9E1" stroke-width="1.5"/>
+      <rect x="400" y="20" width="180" height="3" rx="2" fill="#EDE9E1" opacity="0.9"/>
+      <text x="490" y="42" text-anchor="middle" class="map-text-eyebrow" fill="#6B7280">BOSS</text>
+      <text x="490" y="57" text-anchor="middle" class="map-text-name" fill="#EDE9E1">Michael Landi</text>
+      <text x="490" y="69" text-anchor="middle" class="map-text-role" fill="#6B7280">Field Operator</text>
+
+      <!-- BOSS → ORIENT command line -->
+      <line x1="490" y1="76" x2="490" y2="100" stroke="#EDE9E1" stroke-width="1.5" opacity="0.7" marker-end="url(#arrow-cmd)"/>
+
+      <!-- ===== ORIENT NODE ===== -->
+      <rect x="385" y="100" width="210" height="60" rx="4" fill="#1A1C1F" stroke="#EDE9E1" stroke-width="2"/>
+      <rect x="385" y="100" width="210" height="3" rx="2" fill="#EDE9E1" opacity="0.9"/>
+      <text x="490" y="121" text-anchor="middle" class="map-text-eyebrow" fill="#6B7280">CONSIGLIERE</text>
+      <text x="490" y="138" text-anchor="middle" class="map-text-name" fill="#EDE9E1" font-size="13">ORIENT</text>
+      <text x="490" y="152" text-anchor="middle" class="map-text-role" fill="#6B7280">Briefing · Routing · Coordination</text>
+
+      <!-- ORIENT → Lane routing arrows -->
+      <path d="M430,160 Q430,170 103,170" class="map-edge-route" marker-end="url(#arrow-lane)"/>
+      <path d="M460,160 Q460,170 355,170" class="map-edge-route" marker-end="url(#arrow-lane)"/>
+      <path d="M530,160 Q530,170 597,170" class="map-edge-route" marker-end="url(#arrow-lane)"/>
+      <path d="M560,160 Q560,170 759,170" class="map-edge-route" marker-end="url(#arrow-lane)"/>
+
+      <!-- ===== STRATEGY LANE AGENTS ===== -->
+      <!-- STRATEGOS -->
+      <rect x="24" y="175" width="158" height="56" rx="4" class="map-node-agent" stroke="#A8B5C7" stroke-width="0.75"/>
+      <rect x="24" y="175" width="3" height="56" rx="1" fill="#A8B5C7"/>
+      <text x="44" y="193" class="map-text-eyebrow" fill="#A8B5C7">STRATEGY</text>
+      <text x="44" y="209" class="map-text-name" fill="#EDE9E1">STRATEGOS</text>
+      <text x="44" y="223" class="map-text-role" fill="#6B7280">Revenue arch · GTM</text>
+
+      <!-- RECON -->
+      <rect x="24" y="244" width="158" height="56" rx="4" class="map-node-agent" stroke="#A8B5C7" stroke-width="0.75"/>
+      <rect x="24" y="244" width="3" height="56" rx="1" fill="#A8B5C7"/>
+      <text x="44" y="262" class="map-text-eyebrow" fill="#A8B5C7">STRATEGY</text>
+      <text x="44" y="278" class="map-text-name" fill="#EDE9E1">RECON</text>
+      <text x="44" y="292" class="map-text-role" fill="#6B7280">Research · intelligence</text>
+      <!-- RECON tool chips -->
+      <rect x="44" y="296" width="56" height="14" rx="6" fill="#1A1C1F" stroke="#A8B5C7" stroke-width="0.5"/>
+      <text x="72" y="306" text-anchor="middle" class="map-text-tool" fill="#A8B5C7">Perplexity</text>
+      <rect x="106" y="296" width="56" height="14" rx="6" fill="#1A1C1F" stroke="#A8B5C7" stroke-width="0.5"/>
+      <text x="134" y="306" text-anchor="middle" class="map-text-tool" fill="#A8B5C7">NbkLM</text>
+
+      <!-- Swarm: STRATEGOS ↔ RECON -->
+      <path class="swarm-edge d1" d="M182,203 C200,203 200,272 182,272"/>
+
+      <!-- ===== BUILD LANE AGENTS ===== -->
+      <!-- CANVAS -->
+      <rect x="206" y="175" width="146" height="56" rx="4" class="map-node-agent" stroke="#C9B391" stroke-width="0.75"/>
+      <rect x="206" y="175" width="3" height="56" rx="1" fill="#C9B391"/>
+      <text x="226" y="193" class="map-text-eyebrow" fill="#C9B391">BUILD</text>
+      <text x="226" y="209" class="map-text-name" fill="#EDE9E1">CANVAS</text>
+      <text x="226" y="223" class="map-text-role" fill="#6B7280">Creative direction · brand</text>
+      <!-- CANVAS tool chips -->
+      <rect x="226" y="228" width="38" height="14" rx="6" fill="#1A1C1F" stroke="#C9B391" stroke-width="0.5"/>
+      <text x="245" y="238" text-anchor="middle" class="map-text-tool" fill="#C9B391">Figma</text>
+      <rect x="270" y="228" width="38" height="14" rx="6" fill="#1A1C1F" stroke="#C9B391" stroke-width="0.5"/>
+      <text x="289" y="238" text-anchor="middle" class="map-text-tool" fill="#C9B391">Spline</text>
+
+      <!-- SIGNAL -->
+      <rect x="360" y="175" width="146" height="56" rx="4" class="map-node-agent" stroke="#C9B391" stroke-width="0.75"/>
+      <rect x="360" y="175" width="3" height="56" rx="1" fill="#C9B391"/>
+      <text x="380" y="193" class="map-text-eyebrow" fill="#C9B391">BUILD</text>
+      <text x="380" y="209" class="map-text-name" fill="#EDE9E1">SIGNAL</text>
+      <text x="380" y="223" class="map-text-role" fill="#6B7280">Copy · content · voice</text>
+
+      <!-- FORGE -->
+      <rect x="206" y="248" width="146" height="56" rx="4" class="map-node-agent" stroke="#C9B391" stroke-width="0.75"/>
+      <rect x="206" y="248" width="3" height="56" rx="1" fill="#C9B391"/>
+      <text x="226" y="266" class="map-text-eyebrow" fill="#C9B391">BUILD</text>
+      <text x="226" y="282" class="map-text-name" fill="#EDE9E1">FORGE</text>
+      <text x="226" y="296" class="map-text-role" fill="#6B7280">Web dev · builds</text>
+      <!-- FORGE chips -->
+      <rect x="226" y="300" width="42" height="14" rx="6" fill="#1A1C1F" stroke="#C9B391" stroke-width="0.5"/>
+      <text x="247" y="310" text-anchor="middle" class="map-text-tool" fill="#C9B391">Framer</text>
+      <rect x="274" y="300" width="38" height="14" rx="6" fill="#1A1C1F" stroke="#C9B391" stroke-width="0.5"/>
+      <text x="293" y="310" text-anchor="middle" class="map-text-tool" fill="#C9B391">Stitch</text>
+
+      <!-- STUDIO -->
+      <rect x="360" y="248" width="146" height="56" rx="4" class="map-node-agent" stroke="#C9B391" stroke-width="0.75"/>
+      <rect x="360" y="248" width="3" height="56" rx="1" fill="#C9B391"/>
+      <text x="380" y="266" class="map-text-eyebrow" fill="#C9B391">BUILD</text>
+      <text x="380" y="282" class="map-text-name" fill="#EDE9E1">STUDIO</text>
+      <text x="380" y="296" class="map-text-role" fill="#6B7280">3D · audio · media</text>
+      <!-- STUDIO chips -->
+      <rect x="380" y="300" width="38" height="14" rx="6" fill="#1A1C1F" stroke="#C9B391" stroke-width="0.5"/>
+      <text x="399" y="310" text-anchor="middle" class="map-text-tool" fill="#C9B391">Flow</text>
+      <rect x="424" y="300" width="44" height="14" rx="6" fill="#1A1C1F" stroke="#C9B391" stroke-width="0.5"/>
+      <text x="446" y="310" text-anchor="middle" class="map-text-tool" fill="#C9B391">Remotion</text>
+
+      <!-- Build lane swarm pulses -->
+      <path class="swarm-edge d2" d="M356,199 Q340,199 340,232 Q340,260 356,260"/>
+      <path class="swarm-edge d3" d="M510,199 C528,199 528,260 510,260"/>
+      <path class="swarm-edge d4" d="M356,272 Q340,272 340,295 Q340,316 360,316 Q374,316 374,296"/>
+      <!-- Cross-lane STRATEGOS ↔ CANVAS swarm -->
+      <path class="swarm-edge d1" d="M182,199 Q194,199 206,199" style="animation-delay:1.8s;"/>
+
+      <!-- ===== OPS LANE ===== -->
+      <rect x="528" y="175" width="138" height="56" rx="4" class="map-node-agent" stroke="#9FB8A3" stroke-width="0.75"/>
+      <rect x="528" y="175" width="3" height="56" rx="1" fill="#9FB8A3"/>
+      <text x="548" y="193" class="map-text-eyebrow" fill="#9FB8A3">OPS</text>
+      <text x="548" y="209" class="map-text-name" fill="#EDE9E1">CIRCUIT</text>
+      <text x="548" y="223" class="map-text-role" fill="#6B7280">Automations · integrations</text>
+      <!-- CIRCUIT chips -->
+      <rect x="548" y="228" width="28" height="14" rx="6" fill="#1A1C1F" stroke="#9FB8A3" stroke-width="0.5"/>
+      <text x="562" y="238" text-anchor="middle" class="map-text-tool" fill="#9FB8A3">n8n</text>
+      <rect x="582" y="228" width="34" height="14" rx="6" fill="#1A1C1F" stroke="#9FB8A3" stroke-width="0.5"/>
+      <text x="599" y="238" text-anchor="middle" class="map-text-tool" fill="#9FB8A3">Zapier</text>
+      <rect x="622" y="228" width="28" height="14" rx="6" fill="#1A1C1F" stroke="#9FB8A3" stroke-width="0.5"/>
+      <text x="636" y="238" text-anchor="middle" class="map-text-tool" fill="#9FB8A3">Jira</text>
+
+      <!-- ===== LIFE LANE ===== -->
+      <rect x="690" y="175" width="138" height="56" rx="4" class="map-node-agent" stroke="#BFA7C4" stroke-width="0.75"/>
+      <rect x="690" y="175" width="3" height="56" rx="1" fill="#BFA7C4"/>
+      <text x="710" y="193" class="map-text-eyebrow" fill="#BFA7C4">LIFE</text>
+      <text x="710" y="209" class="map-text-name" fill="#EDE9E1">ANCHOR</text>
+      <text x="710" y="223" class="map-text-role" fill="#6B7280">Personal pillars</text>
+
+      <!-- ANCHOR ↔ ORIENT collab -->
+      <path d="M759,175 Q759,155 600,150 Q540,148 490,160" stroke="#BFA7C4" stroke-width="0.75" stroke-dasharray="3 4" fill="none" opacity="0.4"/>
+
+      <!-- ===== TASTE GATE 1 — before execution swarm ===== -->
+      <!-- Diamond shape at ~x=490, y=340 -->
+      <g class="taste-gate-group" transform="translate(490,352)" filter="url(#gate-glow-filter)">
+        <polygon points="0,-26 26,0 0,26 -26,0" fill="rgba(255,171,64,0.08)" stroke="#FFAB40" stroke-width="1.5"/>
+        <text y="-6" text-anchor="middle" class="map-text-eyebrow" fill="#FFAB40">TASTE</text>
+        <text y="6" text-anchor="middle" class="map-text-eyebrow" fill="#FFAB40">GATE</text>
+        <text y="18" text-anchor="middle" class="map-text-tool" fill="#6B7280" font-size="7">Operator decides</text>
+      </g>
+
+      <!-- ORIENT → Taste Gate 1 -->
+      <line x1="490" y1="160" x2="490" y2="326" stroke="#6B7280" stroke-width="1" stroke-dasharray="4 4" opacity="0.4"/>
+
+      <!-- ===== EXECUTION OUTPUTS (below taste gates) ===== -->
+      <!-- Workflow beat circles -->
+      <circle cx="200" cy="430" r="22" class="map-node-beat" stroke="#C9B391" stroke-width="1"/>
+      <text x="200" y="427" text-anchor="middle" class="map-text-beat" fill="#C9B391">EX</text>
+      <text x="200" y="439" text-anchor="middle" class="map-text-beat" fill="#6B7280" font-size="7">SWARM</text>
+
+      <circle cx="490" cy="430" r="22" class="map-node-beat" stroke="#A8B5C7" stroke-width="1"/>
+      <text x="490" y="427" text-anchor="middle" class="map-text-beat" fill="#A8B5C7">STR</text>
+      <text x="490" y="439" text-anchor="middle" class="map-text-beat" fill="#6B7280" font-size="7">SWARM</text>
+
+      <!-- Taste gate → execution beats -->
+      <path d="M480,378 Q480,400 490,408" stroke="#FFAB40" stroke-width="0.75" fill="none" opacity="0.5" stroke-dasharray="3 3"/>
+      <path d="M464,378 Q420,378 300,400 Q250,415 222,408" stroke="#FFAB40" stroke-width="0.75" fill="none" opacity=" 0.5" stroke-dasharray="3 3"/>
+
+      <!-- ===== TASTE GATE 2 — before shipment ===== -->
+      <g class="taste-gate-group" transform="translate(490,490)" filter="url(#gate-glow-filter)" style="animation-delay:1.5s;">
+        <polygon points="0,-22 22,0 0,22 -22,0" fill="rgba(255,171,64,0.08)" stroke="#FFAB40" stroke-width="1.5"/>
+        <text y="-5" text-anchor="middle" class="map-text-eyebrow" fill="#FFAB40">TASTE</text>
+        <text y="5" text-anchor="middle" class="map-text-eyebrow" fill="#FFAB40">GATE 2</text>
+        <text y="16" text-anchor="middle" class="map-text-tool" fill="#6B7280" font-size="7">Operator decides</text>
+      </g>
+      <!-- Execution → Taste Gate 2 -->
+      <line x1="490" y1="452" x2="490" y2="468" stroke="#6B7280" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"/>
+      <line x1="216" y1="452" x2="490" y2="468" stroke="#6B7280" stroke-width="1" stroke-dasharray="3 3" opacity="0.3"/>
+
+      <!-- SHIPS node -->
+      <rect x="440" y="532" width="100" height="32" rx="4" fill="#1A1C1F" stroke="#EDE9E1" stroke-width="1.5"/>
+      <text x="490" y="552" text-anchor="middle" class="map-text-name" fill="#EDE9E1" font-size="11">SHIPS</text>
+      <line x1="490" y1="512" x2="490" y2="532" stroke="#EDE9E1" stroke-width="1.5" opacity="0.7" marker-end="url(#arrow-ship)"/>
+
+      <!-- ===== ATLAS ENGAGEMENT ZONE ===== -->
+      <rect x="840" y="145" width="240" height="200" rx="4" class="map-atlas-zone"/>
+      <text x="960" y="165" text-anchor="middle" class="map-text-eyebrow" fill="#FFAB40" font-size="7.5">ENGAGEMENT STEWARD · ASPIREVUE</text>
+      <rect x="858" y="172" width="204" height="60" rx="4" fill="#1A1C1F" stroke="#FFAB40" stroke-width="1"/>
+      <rect x="858" y="172" width="3" height="60" rx="1" fill="#FFAB40"/>
+      <text x="878" y="192" class="map-text-eyebrow" fill="#FFAB40">ENGAGEMENT STEWARD</text>
+      <text x="878" y="208" class="map-text-name" fill="#EDE9E1">ATLAS</text>
+      <text x="878" y="222" class="map-text-role" fill="#6B7280">Promise ledger · correspondence</text>
+      <text x="878" y="234" class="map-text-role" fill="#6B7280">memory · cadence</text>
+
+      <!-- ATLAS ↔ ORIENT  -->
+      <path d="M840,200 Q700,200 595,145" stroke="#FFAB40" stroke-width="0.75" stroke-dasharray="3 4" fill="none" opacity="0.4"/>
+
+      <!-- ===== VAULT FOLDER NODES (bottom) ===== -->
+      <rect x="20" y="610" width="1060" height="165" rx="4" class="map-vault-bg"/>
+      <text x="550" y="630" text-anchor="middle" class="map-text-eyebrow" fill="#FFAB40" font-size="8.5" letter-spacing="0.16em">OBSIDIAN VAULT — SOURCE OF TRUTH</text>
+
+      <!-- Folder nodes row -->
+      <!-- _MOCs -->
+      <rect x="36" y="638" width="100" height="40" rx="2" class="map-node-folder" stroke="#6B7280"/>
+      <text x="86" y="655" text-anchor="middle" class="map-text-tool" fill="#6B7280">_MOCs</text>
+      <text x="86" y="670" text-anchor="middle" class="map-text-tool" fill="#6B7280" font-size="7">memory index</text>
+
+      <!-- 01_AGENTS -->
+      <rect x="148" y="638" width="100" height="40" rx="2" class="map-node-folder" stroke="#A8B5C7"/>
+      <text x="198" y="655" text-anchor="middle" class="map-text-tool" fill="#A8B5C7">01_AGENTS</text>
+      <text x="198" y="670" text-anchor="middle" class="map-text-tool" fill="#6B7280" font-size="7">personas · SOPs</text>
+
+      <!-- 02_ARCKIN_CORE -->
+      <rect x="260" y="638" width="120" height="40" rx="2" class="map-node-folder" stroke="#C9B391"/>
+      <text x="320" y="655" text-anchor="middle" class="map-text-tool" fill="#C9B391">02_ARCKIN_CORE</text>
+      <text x="320" y="670" text-anchor="middle" class="map-text-tool" fill="#6B7280" font-size="7">doctrine · feedback</text>
+
+      <!-- 03_ACTIVE_PROJECTS -->
+      <rect x="392" y="638" width="130" height="40" rx="2" class="map-node-folder" stroke="#9FB8A3"/>
+      <text x="457" y="655" text-anchor="middle" class="map-text-tool" fill="#9FB8A3">03_ACTIVE_PROJECTS</text>
+      <text x="457" y="670" text-anchor="middle" class="map-text-tool" fill="#6B7280" font-size="7">live work · briefs</text>
+
+      <!-- 06_SYSTEM_DOCS -->
+      <rect x="534" y="638" width="120" height="40" rx="2" class="map-node-folder" stroke="#6B7280"/>
+      <text x="594" y="655" text-anchor="middle" class="map-text-tool" fill="#6B7280">06_SYSTEM_DOCS</text>
+      <text x="594" y="670" text-anchor="middle" class="map-text-tool" fill="#6B7280" font-size="7">plans · specs</text>
+
+      <!-- 10_Working-Docs -->
+      <rect x="666" y="638" width="120" height="40" rx="2" class="map-node-folder" stroke="#BFA7C4"/>
+      <text x="726" y="655" text-anchor="middle" class="map-text-tool" fill="#BFA7C4">10_Working-Docs</text>
+      <text x="726" y="670" text-anchor="middle" class="map-text-tool" fill="#6B7280" font-size="7">briefs · copy · refs</text>
+
+      <!-- 20_Client-Facing -->
+      <rect x="798" y="638" width="120" height="40" rx="2" class="map-node-folder" stroke="#FFAB40"/>
+      <text x="858" y="655" text-anchor="middle" class="map-text-tool" fill="#FFAB40">20_Client-Facing</text>
+      <text x="858" y="670" text-anchor="middle" class="map-text-tool" fill="#6B7280" font-size="7">deliverables</text>
+
+      <!-- Memory flow lines: agents → vault (dotted drops) -->
+      <line x1="103" y1="300" x2="103" y2="610" class="map-edge-memory"/>
+      <line x1="279" y1="304" x2="279" y2="610" class="map-edge-memory"/>
+      <line x1="433" y1="231" x2="433" y2="610" class="map-edge-memory"/>
+      <line x1="490" y1="564" x2="490" y2="610" class="map-edge-memory"/>
+      <line x1="597" y1="245" x2="597" y2="610" class="map-edge-memory"/>
+      <line x1="759" y1="231" x2="759" y2="610" class="map-edge-memory"/>
+      <line x1="960" y1="232" x2="960" y2="610" class="map-edge-memory"/>
+
+      <!-- Second vault row label -->
+      <text x="550" y="710" text-anchor="middle" class="map-text-role" fill="#6B7280" font-size="9">All agents read from and write to the vault. Every session picks up where the last one left off.</text>
+
+      <!-- ===== MAP LEGEND (minimal, bottom-right) ===== -->
+      <g transform="translate(860, 735)">
+        <text x="0" y="0" class="map-text-eyebrow" fill="#6B7280" font-size="7" letter-spacing="0.1em">LEGEND</text>
+        <!-- Command line -->
+        <line x1="0" y1="12" x2="28" y2="12" stroke="#EDE9E1" stroke-width="1.5" opacity="0.7"/>
+        <text x="32" y="16" class="map-text-tool" fill="#6B7280">Command</text>
+        <!-- Route line -->
+        <line x1="0" y1="26" x2="28" y2="26" stroke="#6B7280" stroke-width="1" stroke-dasharray="3 3" opacity="0.7"/>
+        <text x="32" y="30" class="map-text-tool" fill="#6B7280">Routing</text>
+        <!-- Swarm line -->
+        <line x1="0" y1="40" x2="28" y2="40" stroke="#FFAB40" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.5"/>
+        <text x="32" y="44" class="map-text-tool" fill="#6B7280">Swarming</text>
+        <!-- Memory line -->
+        <line x1="0" y1="54" x2="28" y2="54" stroke="#6B7280" stroke-width="0.75" stroke-dasharray="2 4" opacity="0.5"/>
+        <text x="32" y="58" class="map-text-tool" fill="#6B7280">Memory flow</text>
+        <!-- Gate diamond -->
+        <polygon points="10,68 18,74 10,80 2,74" fill="rgba(255,171,64,0.08)" stroke="#FFAB40" stroke-width="1"/>
+        <text x="32" y="78" class="map-text-tool" fill="#6B7280">Taste gate</text>
+      </g>
+    </svg>
+  </div>
+
+  <p class="map-caption arrive" data-observe>Color lanes match Section 2. Node shapes match Section 3 tool groups. Dotted lines are memory/context flows. Solid lines are active work handoffs. Pulsed edges are live swarming between agents.</p>
+</section>
+
+<!-- SECTION 6 — OBSIDIAN AS SOURCE OF TRUTH -->
+<section class="section border-top" id="section-6" aria-labelledby="s6-heading" style="border-top:1px solid var(--rule);">
+  <span class="eyebrow arrive" data-observe>THE MEMORY LAYER</span>
+  <h2 class="section-heading arrive" id="s6-heading" data-observe>Obsidian holds everything.</h2>
+  <div class="obsidian-layout">
+    <div class="obsidian-prose arrive" data-observe>
+      <p>Every agent, every SOP, every decision, every piece of engagement memory lives in the vault as plain markdown. Folders for active projects. Folders for personas. A MOC for the memory index. Date-stamped notes for sessions and handoffs. Nothing proprietary to a cloud app. Nothing locked behind a subscription that could deprecate under you.</p>
+      <p>The reason this matters is practical. Continuity across sessions: when the next Code session opens, the relevant files are already the context, not an upload ritual. Token economy: you pay for signal, not for reintroducing yourself to the system. Organizational sanity: if a decision was authorized, it's in a file with a date; if it wasn't, you can see that too.</p>
+      <p>The vault looks spare on purpose. No dashboards, no color themes, no cover images. It is a working surface. The aesthetic is legibility under load, not demo polish. When you're in it at five in the morning, you want it to get out of your way.</p>
+    </div>
+    <div class="vault-tree arrive delay-1" data-observe aria-label="Obsidian vault folder structure">
+      <span class="vault-folder">Arc'kin Endeavors/</span><br>
+      <span class="vault-file">├── <span class="vault-folder">_MOCs/</span></span><br>
+      <span class="vault-file">&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="vault-accent">MEMORY.md</span> — the index</span><br>
+      <span class="vault-file">├── <span class="vault-folder">01_AGENTS/</span></span><br>
+      <span class="vault-file">&nbsp;&nbsp;&nbsp;&nbsp;└── ORIENT.md, CANVAS.md ...</span><br>
+      <span class="vault-file">├── <span class="vault-folder">02_ARCKIN_CORE/</span></span><br>
+      <span class="vault-file">&nbsp;&nbsp;&nbsp;&nbsp;└── doctrine · feedback · locks</span><br>
+      <span class="vault-file">├── <span class="vault-folder">03_ACTIVE_PROJECTS/</span></span><br>
+      <span class="vault-file">&nbsp;&nbsp;&nbsp;&nbsp;└── AspireVue/ ...</span><br>
+      <span class="vault-file">├── <span class="vault-folder">06_SYSTEM_DOCS/</span></span><br>
+      <span class="vault-file">&nbsp;&nbsp;&nbsp;&nbsp;└── plans · execution specs</span><br>
+      <span class="vault-file">├── <span class="vault-folder">10_Working-Docs/</span></span><br>
+      <span class="vault-file">&nbsp;&nbsp;&nbsp;&nbsp;└── briefs · copy · references</span><br>
+      <span class="vault-file">└── <span class="vault-folder">20_Client-Facing/</span></span><br>
+      <span class="vault-file">&nbsp;&nbsp;&nbsp;&nbsp;└── deliverables</span>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 7 — THE CLOSER -->
+<section class="closer-section" id="section-7" aria-labelledby="s7-heading">
+  <span class="eyebrow closer-eyebrow arrive" data-observe>THE CLOSER</span>
+  <h2 class="closer-heading arrive" id="s7-heading" data-observe>Wave 1 is foundations. Wave 2 is the next beat — same cadence, deeper instrumentation.</h2>
+  <p class="closer-body arrive delay-1" data-observe>Built for one reader. Shipped because the cadence said to.</p>
+</section>
 
 <!-- APPENDIX — HARDWARE -->
-<section class="section" id="appendix" aria-labelledby="appendix-heading">
+<section class="appendix-section" id="appendix" aria-labelledby="app-heading">
   <span class="eyebrow arrive" data-observe>APPENDIX · THE HARDWARE</span>
-  <h2 class="section-heading arrive" id="appendix-heading" data-observe>What the system runs on.</h2>
-  <p class="arrive" data-observe style="color:var(--subtle);max-width:600px;">The rig isn't the point. But for a reader who thinks about infrastructure at the same resolution as the software, the hardware is the receipt. Six pieces, each with a job and a reason.</p>
+  <h2 class="section-heading arrive" id="app-heading" data-observe>What the system runs on.</h2>
+  <p class="arrive" data-observe>The rig isn't the point. But for a reader who thinks about infrastructure at the same resolution as the software, the hardware is the receipt. Six pieces, each with a job and a reason.</p>
 
-  <div class="appendix-blocks">
+  <div class="hardware-blocks">
 
-    <!-- Plaud -->
     <div class="hw-block arrive" data-observe>
-      <div class="hw-illustration" id="hw-plaud" aria-hidden="true">
-        <!-- STUDIO placeholder — capture device silhouette -->
-        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" fill="none">
-          <rect x="28" y="10" width="24" height="44" rx="5" stroke="#FFAB40" stroke-opacity="0.5" stroke-width="1.5"/>
-          <circle cx="40" cy="58" r="5" stroke="#FFAB40" stroke-opacity="0.35" stroke-width="1.2"/>
-          <line x1="40" y1="63" x2="40" y2="68" stroke="#FFAB40" stroke-opacity="0.3" stroke-width="1.2"/>
-          <line x1="32" y1="68" x2="48" y2="68" stroke="#FFAB40" stroke-opacity="0.3" stroke-width="1.2"/>
-          <line x1="36" y1="22" x2="44" y2="22" stroke="#6B7280" stroke-opacity="0.4" stroke-width="1"/>
-          <circle cx="40" cy="30" r="4" stroke="#6B7280" stroke-opacity="0.3" stroke-width="1"/>
-          <!-- directional lines suggesting capture -->
-          <path d="M54 24 Q60 30 54 36" stroke="#FFAB40" stroke-opacity="0.4" stroke-width="1" stroke-linecap="round"/>
-          <path d="M58 20 Q68 30 58 40" stroke="#FFAB40" stroke-opacity="0.25" stroke-width="1" stroke-linecap="round"/>
+      <div class="hw-icon">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 120 160"
+             width="60" height="80"
+             fill="none"
+             aria-label="Plaud voice recorder illustration"
+             role="img">
+          <style>
+            .hw-stroke { stroke: var(--fg, #EDE9E1); }
+            .hw-accent { stroke: var(--accent, #FFAB40); }
+          </style>
+          <rect class="hw-stroke" x="38" y="28" width="44" height="96" rx="8" stroke-width="1.25" />
+          <circle class="hw-accent" cx="60" cy="42" r="4" stroke-width="1.25" />
+          <circle class="hw-stroke" cx="60" cy="88" r="10" stroke-width="1.25" />
+          <circle class="hw-stroke" cx="60" cy="88" r="4" stroke-width="1" />
+          <path class="hw-stroke" d="M38 50 C28 50 24 60 24 76 C24 92 28 100 38 100" stroke-width="1.25" stroke-linecap="round" />
+          <line class="hw-stroke" x1="28" y1="50" x2="28" y2="100" stroke-width="1" stroke-linecap="round" />
+          <path class="hw-accent" d="M88 72 Q96 76 96 88 Q96 100 88 104" stroke-width="1" stroke-linecap="round" opacity="0.7" />
+          <path class="hw-accent" d="M94 64 Q106 72 106 88 Q106 104 94 112" stroke-width="1" stroke-linecap="round" opacity="0.4" />
+          <line class="hw-stroke" x1="53" y1="118" x2="67" y2="118" stroke-width="1.25" stroke-linecap="round" />
         </svg>
       </div>
-      <div class="hw-content">
-        <span class="hw-caption">The capture device — Plaud</span>
-        <p>A small voice recorder that clips to a lapel or sits on the desk. Transcribes with Apple-native share-out, which is the friction difference between a voice note that becomes an agent input and one that stays on a phone. Voice is the highest-bandwidth input humans produce. The Plaud turns that bandwidth into operable text without a typing layer in between.</p>
+      <div>
+        <div class="hw-title">The capture device — Plaud</div>
+        <div class="hw-body">A small voice recorder that clips to a lapel or sits on the desk. Transcribes with Apple-native share-out, which is the friction difference between a voice note that becomes an agent input and one that stays on a phone. Voice is the highest-bandwidth input humans produce. The Plaud turns that bandwidth into operable text without a typing layer in between.</div>
       </div>
     </div>
 
-    <!-- Compute pair -->
     <div class="hw-block arrive" data-observe>
-      <div class="hw-illustration" id="hw-compute" aria-hidden="true">
-        <!-- STUDIO placeholder — compute pair silhouette -->
-        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" fill="none">
-          <!-- Mac Mini -->
-          <rect x="8" y="38" width="28" height="22" rx="3" stroke="#C9B391" stroke-opacity="0.5" stroke-width="1.2"/>
-          <rect x="14" y="42" width="16" height="10" rx="1" stroke="#6B7280" stroke-opacity="0.3" stroke-width="1"/>
-          <line x1="22" y1="60" x2="22" y2="65" stroke="#6B7280" stroke-opacity="0.25" stroke-width="1"/>
-          <!-- MacBook -->
-          <rect x="42" y="30" width="34" height="22" rx="2" stroke="#C9B391" stroke-opacity="0.4" stroke-width="1.2"/>
-          <rect x="45" y="33" width="28" height="16" rx="1" stroke="#6B7280" stroke-opacity="0.2" stroke-width="1"/>
-          <rect x="38" y="52" width="42" height="4" rx="2" stroke="#C9B391" stroke-opacity="0.3" stroke-width="1"/>
-          <!-- connection hint -->
-          <line x1="36" y1="49" x2="42" y2="49" stroke="#FFAB40" stroke-opacity="0.3" stroke-width="1" stroke-dasharray="2 2"/>
+      <div class="hw-icon">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 200 140"
+             width="80" height="56"
+             fill="none"
+             aria-label="Mac Mini M1 and MacBook Pro compute pair illustration"
+             role="img">
+          <style>
+            .hw-stroke { stroke: var(--fg, #EDE9E1); }
+            .hw-accent { stroke: var(--accent, #FFAB40); }
+            .hw-subtle { stroke: var(--subtle, #6B7280); }
+          </style>
+          <rect class="hw-stroke" x="14" y="54" width="64" height="52" rx="6" stroke-width="1.25" />
+          <line class="hw-stroke" x1="24" y1="62" x2="68" y2="62" stroke-width="0.75" opacity="0.5" />
+          <line class="hw-stroke" x1="24" y1="67" x2="68" y2="67" stroke-width="0.75" opacity="0.5" />
+          <line class="hw-stroke" x1="24" y1="72" x2="68" y2="72" stroke-width="0.75" opacity="0.5" />
+          <circle class="hw-accent" cx="68" cy="97" r="2.5" stroke-width="1" />
+          <text x="46" y="87" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="500" fill="var(--subtle, #6B7280)" text-anchor="middle">M1</text>
+          <path class="hw-stroke" d="M116 22 L184 22 L184 88 L116 88 Z" rx="3" stroke-width="1.25" />
+          <rect class="hw-stroke" x="121" y="27" width="58" height="56" rx="2" stroke-width="0.75" opacity="0.6" />
+          <line class="hw-subtle" x1="128" y1="39" x2="172" y2="39" stroke-width="0.75" opacity="0.4" />
+          <line class="hw-subtle" x1="128" y1="46" x2="164" y2="46" stroke-width="0.75" opacity="0.4" />
+          <line class="hw-subtle" x1="128" y1="53" x2="168" y2="53" stroke-width="0.75" opacity="0.4" />
+          <line class="hw-stroke" x1="110" y1="92" x2="190" y2="92" stroke-width="1.5" stroke-linecap="round" />
+          <path class="hw-stroke" d="M110 92 L106 100 L194 100 L190 92" stroke-width="1.25" stroke-linejoin="round" />
+          <rect class="hw-stroke" x="138" y="93" width="24" height="5" rx="1.5" stroke-width="0.75" opacity="0.6" />
+          <line class="hw-accent" x1="78" y1="106" x2="108" y2="106" stroke-width="1" stroke-dasharray="3 3" stroke-linecap="round" opacity="0.6" />
+          <circle class="hw-accent" cx="78" cy="106" r="2" stroke-width="0.75" opacity="0.6" />
+          <circle class="hw-accent" cx="108" cy="106" r="2" stroke-width="0.75" opacity="0.6" />
         </svg>
       </div>
-      <div class="hw-content">
-        <span class="hw-caption">The compute pair — Mac Mini M1 (primary) + MacBook Pro 2017 (mobile mirror)</span>
-        <p>A fixed desktop is the primary. It holds the vault, runs the sessions, never moves. The laptop is a mirror — same vault via iCloud, same sessions via remote control, used when the work travels. Splitting primary from mobile is deliberate: a single laptop forced to be both burns out, disorients, and loses discipline. Two machines, one of them stationary, preserves the separation between deep-work environment and travel surface.</p>
+      <div>
+        <div class="hw-title">The compute pair — Mac Mini M1 (primary) + MacBook Pro 2017 (mobile mirror)</div>
+        <div class="hw-body">A fixed desktop is the primary. It holds the vault, runs the sessions, never moves. The laptop is a mirror — same vault via iCloud, same sessions via remote control, used when the work travels. Splitting primary from mobile is deliberate: a single laptop forced to be both burns out, disorients, and loses discipline. Two machines, one of them stationary, preserves the separation between deep-work environment and travel surface.</div>
       </div>
     </div>
 
-    <!-- Display rig -->
     <div class="hw-block arrive" data-observe>
-      <div class="hw-illustration" id="hw-display" aria-hidden="true">
-        <!-- STUDIO placeholder — display rig silhouette -->
-        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" fill="none">
-          <!-- CHG90 ultrawide (curved hint) -->
-          <path d="M6 24 Q40 18 74 24 L74 52 Q40 58 6 52 Z" stroke="#C9B391" stroke-opacity="0.4" stroke-width="1.2" fill="none"/>
-          <line x1="40" y1="52" x2="40" y2="60" stroke="#6B7280" stroke-opacity="0.25" stroke-width="1"/>
-          <line x1="28" y1="60" x2="52" y2="60" stroke="#6B7280" stroke-opacity="0.2" stroke-width="1.2"/>
-          <!-- ZenScreen (small, right) -->
-          <rect x="64" y="28" width="12" height="20" rx="1" stroke="#C9B391" stroke-opacity="0.3" stroke-width="1"/>
-          <!-- iPad hint (very small, far right) -->
-          <rect x="68" y="58" width="8" height="12" rx="1" stroke="#6B7280" stroke-opacity="0.25" stroke-width="1"/>
-          <!-- parallel window lines on ultrawide -->
-          <line x1="28" y1="28" x2="28" y2="48" stroke="#6B7280" stroke-opacity="0.15" stroke-width="0.8"/>
-          <line x1="52" y1="28" x2="52" y2="48" stroke="#6B7280" stroke-opacity="0.15" stroke-width="0.8"/>
+      <div class="hw-icon">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 280 160"
+             width="80" height="46"
+             fill="none"
+             aria-label="Display rig: Samsung CHG90 ultrawide, Asus ZenScreen, and iPad Pro Sidecar"
+             role="img">
+          <style>
+            .hw-stroke { stroke: var(--fg, #EDE9E1); }
+            .hw-accent { stroke: var(--accent, #FFAB40); }
+            .hw-subtle { stroke: var(--subtle, #6B7280); }
+          </style>
+          <path class="hw-stroke" d="M18 30 Q140 24 262 30 L258 108 L22 108 Z" stroke-width="1.25" stroke-linejoin="round" />
+          <path class="hw-stroke" d="M25 36 Q140 31 255 36 L251 102 L29 102 Z" stroke-width="0.75" opacity="0.5" />
+          <line class="hw-subtle" x1="93" y1="36" x2="93" y2="102" stroke-width="0.75" opacity="0.4" stroke-dasharray="2 4" />
+          <line class="hw-subtle" x1="140" y1="33" x2="140" y2="102" stroke-width="0.75" opacity="0.4" stroke-dasharray="2 4" />
+          <line class="hw-subtle" x1="187" y1="36" x2="187" y2="102" stroke-width="0.75" opacity="0.4" stroke-dasharray="2 4" />
+          <line class="hw-stroke" x1="122" y1="108" x2="120" y2="124" stroke-width="1.25" stroke-linecap="round" />
+          <line class="hw-stroke" x1="158" y1="108" x2="160" y2="124" stroke-width="1.25" stroke-linecap="round" />
+          <line class="hw-stroke" x1="108" y1="124" x2="172" y2="124" stroke-width="1.5" stroke-linecap="round" />
+          <rect class="hw-accent" x="220" y="38" width="28" height="42" rx="2" stroke-width="1" opacity="0.7" />
+          <line class="hw-subtle" x1="220" y1="75" x2="248" y2="75" stroke-width="0.5" opacity="0.4" />
+          <rect class="hw-stroke" x="231" y="42" width="14" height="19" rx="1.5" stroke-width="0.75" opacity="0.5" fill="var(--bg, #111113)" />
+          <line class="hw-subtle" x1="236" y1="60" x2="242" y2="60" stroke-width="0.5" opacity="0.4" />
+          <circle class="hw-accent" cx="78" cy="68" r="2" stroke-width="0.75" opacity="0.5" />
+          <circle class="hw-accent" cx="140" cy="66" r="2" stroke-width="0.75" opacity="0.5" />
+          <circle class="hw-accent" cx="204" cy="68" r="2" stroke-width="0.75" opacity="0.5" />
         </svg>
       </div>
-      <div class="hw-content">
-        <span class="hw-caption">The display rig — Samsung CHG90 49" ultrawide + Asus ZenScreen Touch + iPad Pro (Sidecar)</span>
-        <p>Parallel agent sessions want parallel windows. The CHG90 is effectively two 1920-wide monitors in one surface, which is the minimum real estate for running four or more windows without cycling focus. The ZenScreen adds touch/pen input for design work. iPad Pro via Sidecar adds a fifth window when the session demands it. Window count carries the swarming pattern physically — the desk is the diagram.</p>
+      <div>
+        <div class="hw-title">The display rig — Samsung CHG90 49" ultrawide + Asus ZenScreen Touch + iPad Pro (Sidecar)</div>
+        <div class="hw-body">Parallel agent sessions want parallel windows. The CHG90 is effectively two 1920-wide monitors in one surface, which is the minimum real estate for running four or more windows without cycling focus. The ZenScreen adds touch/pen input for design work. iPad Pro via Sidecar adds a fifth window when the session demands it. Window count carries the swarming pattern physically — the desk is the diagram.</div>
       </div>
     </div>
 
-    <!-- reMarkable -->
     <div class="hw-block arrive" data-observe>
-      <div class="hw-illustration" id="hw-remarkable" aria-hidden="true">
-        <!-- STUDIO placeholder — reMarkable silhouette -->
-        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" fill="none">
-          <rect x="20" y="10" width="40" height="58" rx="3" stroke="#BFA7C4" stroke-opacity="0.45" stroke-width="1.2"/>
-          <!-- paper texture lines -->
-          <line x1="26" y1="22" x2="54" y2="22" stroke="#6B7280" stroke-opacity="0.2" stroke-width="0.8"/>
-          <line x1="26" y1="30" x2="48" y2="30" stroke="#6B7280" stroke-opacity="0.2" stroke-width="0.8"/>
-          <line x1="26" y1="38" x2="50" y2="38" stroke="#6B7280" stroke-opacity="0.2" stroke-width="0.8"/>
-          <!-- hand-drawn stylus path hint -->
-          <path d="M26 48 Q34 44 40 50 Q46 56 54 46" stroke="#BFA7C4" stroke-opacity="0.5" stroke-width="1" stroke-linecap="round"/>
-          <!-- stylus -->
-          <line x1="56" y1="14" x2="48" y2="42" stroke="#BFA7C4" stroke-opacity="0.4" stroke-width="1" stroke-linecap="round"/>
-          <circle cx="47.5" cy="43" r="1.5" fill="#BFA7C4" opacity="0.4"/>
+      <div class="hw-icon">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 140 180"
+             width="56" height="72"
+             fill="none"
+             aria-label="reMarkable V1 e-ink tablet illustration"
+             role="img">
+          <style>
+            .hw-stroke { stroke: var(--fg, #EDE9E1); }
+            .hw-accent { stroke: var(--accent, #FFAB40); }
+            .hw-subtle { stroke: var(--subtle, #6B7280); }
+          </style>
+          <rect class="hw-stroke" x="22" y="16" width="88" height="120" rx="6" stroke-width="1.25" />
+          <rect class="hw-stroke" x="28" y="22" width="76" height="96" rx="3" stroke-width="0.75" opacity="0.5" />
+          <line class="hw-subtle" x1="34" y1="38" x2="98" y2="38" stroke-width="0.5" opacity="0.25" />
+          <line class="hw-subtle" x1="34" y1="48" x2="98" y2="48" stroke-width="0.5" opacity="0.25" />
+          <line class="hw-subtle" x1="34" y1="58" x2="98" y2="58" stroke-width="0.5" opacity="0.25" />
+          <line class="hw-subtle" x1="34" y1="68" x2="98" y2="68" stroke-width="0.5" opacity="0.25" />
+          <line class="hw-subtle" x1="34" y1="78" x2="98" y2="78" stroke-width="0.5" opacity="0.25" />
+          <path class="hw-accent" d="M38 90 Q52 74 72 80 Q90 86 96 72" stroke-width="1.25" stroke-linecap="round" opacity="0.8" />
+          <line class="hw-stroke" x1="116" y1="20" x2="124" y2="140" stroke-width="1.5" stroke-linecap="round" />
+          <path class="hw-accent" d="M123 134 L125 142 L121 140 Z" stroke-width="1" stroke-linejoin="round" opacity="0.8" />
+          <line class="hw-stroke" x1="55" y1="128" x2="77" y2="128" stroke-width="1" stroke-linecap="round" opacity="0.6" />
+          <circle class="hw-stroke" cx="66" cy="134" r="4" stroke-width="1" opacity="0.5" />
         </svg>
       </div>
-      <div class="hw-content">
-        <span class="hw-caption">The notes layer — reMarkable (V1)</span>
-        <p>An e-ink tablet for handwritten thinking. Offline by design. Used when a problem wants longhand pacing before it's ready for a session. Pairs with Plaud for thought-tracking during reviews and document reads. The reason it stays in the stack is that some problems get smaller when typed and some get sharper when drawn.</p>
+      <div>
+        <div class="hw-title">The notes layer — reMarkable (V1)</div>
+        <div class="hw-body">An e-ink tablet for handwritten thinking. Offline by design. Used when a problem wants longhand pacing before it's ready for a session. Pairs with Plaud for thought-tracking during reviews and document reads. The reason it stays in the stack is that some problems get smaller when typed and some get sharper when drawn.</div>
       </div>
     </div>
 
-    <!-- Storage -->
     <div class="hw-block arrive" data-observe>
-      <div class="hw-illustration" id="hw-storage" aria-hidden="true">
-        <!-- STUDIO placeholder — storage cluster silhouette -->
-        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" fill="none">
-          <!-- G-RAID -->
-          <rect x="10" y="20" width="36" height="40" rx="3" stroke="#9FB8A3" stroke-opacity="0.5" stroke-width="1.2"/>
-          <rect x="14" y="28" width="28" height="8" rx="2" stroke="#6B7280" stroke-opacity="0.25" stroke-width="0.8"/>
-          <rect x="14" y="40" width="28" height="8" rx="2" stroke="#6B7280" stroke-opacity="0.2" stroke-width="0.8"/>
-          <circle cx="22" cy="32" r="2" stroke="#9FB8A3" stroke-opacity="0.4" stroke-width="0.8"/>
-          <circle cx="22" cy="44" r="2" stroke="#9FB8A3" stroke-opacity="0.3" stroke-width="0.8"/>
-          <!-- SSD (stacked, right) -->
-          <rect x="52" y="22" width="22" height="12" rx="2" stroke="#9FB8A3" stroke-opacity="0.4" stroke-width="1"/>
-          <rect x="52" y="38" width="22" height="12" rx="2" stroke="#9FB8A3" stroke-opacity="0.3" stroke-width="1"/>
-          <text x="63" y="31" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="5" fill="#9FB8A3" opacity="0.5">SSD</text>
-          <text x="63" y="47" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="5" fill="#9FB8A3" opacity="0.4">SSD</text>
+      <div class="hw-icon">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 160 160"
+             width="64" height="64"
+             fill="none"
+             aria-label="G-Tech G-RAID and SSD storage cluster illustration"
+             role="img">
+          <style>
+            .hw-stroke { stroke: var(--fg, #EDE9E1); }
+            .hw-accent { stroke: var(--accent, #FFAB40); }
+            .hw-subtle { stroke: var(--subtle, #6B7280); }
+          </style>
+          <rect class="hw-stroke" x="20" y="88" width="120" height="52" rx="5" stroke-width="1.5" />
+          <rect class="hw-subtle" x="30" y="98" width="42" height="32" rx="3" stroke-width="0.75" opacity="0.5" />
+          <rect class="hw-subtle" x="80" y="98" width="42" height="32" rx="3" stroke-width="0.75" opacity="0.5" />
+          <circle class="hw-accent" cx="134" cy="92" r="2.5" stroke-width="1" />
+          <text x="80" y="142" font-family="'JetBrains Mono', monospace" font-size="7.5" font-weight="500" fill="var(--subtle, #6B7280)" text-anchor="middle">RAID</text>
+          <rect class="hw-stroke" x="30" y="54" width="80" height="26" rx="3" stroke-width="1.25" />
+          <rect class="hw-stroke" x="108" y="61" width="12" height="12" rx="2" stroke-width="0.75" opacity="0.6" />
+          <text x="68" y="70" font-family="'JetBrains Mono', monospace" font-size="7.5" font-weight="500" fill="var(--subtle, #6B7280)" text-anchor="middle">4TB SSD</text>
+          <rect class="hw-stroke" x="38" y="24" width="68" height="22" rx="3" stroke-width="1.25" />
+          <rect class="hw-stroke" x="104" y="30" width="10" height="10" rx="2" stroke-width="0.75" opacity="0.6" />
+          <text x="72" y="38" font-family="'JetBrains Mono', monospace" font-size="7.5" font-weight="500" fill="var(--subtle, #6B7280)" text-anchor="middle">1TB SSD</text>
+          <line class="hw-subtle" x1="80" y1="46" x2="80" y2="54" stroke-width="0.75" stroke-dasharray="2 2" opacity="0.4" />
+          <line class="hw-subtle" x1="80" y1="80" x2="80" y2="88" stroke-width="0.75" stroke-dasharray="2 2" opacity="0.4" />
         </svg>
       </div>
-      <div class="hw-content">
-        <span class="hw-caption">The storage philosophy — G-Tech G-RAID (enterprise RAID) + SanDisk 4TB SSD + 1TB SSD</span>
-        <p>SSD only. No spinning disks anywhere in the pipeline. Enterprise-grade RAID for business-critical backup. The RAID could house the full vault independent of the M1 if needed. The rule is simple: reliability first, cost second. Losing a client vault to a failed drive is a category of mistake the system refuses to make possible.</p>
+      <div>
+        <div class="hw-title">The storage philosophy — G-Tech G-RAID (enterprise RAID) + SanDisk 4TB SSD + 1TB SSD</div>
+        <div class="hw-body">SSD only. No spinning disks anywhere in the pipeline. Enterprise-grade RAID for business-critical backup. The RAID could house the full vault independent of the M1 if needed. The rule is simple: reliability first, cost second. Losing a client vault to a failed drive is a category of mistake the system refuses to make possible.</div>
       </div>
     </div>
 
-    <!-- iPhone -->
     <div class="hw-block arrive" data-observe>
-      <div class="hw-illustration" id="hw-iphone" aria-hidden="true">
-        <!-- STUDIO placeholder — iPhone silhouette -->
-        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" fill="none">
-          <rect x="25" y="8" width="30" height="62" rx="6" stroke="#EDE9E1" stroke-opacity="0.3" stroke-width="1.2"/>
-          <!-- Dynamic Island hint -->
-          <rect x="33" y="14" width="14" height="5" rx="2.5" fill="#EDE9E1" opacity="0.12"/>
-          <!-- screen area -->
-          <rect x="28" y="22" width="24" height="38" rx="2" stroke="#6B7280" stroke-opacity="0.2" stroke-width="0.8"/>
-          <!-- home indicator -->
-          <line x1="35" y1="64" x2="45" y2="64" stroke="#EDE9E1" stroke-opacity="0.25" stroke-width="1.5" stroke-linecap="round"/>
-          <!-- remote antenna lines -->
-          <path d="M62 28 Q70 40 62 52" stroke="#FFAB40" stroke-opacity="0.35" stroke-width="1" stroke-linecap="round"/>
-          <path d="M66 24 Q78 40 66 56" stroke="#FFAB40" stroke-opacity="0.2" stroke-width="1" stroke-linecap="round"/>
+      <div class="hw-icon">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             viewBox="0 0 100 180"
+             width="44" height="80"
+             fill="none"
+             aria-label="iPhone 16 Pro Max illustration"
+             role="img">
+          <style>
+            .hw-stroke { stroke: var(--fg, #EDE9E1); }
+            .hw-accent { stroke: var(--accent, #FFAB40); }
+            .hw-subtle { stroke: var(--subtle, #6B7280); }
+          </style>
+          <rect class="hw-stroke" x="18" y="10" width="64" height="158" rx="14" stroke-width="1.5" />
+          <rect class="hw-stroke" x="21" y="13" width="58" height="152" rx="12" stroke-width="0.75" opacity="0.4" />
+          <rect class="hw-stroke" x="37" y="22" width="26" height="10" rx="5" stroke-width="1" />
+          <rect class="hw-stroke" x="22" y="18" width="28" height="28" rx="7" stroke-width="1" opacity="0.6" />
+          <circle class="hw-stroke" cx="30" cy="26" r="4" stroke-width="0.75" opacity="0.5" />
+          <circle class="hw-stroke" cx="40" cy="26" r="4" stroke-width="0.75" opacity="0.5" />
+          <circle class="hw-stroke" cx="30" cy="36" r="4" stroke-width="0.75" opacity="0.5" />
+          <circle class="hw-accent" cx="40" cy="36" r="2" stroke-width="0.75" opacity="0.6" />
+          <line class="hw-stroke" x1="18" y1="52" x2="18" y2="62" stroke-width="2" stroke-linecap="round" />
+          <line class="hw-stroke" x1="18" y1="68" x2="18" y2="78" stroke-width="2" stroke-linecap="round" />
+          <line class="hw-stroke" x1="82" y1="56" x2="82" y2="72" stroke-width="2" stroke-linecap="round" />
+          <path class="hw-accent" d="M86 90 Q94 100 86 110" stroke-width="1" stroke-linecap="round" opacity="0.6" />
+          <path class="hw-accent" d="M90 84 Q102 100 90 116" stroke-width="1" stroke-linecap="round" opacity="0.35" />
+          <line class="hw-stroke" x1="40" y1="156" x2="60" y2="156" stroke-width="1.5" stroke-linecap="round" opacity="0.6" />
         </svg>
       </div>
-      <div class="hw-content">
-        <span class="hw-caption">The mobile — iPhone 16 Pro Max</span>
-        <p>Plaud companion. Claude remote-control surface. Calendar, inbox, the rest. The phone is the thinnest part of the stack because the heavy work should not happen on it. When a prompt is firing from the phone, the goal is fewest keystrokes possible — voice-first, file-drop second, text as a fallback.</p>
+      <div>
+        <div class="hw-title">The mobile — iPhone 16 Pro Max</div>
+        <div class="hw-body">Plaud companion. Claude remote-control surface. Calendar, inbox, the rest. The phone is the thinnest part of the stack because the heavy work should not happen on it. When a prompt is firing from the phone, the goal is fewest keystrokes possible — voice-first, file-drop second, text as a fallback.</div>
       </div>
     </div>
 
@@ -1570,34 +1388,50 @@ p.last-line {
 
 <!-- COLOPHON -->
 <footer class="colophon" role="contentinfo">
-  <p class="colophon-line">Arc'kin Endeavors · Wave 1 · 2026-04</p>
+  Arc'kin Endeavors · Wave 1 · 2026-04
 </footer>
 
 <script>
 (function () {
   'use strict';
 
-  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   // --- SECTION 0 DISMISS ---
   var s0Card = document.getElementById('s0-card');
-  var s0Dismiss = document.getElementById('s0-dismiss');
-
-  if (s0Dismiss && s0Card) {
-    // Check sessionStorage
-    if (sessionStorage.getItem('s0-dismissed') === '1') {
-      s0Card.classList.add('hidden');
-    }
-    s0Dismiss.addEventListener('click', function () {
-      s0Card.classList.add('hidden');
+  var s0Btn  = document.getElementById('s0-dismiss-btn');
+  if (sessionStorage.getItem('s0-dismissed') === '1' && s0Card) {
+    s0Card.classList.add('dismissed');
+  }
+  if (s0Btn) {
+    s0Btn.addEventListener('click', function () {
+      if (s0Card) s0Card.classList.add('dismissed');
       sessionStorage.setItem('s0-dismissed', '1');
-    });
-    s0Dismiss.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); s0Dismiss.click(); }
     });
   }
 
+  // --- NAV ACTIVE STATE ON SCROLL ---
+  var navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+  var sections = [];
+  navLinks.forEach(function (link) {
+    var id = link.getAttribute('href').substring(1);
+    var el = document.getElementById(id);
+    if (el) sections.push({ link: link, el: el });
+  });
+
+  function updateNav() {
+    var scrollY = window.scrollY + 80;
+    var active = sections[0];
+    sections.forEach(function (s) {
+      if (s.el.offsetTop <= scrollY) active = s;
+    });
+    navLinks.forEach(function (l) { l.classList.remove('active'); });
+    if (active) active.link.classList.add('active');
+  }
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
+
   // --- INTERSECTION OBSERVER (ARRIVE) ---
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   function observeAll() {
     var targets = document.querySelectorAll('[data-observe]:not(.is-visible)');
     if (prefersReduced) {
@@ -1611,60 +1445,56 @@ p.last-line {
           io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -48px 0px' });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
     targets.forEach(function (el) { io.observe(el); });
   }
 
-  // --- HERO REVEAL ---
-  function fireReveal() {
-    var ids = ['hero-h1', 'hero-sub', 'hero-tertiary'];
-    ids.forEach(function (id) {
-      var el = document.getElementById(id);
-      if (el) el.classList.add('is-visible');
-    });
+  // --- MAP INPUT PULSE (fires once when map enters viewport) ---
+  var mapFired = false;
+  if (!prefersReduced) {
+    var mapObserver = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting && !mapFired) {
+        mapFired = true;
+        document.querySelectorAll('.input-edge').forEach(function (el) {
+          el.classList.add('fired');
+        });
+        mapObserver.disconnect();
+      }
+    }, { threshold: 0.2 });
+    var mapEl = document.getElementById('ecosystem-map');
+    if (mapEl) mapObserver.observe(mapEl);
   }
 
+  // --- VISIBILITY: pause swarm animation when tab hidden ---
+  document.addEventListener('visibilitychange', function () {
+    var svgEl = document.getElementById('ecosystem-map');
+    if (!svgEl) return;
+    if (document.hidden) {
+      svgEl.style.animationPlayState = 'paused';
+      document.querySelectorAll('.swarm-edge, .taste-gate-group').forEach(function (el) {
+        el.style.animationPlayState = 'paused';
+      });
+    } else {
+      svgEl.style.animationPlayState = '';
+      document.querySelectorAll('.swarm-edge, .taste-gate-group').forEach(function (el) {
+        el.style.animationPlayState = '';
+      });
+    }
+  });
+
+  // --- HERO REVEAL ---
+  function fireReveal() {
+    var h1  = document.getElementById('hero-h1');
+    var sub = document.getElementById('hero-sub');
+    if (h1)  h1.classList.add('is-visible');
+    if (sub) sub.classList.add('is-visible');
+  }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () { fireReveal(); observeAll(); });
   } else {
-    fireReveal(); observeAll();
+    fireReveal();
+    observeAll();
   }
-
-  // --- MAP INPUT PULSE (one-shot on map visible) ---
-  if (!prefersReduced) {
-    var mapEl = document.getElementById('ecosystem-map');
-    if (mapEl) {
-      var mapFired = false;
-      var mapIO = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting && !mapFired) {
-            mapFired = true;
-            var inputLocal    = document.getElementById('input-local');
-            var inputRemote   = document.getElementById('input-remote');
-            var inputExterior = document.getElementById('input-exterior');
-            // Stagger the three input line animations
-            if (inputLocal)    { inputLocal.classList.add('fired'); }
-            setTimeout(function () {
-              if (inputRemote) { inputRemote.classList.add('fired'); }
-            }, 300);
-            setTimeout(function () {
-              if (inputExterior) { inputExterior.classList.add('fired'); }
-            }, 600);
-            mapIO.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.2 });
-      mapIO.observe(mapEl);
-    }
-  }
-
-  // --- BACKGROUND PAUSE for battery ---
-  var swarmLines = document.querySelectorAll('.map-swarm-line, .map-swarm-line-b');
-  document.addEventListener('visibilitychange', function () {
-    swarmLines.forEach(function (el) {
-      el.style.animationPlayState = document.hidden ? 'paused' : 'running';
-    });
-  });
 
 })();
 </script>

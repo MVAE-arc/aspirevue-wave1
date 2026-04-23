@@ -268,6 +268,20 @@ p:last-child { margin-bottom: 0; }
 .swarm-hint           { stroke: var(--lane-build); stroke-width: 1; fill: none; stroke-dasharray: 2 4; opacity: 0.4; }
 .lane-header-text     { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; }
 
+/* Edit A — §2 Lane interaction (CANVAS rev1) */
+.roster-svg [data-lane] { transition: opacity 220ms ease-out; }
+.roster-svg.lane-active-strategy [data-lane]:not([data-lane="strategy"]) { opacity: 0.28; }
+.roster-svg.lane-active-build    [data-lane]:not([data-lane="build"])    { opacity: 0.28; }
+.roster-svg.lane-active-ops      [data-lane]:not([data-lane="ops"])      { opacity: 0.28; }
+.roster-svg.lane-active-life     [data-lane]:not([data-lane="life"])     { opacity: 0.28; }
+.roster-svg.lane-active-strategy [data-lane="strategy"] .node-bg { stroke-opacity: 1; }
+.roster-svg.lane-active-build    [data-lane="build"]    .node-bg { stroke-opacity: 1; }
+.roster-svg.lane-active-ops      [data-lane="ops"]      .node-bg { stroke-opacity: 1; }
+.roster-svg.lane-active-life     [data-lane="life"]     .node-bg { stroke-opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .roster-svg [data-lane] { transition: none; }
+}
+
 /* §2 prose below roster */
 .roster-prose { margin-top: 40px; max-width: 680px; }
 .roster-prose p { margin-bottom: 16px; }
@@ -411,18 +425,77 @@ p:last-child { margin-bottom: 0; }
 .map-vault-bg { fill: rgba(255,171,64,0.03); stroke: var(--accent); stroke-width: 0.75; stroke-dasharray: 3 4; opacity: 0.5; }
 .map-atlas-zone { fill: rgba(255,171,64,0.04); stroke: var(--accent); stroke-width: 0.75; stroke-dasharray: 4 3; }
 
+/* Edit C — §6 prose-highlight (CANVAS rev1) */
+.prose-highlight {
+  background-color: rgba(168, 181, 199, 0.12);
+  color: inherit;
+  font-weight: 600;
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+mark.prose-highlight {
+  background-color: rgba(168, 181, 199, 0.12);
+}
+@media (prefers-color-scheme: light) {
+  .prose-highlight {
+    background-color: rgba(90, 102, 118, 0.10);
+  }
+  mark.prose-highlight {
+    background-color: rgba(90, 102, 118, 0.10);
+  }
+}
+
 /* === §6 OBSIDIAN === */
 .obsidian-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; margin-top: 8px; }
 @media (max-width: 767px) { .obsidian-layout { grid-template-columns: 1fr; gap: 32px; } }
 .obsidian-prose p { margin-bottom: 16px; }
+/* Edit D — §6 vault tree upgrade (CANVAS rev1) */
 .vault-tree {
-  background: var(--hover); border: 1px solid var(--rule); border-radius: 4px;
-  padding: 20px 24px; font-family: var(--font-mono); font-size: 0.8125rem;
-  color: var(--subtle); line-height: 1.8;
+  background: var(--hover);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--lane-strategy);
+  border-radius: 4px;
+  padding: 20px 24px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 2.0;
+  letter-spacing: 0.01em;
+  color: var(--subtle);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
-.vault-folder { color: var(--fg); font-weight: 500; }
-.vault-file   { color: var(--subtle); font-size: 0.75rem; padding-left: 16px; display: block; }
-.vault-accent { color: var(--accent); }
+@media (max-width: 480px) {
+  .vault-tree {
+    font-size: 0.6875rem;
+    padding: 14px 16px;
+    line-height: 1.85;
+  }
+}
+.vault-tree-pre {
+  margin: 0;
+  white-space: pre;
+  font: inherit;
+}
+.vault-root {
+  color: var(--fg);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+.vault-toplevel {
+  color: var(--fg);
+  font-weight: 500;
+}
+.vault-subtle {
+  color: var(--subtle);
+  font-weight: 400;
+}
+.vault-memory-line {
+  color: var(--accent);
+  font-weight: 600;
+  background-color: rgba(255, 171, 64, 0.08);
+  padding: 0 3px;
+  border-radius: 2px;
+}
 
 /* === §7 CLOSER === */
 .closer-section {
@@ -515,7 +588,6 @@ p:last-child { margin-bottom: 0; }
     <div class="s0-body">
       <p>This is Wave 1. It covers the foundations — the philosophy, the team, the tools, the workflow, and the ecosystem map that ties it together. One pass, eight sections plus a hardware appendix. Ten minutes if you read it linearly, less if you skim the map.</p>
       <p>The sections stand alone. You can drop in and out. The ecosystem map in Section 5 is the hero of the deck; everything before it earns its color-coding, everything after it pays off on what it names.</p>
-      <p>No presenter, no audio, no meeting attached. Read it when you have the window. Close it when you're done.</p>
     </div>
     <button class="s0-dismiss" id="s0-dismiss-btn" aria-label="Dismiss this orientation card">Got it — hide this</button>
   </div>
@@ -541,8 +613,8 @@ p:last-child { margin-bottom: 0; }
 
   <div class="roster-wrap arrive" data-observe>
     <div class="roster-svg-container" role="img" aria-label="Agent roster hierarchy: Boss commands ORIENT, ORIENT routes to Strategy, Build, Ops, and Life lanes. ATLAS is the engagement steward for AspireVue.">
-      <!-- §2 ROSTER SVG — 900×540, responsive -->
-      <svg class="roster-svg" viewBox="0 0 900 560" width="100%" xmlns="http://www.w3.org/2000/svg" style="max-width:900px;display:block;">
+      <!-- §2 ROSTER SVG — 1100×600, responsive (Edit A: widened viewBox + lane interaction) -->
+      <svg class="roster-svg" viewBox="0 0 1100 600" width="100%" xmlns="http://www.w3.org/2000/svg" style="max-width:1100px;display:block;">
         <defs>
           <marker id="arr-cmd" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
             <path d="M0,0 L6,3 L0,6 Z" fill="#EDE9E1" opacity="0.6"/>
@@ -552,116 +624,124 @@ p:last-child { margin-bottom: 0; }
           </marker>
         </defs>
 
-        <!-- Lane column backgrounds -->
-        <!-- Strategy lane -->
-        <rect x="20" y="180" width="190" height="260" rx="4" class="lane-strategy-bg"/>
-        <!-- Build lane -->
-        <rect x="230" y="180" width="240" height="260" rx="4" class="lane-build-bg"/>
-        <!-- Ops lane -->
-        <rect x="490" y="180" width="130" height="160" rx="4" class="lane-ops-bg"/>
-        <!-- Life lane -->
-        <rect x="640" y="180" width="130" height="160" rx="4" class="lane-life-bg"/>
+        <!-- Lane column backgrounds (Edit A: new x-origins, 30px min gaps) -->
+        <!-- Strategy lane: x=20 w=220 -->
+        <rect x="20" y="180" width="220" height="260" rx="4" class="lane-strategy-bg" data-lane="strategy" data-lane-trigger="strategy"/>
+        <!-- Build lane: x=270 w=290 -->
+        <rect x="270" y="180" width="290" height="260" rx="4" class="lane-build-bg" data-lane="build" data-lane-trigger="build"/>
+        <!-- Ops lane: x=600 w=160 -->
+        <rect x="600" y="180" width="160" height="160" rx="4" class="lane-ops-bg" data-lane="ops" data-lane-trigger="ops"/>
+        <!-- Life lane: x=800 w=160 -->
+        <rect x="800" y="180" width="160" height="160" rx="4" class="lane-life-bg" data-lane="life" data-lane-trigger="life"/>
 
-        <!-- Lane headers -->
-        <text x="115" y="200" text-anchor="middle" class="lane-header-text" fill="#A8B5C7" opacity="0.9">STRATEGY</text>
-        <text x="350" y="200" text-anchor="middle" class="lane-header-text" fill="#C9B391" opacity="0.9">BUILD</text>
-        <text x="555" y="200" text-anchor="middle" class="lane-header-text" fill="#9FB8A3" opacity="0.9">OPS</text>
-        <text x="705" y="200" text-anchor="middle" class="lane-header-text" fill="#BFA7C4" opacity="0.9">LIFE</text>
+        <!-- Lane headers (Edit A: new centers) -->
+        <text x="130" y="200" text-anchor="middle" class="lane-header-text" fill="#A8B5C7" opacity="0.9" data-lane="strategy">STRATEGY</text>
+        <text x="415" y="200" text-anchor="middle" class="lane-header-text" fill="#C9B391" opacity="0.9" data-lane="build">BUILD</text>
+        <text x="680" y="200" text-anchor="middle" class="lane-header-text" fill="#9FB8A3" opacity="0.9" data-lane="ops">OPS</text>
+        <text x="880" y="200" text-anchor="middle" class="lane-header-text" fill="#BFA7C4" opacity="0.9" data-lane="life">LIFE</text>
 
-        <!-- BOSS node -->
-        <rect x="340" y="20" width="220" height="68" rx="4" fill="#1A1C1F" stroke="#EDE9E1" stroke-width="1.5"/>
-        <rect x="340" y="20" width="220" height="3" rx="2" fill="#EDE9E1" opacity="0.8"/>
-        <text x="450" y="44" text-anchor="middle" class="node-eyebrow" fill="#6B7280">BOSS</text>
-        <text x="450" y="60" text-anchor="middle" class="node-text-primary" font-size="13">Michael Landi</text>
-        <text x="450" y="76" text-anchor="middle" class="node-text-secondary" fill="#6B7280">Field Operator · Sets direction</text>
+        <!-- BOSS node (Edit A: center x=550) -->
+        <rect x="440" y="20" width="220" height="68" rx="4" fill="#1A1C1F" stroke="#EDE9E1" stroke-width="1.5"/>
+        <rect x="440" y="20" width="220" height="3" rx="2" fill="#EDE9E1" opacity="0.8"/>
+        <text x="550" y="44" text-anchor="middle" class="node-eyebrow" fill="#6B7280">BOSS</text>
+        <text x="550" y="60" text-anchor="middle" class="node-text-primary" font-size="13">Michael Landi</text>
+        <text x="550" y="76" text-anchor="middle" class="node-text-secondary" fill="#6B7280">Field Operator · Sets direction</text>
 
-        <!-- ORIENT node -->
-        <rect x="305" y="120" width="290" height="68" rx="4" fill="#1A1C1F" stroke="#EDE9E1" stroke-width="1.5"/>
-        <rect x="305" y="120" width="290" height="3" rx="2" fill="#EDE9E1" opacity="0.8"/>
-        <text x="450" y="144" text-anchor="middle" class="node-eyebrow" fill="#6B7280">CONSIGLIERE</text>
-        <text x="450" y="161" text-anchor="middle" class="node-text-primary" font-size="13">ORIENT</text>
-        <text x="450" y="176" text-anchor="middle" class="node-text-secondary" fill="#6B7280">Briefing · Coordination · Routing</text>
+        <!-- ORIENT node (Edit A: center x=550) -->
+        <rect x="390" y="120" width="320" height="68" rx="4" fill="#1A1C1F" stroke="#EDE9E1" stroke-width="1.5"/>
+        <rect x="390" y="120" width="320" height="3" rx="2" fill="#EDE9E1" opacity="0.8"/>
+        <text x="550" y="144" text-anchor="middle" class="node-eyebrow" fill="#6B7280">CONSIGLIERE</text>
+        <text x="550" y="161" text-anchor="middle" class="node-text-primary" font-size="13">ORIENT</text>
+        <text x="550" y="176" text-anchor="middle" class="node-text-secondary" fill="#6B7280">Briefing · Coordination · Routing</text>
 
         <!-- Command line: BOSS → ORIENT -->
-        <line x1="450" y1="88" x2="450" y2="120" class="edge-command" marker-end="url(#arr-cmd)"/>
+        <line x1="550" y1="88" x2="550" y2="120" class="edge-command" marker-end="url(#arr-cmd)"/>
 
-        <!-- Route lines: ORIENT → lane columns -->
-        <path d="M380,188 C380,188 115,210 115,210" class="edge-route" marker-end="url(#arr-route)"/>
-        <path d="M430,188 C430,188 350,210 350,210" class="edge-route" marker-end="url(#arr-route)"/>
-        <path d="M490,188 C490,188 555,210 555,210" class="edge-route" marker-end="url(#arr-route)"/>
-        <path d="M520,188 C520,188 705,210 705,210" class="edge-route" marker-end="url(#arr-route)"/>
+        <!-- Route lines: ORIENT → lane columns (Edit A: new lane-center x-values) -->
+        <path d="M480,188 C480,188 130,210 130,210" class="edge-route" marker-end="url(#arr-route)"/>
+        <path d="M520,188 C520,188 415,210 415,210" class="edge-route" marker-end="url(#arr-route)"/>
+        <path d="M590,188 C590,188 680,210 680,210" class="edge-route" marker-end="url(#arr-route)"/>
+        <path d="M620,188 C620,188 880,210 880,210" class="edge-route" marker-end="url(#arr-route)"/>
 
-        <!-- STRATEGY agents -->
-        <rect x="30" y="215" width="170" height="52" rx="3" class="node-bg" stroke="#A8B5C7" stroke-width="0.75"/>
-        <rect x="30" y="215" width="3" height="52" rx="1" fill="#A8B5C7"/>
-        <text x="50" y="234" class="node-eyebrow" fill="#A8B5C7">STRATEGY</text>
-        <text x="50" y="249" class="node-text-primary" font-size="11" fill="#EDE9E1">STRATEGOS</text>
-        <text x="50" y="261" class="node-text-secondary" fill="#6B7280">Revenue architecture · GTM</text>
+        <!-- STRATEGY agents (Edit A: min 16px row gap; STRATEGOS y=215, RECON y=295) -->
+        <g data-lane="strategy">
+          <rect x="30" y="215" width="200" height="54" rx="3" class="node-bg" stroke="#A8B5C7" stroke-width="0.75"/>
+          <rect x="30" y="215" width="3" height="54" rx="1" fill="#A8B5C7"/>
+          <text x="50" y="234" class="node-eyebrow" fill="#A8B5C7">STRATEGY</text>
+          <text x="50" y="250" class="node-text-primary" font-size="11" fill="#EDE9E1">STRATEGOS</text>
+          <text x="50" y="263" class="node-text-secondary" fill="#6B7280">Revenue architecture · GTM</text>
 
-        <rect x="30" y="278" width="170" height="52" rx="3" class="node-bg" stroke="#A8B5C7" stroke-width="0.75"/>
-        <rect x="30" y="278" width="3" height="52" rx="1" fill="#A8B5C7"/>
-        <text x="50" y="297" class="node-eyebrow" fill="#A8B5C7">STRATEGY</text>
-        <text x="50" y="312" class="node-text-primary" font-size="11" fill="#EDE9E1">RECON</text>
-        <text x="50" y="324" class="node-text-secondary" fill="#6B7280">Research · intelligence</text>
+          <rect x="30" y="295" width="200" height="54" rx="3" class="node-bg" stroke="#A8B5C7" stroke-width="0.75"/>
+          <rect x="30" y="295" width="3" height="54" rx="1" fill="#A8B5C7"/>
+          <text x="50" y="314" class="node-eyebrow" fill="#A8B5C7">STRATEGY</text>
+          <text x="50" y="330" class="node-text-primary" font-size="11" fill="#EDE9E1">RECON</text>
+          <text x="50" y="343" class="node-text-secondary" fill="#6B7280">Research · intelligence</text>
 
-        <!-- Swarm hint: STRATEGOS ↔ RECON -->
-        <line x1="115" y1="267" x2="115" y2="278" class="swarm-hint"/>
+          <!-- Swarm hint: STRATEGOS ↔ RECON -->
+          <line x1="130" y1="269" x2="130" y2="295" class="swarm-hint"/>
+        </g>
 
-        <!-- BUILD agents -->
-        <rect x="240" y="215" width="210" height="48" rx="3" class="node-bg" stroke="#C9B391" stroke-width="0.75"/>
-        <rect x="240" y="215" width="3" height="48" rx="1" fill="#C9B391"/>
-        <text x="260" y="233" class="node-eyebrow" fill="#C9B391">BUILD</text>
-        <text x="260" y="249" class="node-text-primary" font-size="11" fill="#EDE9E1">CANVAS</text>
-        <text x="260" y="261" class="node-text-secondary" fill="#6B7280">Creative direction · brand</text>
+        <!-- BUILD agents (Edit A: CANVAS y=215, SIGNAL y=273, FORGE y=331, STUDIO y=389) -->
+        <g data-lane="build">
+          <rect x="280" y="215" width="270" height="48" rx="3" class="node-bg" stroke="#C9B391" stroke-width="0.75"/>
+          <rect x="280" y="215" width="3" height="48" rx="1" fill="#C9B391"/>
+          <text x="300" y="233" class="node-eyebrow" fill="#C9B391">BUILD</text>
+          <text x="300" y="249" class="node-text-primary" font-size="11" fill="#EDE9E1">CANVAS</text>
+          <text x="300" y="261" class="node-text-secondary" fill="#6B7280">Creative direction · brand</text>
 
-        <rect x="240" y="273" width="210" height="48" rx="3" class="node-bg" stroke="#C9B391" stroke-width="0.75"/>
-        <rect x="240" y="273" width="3" height="48" rx="1" fill="#C9B391"/>
-        <text x="260" y="291" class="node-eyebrow" fill="#C9B391">BUILD</text>
-        <text x="260" y="307" class="node-text-primary" font-size="11" fill="#EDE9E1">SIGNAL</text>
-        <text x="260" y="319" class="node-text-secondary" fill="#6B7280">Copy · content · voice</text>
+          <rect x="280" y="273" width="270" height="48" rx="3" class="node-bg" stroke="#C9B391" stroke-width="0.75"/>
+          <rect x="280" y="273" width="3" height="48" rx="1" fill="#C9B391"/>
+          <text x="300" y="291" class="node-eyebrow" fill="#C9B391">BUILD</text>
+          <text x="300" y="307" class="node-text-primary" font-size="11" fill="#EDE9E1">SIGNAL</text>
+          <text x="300" y="319" class="node-text-secondary" fill="#6B7280">Copy · content · voice</text>
 
-        <rect x="240" y="331" width="210" height="48" rx="3" class="node-bg" stroke="#C9B391" stroke-width="0.75"/>
-        <rect x="240" y="331" width="3" height="48" rx="1" fill="#C9B391"/>
-        <text x="260" y="349" class="node-eyebrow" fill="#C9B391">BUILD</text>
-        <text x="260" y="365" class="node-text-primary" font-size="11" fill="#EDE9E1">FORGE</text>
-        <text x="260" y="377" class="node-text-secondary" fill="#6B7280">Web dev · builds</text>
+          <rect x="280" y="331" width="270" height="48" rx="3" class="node-bg" stroke="#C9B391" stroke-width="0.75"/>
+          <rect x="280" y="331" width="3" height="48" rx="1" fill="#C9B391"/>
+          <text x="300" y="349" class="node-eyebrow" fill="#C9B391">BUILD</text>
+          <text x="300" y="365" class="node-text-primary" font-size="11" fill="#EDE9E1">FORGE</text>
+          <text x="300" y="377" class="node-text-secondary" fill="#6B7280">Web dev · builds</text>
 
-        <rect x="240" y="389" width="210" height="48" rx="3" class="node-bg" stroke="#C9B391" stroke-width="0.75"/>
-        <rect x="240" y="389" width="3" height="48" rx="1" fill="#C9B391"/>
-        <text x="260" y="407" class="node-eyebrow" fill="#C9B391">BUILD</text>
-        <text x="260" y="423" class="node-text-primary" font-size="11" fill="#EDE9E1">STUDIO</text>
-        <text x="260" y="435" class="node-text-secondary" fill="#6B7280">3D · audio · media</text>
+          <rect x="280" y="389" width="270" height="48" rx="3" class="node-bg" stroke="#C9B391" stroke-width="0.75"/>
+          <rect x="280" y="389" width="3" height="48" rx="1" fill="#C9B391"/>
+          <text x="300" y="407" class="node-eyebrow" fill="#C9B391">BUILD</text>
+          <text x="300" y="423" class="node-text-primary" font-size="11" fill="#EDE9E1">STUDIO</text>
+          <text x="300" y="435" class="node-text-secondary" fill="#6B7280">3D · audio · media</text>
 
-        <!-- Swarm hints: Build lane inter-agent -->
-        <path d="M460,239 C480,239 480,295 460,295" class="swarm-hint"/>
-        <path d="M460,297 C480,297 480,353 460,353" class="swarm-hint"/>
+          <!-- Swarm hints: Build lane inter-agent -->
+          <path d="M560,239 C580,239 580,295 560,295" class="swarm-hint"/>
+          <path d="M560,297 C580,297 580,353 560,353" class="swarm-hint"/>
+        </g>
 
-        <!-- OPS agent -->
-        <rect x="500" y="215" width="110" height="52" rx="3" class="node-bg" stroke="#9FB8A3" stroke-width="0.75"/>
-        <rect x="500" y="215" width="3" height="52" rx="1" fill="#9FB8A3"/>
-        <text x="520" y="234" class="node-eyebrow" fill="#9FB8A3">OPS</text>
-        <text x="520" y="249" class="node-text-primary" font-size="11" fill="#EDE9E1">CIRCUIT</text>
-        <text x="520" y="261" class="node-text-secondary" fill="#6B7280">Automations · integrations</text>
+        <!-- OPS agent (Edit A: x=610 data-lane) -->
+        <g data-lane="ops">
+          <rect x="610" y="215" width="140" height="54" rx="3" class="node-bg" stroke="#9FB8A3" stroke-width="0.75"/>
+          <rect x="610" y="215" width="3" height="54" rx="1" fill="#9FB8A3"/>
+          <text x="630" y="234" class="node-eyebrow" fill="#9FB8A3">OPS</text>
+          <text x="630" y="250" class="node-text-primary" font-size="11" fill="#EDE9E1">CIRCUIT</text>
+          <text x="630" y="263" class="node-text-secondary" fill="#6B7280">Automations · integrations</text>
+        </g>
 
-        <!-- LIFE agent -->
-        <rect x="650" y="215" width="110" height="52" rx="3" class="node-bg" stroke="#BFA7C4" stroke-width="0.75"/>
-        <rect x="650" y="215" width="3" height="52" rx="1" fill="#BFA7C4"/>
-        <text x="670" y="234" class="node-eyebrow" fill="#BFA7C4">LIFE</text>
-        <text x="670" y="249" class="node-text-primary" font-size="11" fill="#EDE9E1">ANCHOR</text>
-        <text x="670" y="261" class="node-text-secondary" fill="#6B7280">Personal pillars</text>
+        <!-- LIFE agent (Edit A: x=810 data-lane) -->
+        <g data-lane="life">
+          <rect x="810" y="215" width="140" height="54" rx="3" class="node-bg" stroke="#BFA7C4" stroke-width="0.75"/>
+          <rect x="810" y="215" width="3" height="54" rx="1" fill="#BFA7C4"/>
+          <text x="830" y="234" class="node-eyebrow" fill="#BFA7C4">LIFE</text>
+          <text x="830" y="250" class="node-text-primary" font-size="11" fill="#EDE9E1">ANCHOR</text>
+          <text x="830" y="263" class="node-text-secondary" fill="#6B7280">Personal pillars</text>
+        </g>
 
         <!-- ANCHOR ↔ ORIENT collab line -->
-        <path d="M650,241 C630,241 600,188 520,188" stroke="#BFA7C4" stroke-width="0.75" stroke-dasharray="3 3" fill="none" opacity="0.4"/>
+        <path d="M810,242 C790,242 750,188 710,188" stroke="#BFA7C4" stroke-width="0.75" stroke-dasharray="3 3" fill="none" opacity="0.4"/>
 
-        <!-- ATLAS engagement zone -->
-        <rect x="200" y="480" width="500" height="68" rx="4" class="atlas-bg"/>
-        <text x="450" y="498" text-anchor="middle" font-family="'Syne',sans-serif" font-weight="700" font-size="7.5" letter-spacing="0.14em" fill="#FFAB40" opacity="0.8">ENGAGEMENT STEWARD · ASPIREVUE</text>
-        <rect x="330" y="505" width="240" height="36" rx="3" fill="#1A1C1F" stroke="#FFAB40" stroke-width="1"/>
-        <rect x="330" y="505" width="3" height="36" rx="1" fill="#FFAB40"/>
-        <text x="422" y="520" text-anchor="middle" class="node-text-primary" font-size="11" fill="#EDE9E1">ATLAS</text>
-        <text x="422" y="534" text-anchor="middle" class="node-text-secondary" fill="#6B7280">Promise ledger · correspondence memory</text>
+        <!-- ATLAS engagement zone (Edit A: x=230 w=640, inner node centered) -->
+        <rect x="230" y="490" width="640" height="72" rx="4" class="atlas-bg"/>
+        <text x="550" y="508" text-anchor="middle" font-family="'Syne',sans-serif" font-weight="700" font-size="7.5" letter-spacing="0.14em" fill="#FFAB40" opacity="0.8">ENGAGEMENT STEWARD · ASPIREVUE</text>
+        <rect x="395" y="507" width="310" height="40" rx="3" fill="#1A1C1F" stroke="#FFAB40" stroke-width="1"/>
+        <rect x="395" y="507" width="3" height="40" rx="1" fill="#FFAB40"/>
+        <text x="545" y="524" text-anchor="middle" class="node-text-primary" font-size="11" fill="#EDE9E1">ATLAS</text>
+        <text x="545" y="539" text-anchor="middle" class="node-text-secondary" fill="#6B7280">Promise ledger · correspondence memory</text>
         <!-- Dashed line ORIENT → ATLAS -->
-        <path d="M450,188 L450,480" stroke="#FFAB40" stroke-width="0.75" stroke-dasharray="3 5" fill="none" opacity="0.3"/>
+        <path d="M550,188 L550,490" stroke="#FFAB40" stroke-width="0.75" stroke-dasharray="3 5" fill="none" opacity="0.3"/>
       </svg>
     </div>
   </div>
@@ -823,7 +903,6 @@ p:last-child { margin-bottom: 0; }
   <h2 class="section-heading large arrive" id="s5-heading" data-observe>The ecosystem, in one view.</h2>
   <div class="map-intro arrive" data-observe>
     <p>Everything in the four sections above, shown as a single coordinated system. Agents, vault, tools, workflows, taste gates. Directional flow lines show how work actually moves. Swarming lines pulse between collaborating agents. Taste-gate nodes mark the points where the operator decides.</p>
-    <p>The map doesn't need a legend. If the sections above did their job, it reads on its own. Sit with it.</p>
   </div>
 
   <div class="map-container" id="map-container">
@@ -871,14 +950,16 @@ p:last-child { margin-bottom: 0; }
       <text x="510" y="34" text-anchor="middle" class="map-text-tool" fill="#C9B391">REMOTE</text>
       <text x="510" y="47" text-anchor="middle" class="map-text-tool" fill="#6B7280">dispatch · control</text>
 
-      <rect x="840" y="20" width="80" height="36" rx="10" class="map-node-tool" stroke="#9FB8A3" stroke-width="0.75"/>
-      <text x="880" y="34" text-anchor="middle" class="map-text-tool" fill="#9FB8A3">EXTERIOR</text>
-      <text x="880" y="47" text-anchor="middle" class="map-text-tool" fill="#6B7280">antigravity · triggers</text>
+      <!-- Edit B: EXTERIOR relocated to x=670, clear of ATLAS zone -->
+      <rect x="670" y="20" width="80" height="36" rx="10" class="map-node-tool" stroke="#9FB8A3" stroke-width="0.75"/>
+      <text x="710" y="34" text-anchor="middle" class="map-text-tool" fill="#9FB8A3">EXTERIOR</text>
+      <text x="710" y="47" text-anchor="middle" class="map-text-tool" fill="#6B7280">antigravity · triggers</text>
 
       <!-- Input → ORIENT arrows (animated) -->
+      <!-- Edit B: i3 rerouted to arc through y=92, above ATLAS boundary -->
       <path class="input-edge i1" d="M140,56 L140,80 Q140,96 440,96 Q490,96 490,100"/>
       <path class="input-edge i2" d="M510,56 L510,96 Q510,100 490,100"/>
-      <path class="input-edge i3" d="M880,56 L880,80 Q880,96 560,96 Q510,96 510,100"/>
+      <path class="input-edge i3" d="M710,56 L710,76 Q710,92 560,92 Q510,92 510,100"/>
 
       <!-- ===== BOSS NODE ===== -->
       <rect x="400" y="20" width="180" height="56" rx="4" fill="#1A1C1F" stroke="#EDE9E1" stroke-width="1.5"/>
@@ -1140,34 +1221,36 @@ p:last-child { margin-bottom: 0; }
   <div class="obsidian-layout">
     <div class="obsidian-prose arrive" data-observe>
       <p>Every agent, every SOP, every decision, every piece of engagement memory lives in the vault as plain markdown. Folders for active projects. Folders for personas. A MOC for the memory index. Date-stamped notes for sessions and handoffs. Nothing proprietary to a cloud app. Nothing locked behind a subscription that could deprecate under you.</p>
-      <p>The reason this matters is practical. Continuity across sessions: when the next Code session opens, the relevant files are already the context, not an upload ritual. Token economy: you pay for signal, not for reintroducing yourself to the system. Organizational sanity: if a decision was authorized, it's in a file with a date; if it wasn't, you can see that too.</p>
-      <p>The vault looks spare on purpose. No dashboards, no color themes, no cover images. It is a working surface. The aesthetic is legibility under load, not demo polish. When you're in it at five in the morning, you want it to get out of your way.</p>
+      <p>The reason this matters is practical. Continuity <mark class="prose-highlight">across sessions</mark>: when the next Code session opens, the relevant <mark class="prose-highlight">files are already the context</mark>, not an upload ritual. Token economy: you pay for signal, not for reintroducing yourself to the system. <mark class="prose-highlight">Organizational sanity</mark>: if a decision was authorized, it's in a file with a date; if it wasn't, you can see that too.</p>
+      <p>The vault looks spare on purpose. <mark class="prose-highlight">No dashboards, no color themes, no cover images</mark>. It is a working surface. The aesthetic is legibility under load, not demo polish. When you're in it at five in the morning, you want it to get out of your way.</p>
     </div>
     <div class="vault-tree arrive delay-1" data-observe aria-label="Obsidian vault folder structure">
-      <span class="vault-folder">Arc'kin Endeavors/</span><br>
-      <span class="vault-file">├── <span class="vault-folder">_MOCs/</span></span><br>
-      <span class="vault-file">&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="vault-accent">MEMORY.md</span> — the index</span><br>
-      <span class="vault-file">├── <span class="vault-folder">01_AGENTS/</span></span><br>
-      <span class="vault-file">&nbsp;&nbsp;&nbsp;&nbsp;└── ORIENT.md, CANVAS.md ...</span><br>
-      <span class="vault-file">├── <span class="vault-folder">02_ARCKIN_CORE/</span></span><br>
-      <span class="vault-file">&nbsp;&nbsp;&nbsp;&nbsp;└── doctrine · feedback · locks</span><br>
-      <span class="vault-file">├── <span class="vault-folder">03_ACTIVE_PROJECTS/</span></span><br>
-      <span class="vault-file">&nbsp;&nbsp;&nbsp;&nbsp;└── AspireVue/ ...</span><br>
-      <span class="vault-file">├── <span class="vault-folder">06_SYSTEM_DOCS/</span></span><br>
-      <span class="vault-file">&nbsp;&nbsp;&nbsp;&nbsp;└── plans · execution specs</span><br>
-      <span class="vault-file">├── <span class="vault-folder">10_Working-Docs/</span></span><br>
-      <span class="vault-file">&nbsp;&nbsp;&nbsp;&nbsp;└── briefs · copy · references</span><br>
-      <span class="vault-file">└── <span class="vault-folder">20_Client-Facing/</span></span><br>
-      <span class="vault-file">&nbsp;&nbsp;&nbsp;&nbsp;└── deliverables</span>
+<pre class="vault-tree-pre">
+<span class="vault-root">Arc'kin Endeavors/</span>
+<span class="vault-toplevel">├── _MOCs/</span>
+<span class="vault-subtle">│   └── <span class="vault-memory-line">MEMORY.md</span> <span class="vault-subtle">— the index</span></span>
+<span class="vault-toplevel">├── 01_AGENTS/</span>
+<span class="vault-subtle">│   └── <span class="vault-subtle">ORIENT.md, CANVAS.md ...</span></span>
+<span class="vault-toplevel">├── 02_ARCKIN_CORE/</span>
+<span class="vault-subtle">│   └── <span class="vault-subtle">doctrine · feedback · locks</span></span>
+<span class="vault-toplevel">├── 03_ACTIVE_PROJECTS/</span>
+<span class="vault-subtle">│   └── <span class="vault-subtle">AspireVue/ ...</span></span>
+<span class="vault-toplevel">├── 06_SYSTEM_DOCS/</span>
+<span class="vault-subtle">│   └── <span class="vault-subtle">plans · execution specs</span></span>
+<span class="vault-toplevel">├── 10_Working-Docs/</span>
+<span class="vault-subtle">│   └── <span class="vault-subtle">briefs · copy · references</span></span>
+<span class="vault-toplevel">└── 20_Client-Facing/</span>
+<span class="vault-subtle">    └── <span class="vault-subtle">deliverables</span></span>
+</pre>
     </div>
   </div>
 </section>
 
 <!-- SECTION 7 — THE CLOSER -->
 <section class="closer-section" id="section-7" aria-labelledby="s7-heading">
-  <span class="eyebrow closer-eyebrow arrive" data-observe>THE CLOSER</span>
-  <h2 class="closer-heading arrive" id="s7-heading" data-observe>Wave 1 is foundations. Wave 2 is the next beat — same cadence, deeper instrumentation.</h2>
-  <p class="closer-body arrive delay-1" data-observe>Built for one reader. Shipped because the cadence said to.</p>
+  <span class="eyebrow closer-eyebrow arrive" data-observe>ON THE CADENCE</span>
+  <h2 class="closer-heading arrive" id="s7-heading" data-observe>Wave 1 is foundations. Wave 2 runs the same system at higher resolution.</h2>
+  <p class="closer-body arrive delay-1" data-observe>Built for one reader. Shipped on a deliberate rhythm, not a deadline.</p>
 </section>
 
 <!-- APPENDIX — HARDWARE -->
@@ -1480,6 +1563,31 @@ p:last-child { margin-bottom: 0; }
         el.style.animationPlayState = '';
       });
     }
+  });
+
+  // --- §2 ROSTER LANE INTERACTION (Edit A — CANVAS rev1) ---
+  var rosterSvg = document.querySelector('.roster-svg');
+  var laneGroups = rosterSvg ? rosterSvg.querySelectorAll('[data-lane-trigger]') : [];
+  var clearLane = function () {
+    if (!rosterSvg) return;
+    rosterSvg.className.baseVal = rosterSvg.className.baseVal
+      .replace(/lane-active-\w+/g, '').trim();
+  };
+  laneGroups.forEach(function (el) {
+    el.addEventListener('mouseenter', function () {
+      clearLane();
+      rosterSvg.classList.add('lane-active-' + el.dataset.laneTrigger);
+    });
+    el.addEventListener('mouseleave', clearLane);
+    el.addEventListener('touchstart', function (e) {
+      e.preventDefault();
+      var already = rosterSvg.classList.contains('lane-active-' + el.dataset.laneTrigger);
+      clearLane();
+      if (!already) rosterSvg.classList.add('lane-active-' + el.dataset.laneTrigger);
+    }, { passive: false });
+  });
+  document.addEventListener('touchstart', function (e) {
+    if (rosterSvg && !rosterSvg.contains(e.target)) clearLane();
   });
 
   // --- HERO REVEAL ---

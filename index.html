@@ -411,10 +411,10 @@ p:last-child { margin-bottom: 0; }
   fill: none; stroke: var(--accent); stroke-width: 1.5;
   stroke-dasharray: 10 8; opacity: 0;
 }
-.input-edge.fired { animation: input-pulse 1.8s ease-out forwards; }
-.input-edge.i1 { animation-delay: 0.1s; }
-.input-edge.i2 { animation-delay: 0.4s; }
-.input-edge.i3 { animation-delay: 0.7s; }
+.input-edge.fired { animation: input-pulse 1.8s ease-out infinite; }
+.input-edge.i1.fired { animation-delay: 0.1s; }
+.input-edge.i2.fired { animation-delay: 0.4s; }
+.input-edge.i3.fired { animation-delay: 0.7s; }
 .taste-gate-group { animation: gate-glow 3s ease-in-out infinite; }
 .map-lane-bg-strategy { fill: rgba(168,181,199,0.05); }
 .map-lane-bg-build    { fill: rgba(201,179,145,0.05); }
@@ -577,10 +577,10 @@ mark.prose-highlight {
 }
 .swarm-hint { stroke: var(--lane-build); stroke-width: 1.25; fill: none; stroke-dasharray: 2 4; opacity: 0.55; }
 .input-edge { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 10 8; opacity: 0; }
-.input-edge.fired { animation: input-pulse 1.8s ease-out forwards; }
-.input-edge.i1 { animation-delay: 0.1s; }
-.input-edge.i2 { animation-delay: 0.4s; }
-.input-edge.i3 { animation-delay: 0.7s; }
+.input-edge.fired { animation: input-pulse 1.8s ease-out infinite; }
+.input-edge.i1.fired { animation-delay: 0.1s; }
+.input-edge.i2.fired { animation-delay: 0.4s; }
+.input-edge.i3.fired { animation-delay: 0.7s; }
 
 /* === LANE-HOVER DIM BG EXTENSION === */
 .roster-svg.lane-active-strategy [data-lane="strategy"].lane-strategy-bg { fill-opacity: 0.10; }
@@ -1058,10 +1058,10 @@ mark.prose-highlight {
 <path d="M620,160 Q620,176 1040,176" class="routing-line map-reveal-target" id="m-route-l"/>
 
       
-<rect x="28" y="160" width="264" height="370" rx="4" class="map-lane-bg-strategy map-reveal-target" id="m-bg-s"/>
-<rect x="321" y="160" width="264" height="370" rx="4" class="map-lane-bg-build map-reveal-target" id="m-bg-b"/>
-<rect x="615" y="160" width="264" height="200" rx="4" class="map-lane-bg-ops map-reveal-target" id="m-bg-o"/>
-<rect x="908" y="160" width="264" height="200" rx="4" class="map-lane-bg-life map-reveal-target" id="m-bg-l"/>
+<rect x="40" y="160" width="240" height="370" rx="4" class="map-lane-bg-strategy map-reveal-target" id="m-bg-s"/>
+<rect x="333" y="160" width="240" height="370" rx="4" class="map-lane-bg-build map-reveal-target" id="m-bg-b"/>
+<rect x="627" y="160" width="240" height="200" rx="4" class="map-lane-bg-ops map-reveal-target" id="m-bg-o"/>
+<rect x="920" y="160" width="240" height="200" rx="4" class="map-lane-bg-life map-reveal-target" id="m-bg-l"/>
 
       
 <text x="160" y="176" text-anchor="middle" class="map-lane-label" fill="#A8B5C7">STRATEGY</text>
@@ -1177,18 +1177,6 @@ mark.prose-highlight {
 <line x1="600" y1="639" x2="600" y2="640" stroke="#EDE9E1" stroke-width="2" opacity="0.8" marker-end="url(#arrow-ship)"/>
 </g>
 
-      
-<rect x="840" y="145" width="240" height="200" rx="4" class="map-atlas-zone"/>
-<text x="960" y="165" text-anchor="middle" class="map-text-eyebrow" fill="#FFAB40" font-size="7.5">ENGAGEMENT STEWARD · ASPIREVUE</text>
-<g data-role-verb="steward" class="node-lift">
-<rect x="858" y="172" width="204" height="60" rx="4" fill="#1A1C1F" stroke="#FFAB40" stroke-width="1"/>
-<rect x="858" y="172" width="3" height="60" rx="1" fill="#FFAB40"/>
-<text x="878" y="192" class="map-text-eyebrow" fill="#FFAB40">ENGAGEMENT STEWARD</text>
-<text x="878" y="208" class="map-text-name" fill="#EDE9E1">ATLAS</text>
-<text x="878" y="222" class="map-text-role" fill="#6B7280">Promise ledger · correspondence memory</text>
-</g>
-      
-<path d="M840,200 Q700,200 695,160 Q680,145 600,140" stroke="#FFAB40" stroke-width="0.75" stroke-dasharray="3 4" fill="none" opacity="0.4"/>
 
       
 <g class="map-reveal-target" id="m-vault">
@@ -1232,7 +1220,6 @@ mark.prose-highlight {
 <line x1="600" y1="688" x2="600" y2="726" class="vault-tether"/>
 <line x1="742" y1="217" x2="765" y2="726" class="vault-tether"/>
 <line x1="1035" y1="217" x2="930" y2="726" class="vault-tether"/>
-<line x1="960" y1="345" x2="1095" y2="726" class="vault-tether"/>
 
       
 <text x="600" y="800" text-anchor="middle" class="map-text-role" fill="#6B7280" font-size="9">All agents read from and write to the vault. Every session picks up where the last one left off.</text>
@@ -1679,7 +1666,7 @@ role="img">
       var edge = edges[idx % edges.length];
       edge.style.animation = 'none';
       edge.offsetHeight;
-      edge.style.animation = 'swarm-pulse-r2 ' + CYCLE + 'ms ease-in-out';
+      edge.style.animation = 'swarm-pulse-r2 ' + CYCLE + 'ms ease-in-out infinite';
       idx++;
       setTimeout(fireNext, CYCLE * 0.6);
     }

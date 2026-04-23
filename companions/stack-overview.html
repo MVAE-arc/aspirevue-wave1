@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Arc'kin Stack Overview — Wave 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+
+  <nav class="nav" aria-label="Back to hub">
+    <div class="nav-brand">Arc<span>&apos;</span>kin Endeavors</div>
+    <a class="nav-back" href="../start/">Back to hub</a>
+  </nav>
+
+  <article class="doc">
+    <span class="doc-eyebrow">Wave 1 · Companion</span>
+    <h1>Arc&apos;kin Stack Overview</h1>
+    <p style="color: var(--subtle); font-size: 1rem; margin-top: -24px; margin-bottom: 40px;">Systems, tools, and the source of truth.</p>
+
+    <h2>1. The Philosophy: System Over Scatter</h2>
+    <p>The Arc&apos;kin Agency operates on the principle that standard AI usage is fundamentally scattered. Most workflows involve bouncing between disconnected tools and ephemeral chat sessions where every prompt starts from zero. This results in the loss of compounding value: insights are retyped, and decisions made on Monday are forgotten by Friday.</p>
+    <p>The Arc&apos;kin system is the inverse of this scatter. It is a disciplined operating system designed to preserve intent and ensure that every action builds upon a documented foundation. This discipline is anchored by a single, non-negotiable rule regarding the relationship between the human operator and the machine.</p>
+    <p><strong>Key Principle: The AI does not originate.</strong> The AI does not ideate without instruction, decide without scope, or architect without authorization. Every creative and strategic direction comes from the operator. The system carries the intent; the operator remains the boss.</p>
+    <p>This philosophy is enforced through a physical and digital rig that prioritizes execution and memory over generic chat interfaces.</p>
+
+    <hr>
+
+    <h2>2. The Architecture: The Team</h2>
+    <p>The system relies on a named roster of ten specialist personas. Each operates within a specific lane to prevent the &ldquo;drift&rdquo; common in general-purpose chat.</p>
+    <ul>
+      <li><strong>BOSS:</strong> Michael Landi. Field Operator. Sets direction.</li>
+      <li><strong>CONSIGLIERE (ORIENT):</strong> Briefing, coordination, and routing. The first point of contact for any ask.</li>
+      <li><strong>STRATEGY LANE:</strong>
+        <ul>
+          <li><strong>STRATEGOS:</strong> Revenue architecture, GTM, and commercial shape.</li>
+          <li><strong>RECON:</strong> Research, intelligence, and market pulls.</li>
+        </ul>
+      </li>
+      <li><strong>BUILD LANE:</strong>
+        <ul>
+          <li><strong>CANVAS:</strong> Creative direction, brand, and visual systems.</li>
+          <li><strong>SIGNAL:</strong> Copy, voice, narrative, and content.</li>
+          <li><strong>FORGE:</strong> Web development and technical implementation.</li>
+          <li><strong>STUDIO:</strong> 3D, audio, motion, and media production.</li>
+        </ul>
+      </li>
+      <li><strong>OPS LANE:</strong>
+        <ul><li><strong>CIRCUIT:</strong> Automations, integrations, and workflow plumbing.</li></ul>
+      </li>
+      <li><strong>LIFE LANE:</strong>
+        <ul><li><strong>ANCHOR:</strong> Personal pillars and work-life integration.</li></ul>
+      </li>
+      <li><strong>ENGAGEMENT STEWARD:</strong>
+        <ul><li><strong>ATLAS:</strong> Account memory, promise ledger, and correspondence continuity for specific engagements.</li></ul>
+      </li>
+    </ul>
+    <p>Work typically runs as a &ldquo;swarm.&rdquo; For example, a positioning question pulls STRATEGOS and RECON together, while a landing page build engages CANVAS, SIGNAL, and FORGE in parallel. ORIENT manages the routing to ensure the right specialist addresses the right question.</p>
+
+    <hr>
+
+    <h2>3. The Core Engine: Claude Max &amp; Antigravity</h2>
+    <p>The primary execution surface is built on the Claude Max session engine. This is accessed through &ldquo;three doors&rdquo; that all lead to the same underlying vault.</p>
+    <table>
+      <thead><tr><th>Tool</th><th>Surface / Interface</th><th>Primary Capability</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Claude Code</strong></td><td>Terminal (via Antigravity)</td><td>The execution surface. Reads and writes files directly; full file-system access.</td></tr>
+        <tr><td><strong>Claude Cowork</strong></td><td>Project-scoped Chat</td><td>A quieter register for collaborative thinking that mirrors the file environment.</td></tr>
+        <tr><td><strong>Claude for Chrome</strong></td><td>In-browser Agent</td><td>An in-browser surface for web-based agent tasks and input.</td></tr>
+        <tr><td><strong>Google Antigravity</strong></td><td>IDE / Launcher</td><td>The workspace that launches sessions; VS Code-compatible and terminal-friendly.</td></tr>
+      </tbody>
+    </table>
+    <h4>The Operator&apos;s Advantage</h4>
+    <p>A terminal-based execution surface like Claude Code fundamentally changes the relationship with the file system. Instead of the operator acting as a manual bridge — copying and pasting text — the system operates directly on the files. This allows for the simultaneous spawning of specialist agents to work on different parts of a project within a single, unified environment. While these tools execute, they do not &ldquo;remember&rdquo; without a dedicated layer.</p>
+
+    <hr>
+
+    <h2>4. The Memory Layer: Obsidian as the Source of Truth</h2>
+    <p>The &ldquo;Source of Truth&rdquo; is the vault where all agency memory resides. The system utilizes Obsidian for this purpose, prioritizing local storage and plain Markdown files over proprietary cloud formats that risk deprecation.</p>
+    <p>This layer is load-bearing for three reasons:</p>
+    <ol>
+      <li><strong>Continuity:</strong> When a new session begins, the relevant files are already the context. There is no &ldquo;upload ritual&rdquo; required to re-introduce the operator or the project.</li>
+      <li><strong>Token Economy:</strong> By maintaining SOPs and decision logs, the operator pays for new &ldquo;signal&rdquo; rather than repeating existing information.</li>
+      <li><strong>Organizational Sanity:</strong> The vault uses <strong>MOCs (Maps of Content)</strong> as a memory index. If a decision is not documented in the vault with a date, it did not happen.</li>
+    </ol>
+    <p>The vault is a working surface designed for legibility under load. It prevents the system from starting every session from zero.</p>
+
+    <hr>
+
+    <h2>5. High-Bandwidth Capture and Infrastructure</h2>
+    <p>To feed the memory layer efficiently, the stack utilizes specialized hardware to eliminate the friction of manual typing.</p>
+    <ul>
+      <li><strong>Plaud:</strong> A dedicated voice capture device. Voice is the highest-bandwidth input humans produce; Plaud turns that bandwidth into operable text without a typing layer.</li>
+      <li><strong>Physical Rig:</strong> The system runs on a Mac Mini M1 (primary desktop) and a MacBook Pro (mobile mirror). This separation preserves the discipline between a deep-work environment and a travel surface.</li>
+      <li><strong>Storage Philosophy:</strong> The rig is SSD-only (G-Tech G-RAID and SanDisk), prioritizing reliability and speed. No spinning disks are used in the pipeline.</li>
+      <li><strong>Display Rig:</strong> A 49&quot; Samsung ultrawide allows for the parallel windowing required for agent swarms — the desk physically mirrors the system diagram.</li>
+    </ul>
+
+    <hr>
+
+    <h2>6. The Specialized Roster: Capability Over Popularity</h2>
+    <p>The stack includes a roster of &ldquo;sidekick&rdquo; and &ldquo;build&rdquo; tools selected for specific technical roles rather than market trends.</p>
+
+    <h3>Research Specialists</h3>
+    <ul>
+      <li><strong>Perplexity (via Comet browser):</strong> Used for fast, open-web research with transparent sourcing.</li>
+      <li><strong>NotebookLM:</strong> A second-brain reader used for closed-world synthesis across a bounded corpus of documents.</li>
+      <li><strong>Gemini (AI Pro):</strong> Utilized for its extended context window and Workspace-native integrations.</li>
+    </ul>
+
+    <h3>Creative Surfaces</h3>
+    <ul>
+      <li><strong>Figma &amp; Figma Weave:</strong> The environment for design systems, interfaces, and AI-native motion and canvas work.</li>
+      <li><strong>Flow (powered by Veo):</strong> Google&apos;s specialized surface for AI filmmaking and video production.</li>
+      <li><strong>Stitch:</strong> Specialized AI UI/UX generation.</li>
+      <li><strong>Gemini Canvas:</strong> Interactive data visualization for professional contexts.</li>
+      <li><strong>Spline &amp; Remotion:</strong> Tools for 3D scenes and programmatic, code-level video control.</li>
+    </ul>
+
+    <h3>Workflow Plumbing</h3>
+    <ul>
+      <li><strong>Make, n8n, &amp; Zapier:</strong> Automation and routing tools that move data between surfaces.</li>
+      <li><strong>Jira:</strong> Used for project management and the epic-to-task decomposition of complex engagements.</li>
+    </ul>
+
+    <hr>
+
+    <h2>7. Synthesis: How the Stack Moves</h2>
+    <p>The value of the stack is realized in the &ldquo;pass&rdquo; — the sequence of moving from an idea to a finished artifact. This workflow is governed by documented standards and human authorization.</p>
+    <h4>The Path of a Pass</h4>
+    <ol>
+      <li><strong>Ideation (Chat):</strong> Initial shaping and refining of the brief occur in standard Claude chat.</li>
+      <li><strong>Spec (Obsidian):</strong> Once refined, the specification is written into the Obsidian vault.</li>
+      <li><strong>Strategy Swarm:</strong> A Claude Code session opens. ORIENT routes the spec to STRATEGOS and RECON to produce a formal execution brief.</li>
+      <li><strong>Execution Swarm:</strong> A new session opens on that brief. Build agents (CANVAS, SIGNAL, FORGE, STUDIO) work in parallel to create the artifact.</li>
+      <li><strong>Taste Gates:</strong> The operator reviews the output against documented <strong>SOPs, scorecards, and style gates</strong>.</li>
+      <li><strong>Ship:</strong> The final product is delivered.</li>
+    </ol>
+    <p>This sequence ensures that strategy always precedes execution and that the creative direction remains anchored to the operator&apos;s intent.</p>
+
+    <hr>
+
+    <h2>8. Closing Posture: Foundations for the Operator</h2>
+    <p>Wave 1 is about establishing foundations. The rig and the software are not ends in themselves; they are the infrastructure for a repeatable and disciplined operating system. By separating ideation from implementation and ensuring each session is scoped to a specific beat, the system prevents drift.</p>
+    <p><strong>Wave 1 is foundations. Wave 2 runs the same system at higher resolution.</strong></p>
+    <p><strong>The system is the leverage. The operator stays the operator.</strong></p>
+
+  </article>
+
+  <footer class="colophon">
+    <span>Arc&apos;kin Endeavors · Wave 1 · 2026-04</span>
+    <a href="../start/">Back to hub →</a>
+  </footer>
+
+</div>
+</body>
+</html>

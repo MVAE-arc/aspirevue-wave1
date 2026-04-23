@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Systems Architecture Manual — Wave 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+
+  <nav class="nav" aria-label="Back to hub">
+    <div class="nav-brand">Arc<span>&apos;</span>kin Endeavors</div>
+    <a class="nav-back" href="../start/">Back to hub</a>
+  </nav>
+
+  <article class="doc">
+    <span class="doc-eyebrow">Wave 1 · Companion</span>
+    <h1>Systems Architecture Manual</h1>
+    <p style="color: var(--subtle); font-size: 1rem; margin-top: -24px; margin-bottom: 40px;">The Arc&apos;kin Agency ecosystem.</p>
+
+    <h2>1. The Foundational Philosophy: Intent vs. Execution</h2>
+    <p>The Arc&apos;kin philosophy is defined by the rigorous separation of the originator from the execution layer. AI is an engine for building, but it lacks the direction required for professional stakes. Fragmented tools are the default state for most users; a unified operating system is the goal. By isolating human intent from machine execution, the agency creates a structural safeguard against the entropy of generic AI outputs.</p>
+    <p>The objective is a move from the scattered state to the operating system state.</p>
+    <table>
+      <thead><tr><th>Dimension</th><th>Scattered State</th><th>Operating System State</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Context</strong></td><td>Every session starts from zero; context is lost.</td><td>A persistent vault provides continuous context.</td></tr>
+        <tr><td><strong>Continuity</strong></td><td>Insights are fragmented and temporary.</td><td>Decision logs and SOPs ensure insights compound.</td></tr>
+        <tr><td><strong>Agency</strong></td><td>AI ideates without scope, leading to drift.</td><td>The human operator maintains a monopoly on origination.</td></tr>
+      </tbody>
+    </table>
+    <p>Origination remains a human-monopolized function. When AI dictates the architecture, output moves toward the mean of training data, sacrificing the strategic edge of a senior operator. The system prevents quality slip and chat drift by enforcing a single rule: the AI does not ideate without instruction or decide without scope. The system carries the intent; the operator remains the operator.</p>
+
+    <h2>2. The Persona Roster: Structural Hierarchy and Lane Allocation</h2>
+    <p>The Arc&apos;kin Agency replaces generic chat interfaces with a roster of specialist personas. Named roles enforce routing discipline, ensuring specific expertise is applied to the appropriate lane. This hierarchy prevents the system from losing focus during complex builds.</p>
+    <p><strong>BOSS: Michael Landi.</strong> Field Operator. Sets the direction and makes all final decisions.</p>
+    <p><strong>CONSIGLIERE: ORIENT.</strong> Directive: briefing, coordination, and routing; the first point of contact for every ask.</p>
+    <h4>Strategy Lane</h4>
+    <ul>
+      <li><strong>STRATEGOS</strong> — Directive: responsible for revenue architecture, GTM strategy, and commercial shape.</li>
+      <li><strong>RECON</strong> — Directive: conducts research, market pulls, and gathers competitive intelligence.</li>
+      <li><em>Value-Add:</em> anchors every build in market reality and commercial viability.</li>
+    </ul>
+    <h4>Build Lane</h4>
+    <ul>
+      <li><strong>CANVAS</strong> — Directive: governs creative direction, visual systems, and brand identity.</li>
+      <li><strong>SIGNAL</strong> — Directive: manages copy, narrative, and voice consistency.</li>
+      <li><strong>FORGE</strong> — Directive: executes web development and technical implementation.</li>
+      <li><strong>STUDIO</strong> — Directive: produces high-fidelity media, including 3D, audio, and motion.</li>
+      <li><em>Value-Add:</em> specialized agents prevent the dilution of the creative vision during technical execution.</li>
+    </ul>
+    <h4>Ops Lane</h4>
+    <ul>
+      <li><strong>CIRCUIT</strong> — Directive: designs and maintains automations, integrations, and workflow plumbing.</li>
+      <li><em>Value-Add:</em> maintains a frictionless environment where data flows automatically between tools.</li>
+    </ul>
+    <h4>Life Lane</h4>
+    <ul>
+      <li><strong>ANCHOR</strong> — Directive: maintains personal pillars and work-life integration.</li>
+      <li><em>Value-Add:</em> safeguards the operator&apos;s well-being as work intensity compounds.</li>
+    </ul>
+    <h4>Engagement Steward</h4>
+    <ul>
+      <li><strong>ATLAS</strong> — Directive: assigned to the AspireVue engagement to manage account memory and the promise ledger.</li>
+    </ul>
+
+    <h2>3. The Tool Stack: A Functional Taxonomy</h2>
+    <p>Tools are not a buy-list; they are a collection of seats earned through utility. The stack is grouped by mental models rather than popularity. Roughly eighty percent of the work runs through the core execution engine.</p>
+    <p><strong>Strategic Utility Pairings.</strong> The &ldquo;High-Bandwidth Input&rdquo; problem is solved by the integration of three components. Claude Max and Claude Code provide terminal-level execution. Obsidian serves as the sovereign source of truth. Plaud captures high-bandwidth voice input and converts it into operable text.</p>
+    <p><strong>Functional Taxonomy.</strong></p>
+    <ul>
+      <li><strong>Core:</strong> Claude Max — the session engine hosting Claude Code and Claude Cowork.</li>
+      <li><strong>Memory:</strong> Obsidian — the sovereign vault for agents, SOPs, and decisions.</li>
+      <li><strong>Capture:</strong> Plaud — hardware voice-to-text for meetings and thoughts.</li>
+      <li><strong>Sidekick LLMs:</strong> Gemini AI Pro (extended context), NotebookLM (synthesis), Perplexity (research).</li>
+      <li><strong>IDE / Launcher:</strong> Google Antigravity — the surface that launches Claude Code sessions.</li>
+      <li><strong>Build &amp; Design:</strong> Figma, Figma Weave, Make, Framer, Spline, Stitch, Gemini Canvas, Flow (Veo), Remotion.</li>
+      <li><strong>Ops:</strong> n8n, Zapier, Jira.</li>
+      <li><strong>Browser:</strong> Claude for Chrome, Comet.</li>
+    </ul>
+
+    <h2>4. The Workflow Logic: Routing, Swarming, and Taste Gates</h2>
+    <p>The discipline of sequence dictates that strategy must precede execution and ideation must remain isolated from implementation.</p>
+    <h4>Input Channels</h4>
+    <ul>
+      <li><strong>Local:</strong> terminal prompts, native dictation, and file drops.</li>
+      <li><strong>Remote:</strong> Claude Dispatch for quick retrievals and Claude Remote-control for session management.</li>
+      <li><strong>Exterior:</strong> automations and triggers from the calendar, inbox, or vault events.</li>
+    </ul>
+    <h4>Claude Surfaces</h4>
+    <p>The system operates through three doors to the same vault. <strong>Claude Code</strong> (via Antigravity) is the execution environment that reads and writes files directly. <strong>Claude Cowork</strong> is a project-scoped chat for shared context. <strong>Claude Chat</strong> is utilized for early shaping and brief refinement.</p>
+    <h4>The Standard Pass</h4>
+    <ol>
+      <li><strong>Ideation:</strong> shaping occurs in Claude Chat to refine the brief.</li>
+      <li><strong>Documentation:</strong> the refined spec is committed to the Obsidian vault.</li>
+      <li><strong>Routing:</strong> ORIENT analyzes the spec and routes the task.</li>
+      <li><strong>The Swarm:</strong> agents collaborate across lanes. A strategy swarm (STRATEGOS and RECON) produces the brief, followed by an execution swarm (CANVAS, SIGNAL, FORGE, STUDIO) to build the artifact.</li>
+      <li><strong>The Taste Gate:</strong> this is the critical intervention point. The operator verifies the output against the original intent. The Taste Gate ensures execution meets the human standard before shipping.</li>
+    </ol>
+
+    <h2>5. The Ecosystem Map: Visual Synthesis</h2>
+    <p>The Ecosystem Map is the cognitive anchor for the operating system. It serves as a visual grammar, allowing a senior operator to diagnose system bottlenecks at a glance.</p>
+    <p>The map utilizes directional flow lines to track work from input to artifact. Tool groups are represented by distinct node shapes, and pulsing lines indicate active swarms between collaborating agents.</p>
+    <ul>
+      <li><strong>Color Lanes:</strong> correspond to Strategy, Build, Ops, and Life lanes.</li>
+      <li><strong>Node Shapes:</strong> represent specific tool groups (Core, Memory, Capture).</li>
+      <li><strong>Dotted Lines:</strong> indicate memory and context flows from the vault.</li>
+      <li><strong>Solid Lines:</strong> represent active work handoffs.</li>
+      <li><strong>Pulsed Edges:</strong> highlight active swarming between agents.</li>
+    </ul>
+
+    <h2>6. The Memory Layer: Obsidian as the Sovereign Source of Truth</h2>
+    <p>Plain text sovereignty is a matter of institutional sanity. Obsidian ensures the agency&apos;s memory is not locked in proprietary cloud formats. The vault is a portable, local-first source of truth.</p>
+    <h4>Vault Structure</h4>
+    <ul>
+      <li><strong>Personas:</strong> files for each specialist agent.</li>
+      <li><strong>SOPs:</strong> documented standards and style gates.</li>
+      <li><strong>MOCs:</strong> Maps of Content indexing the agency memory.</li>
+      <li><strong>Sessions:</strong> date-stamped notes for every handoff.</li>
+    </ul>
+    <p>The vault enables a functional token economy. By using Claude Code to read and write files directly, the system eliminates the upload ritual. Relevant files are already context. The vault provides continuity across sessions, reduces token waste, and maintains a clear record of authorized decisions.</p>
+
+    <h2>7. The Physical Layer: Hardware as the Receipt</h2>
+    <p>Hardware is the physical manifestation of software discipline. The rig provides the surfaces required for high-bandwidth work and deep focus. The stack is built on a separation of concerns between fixed and mobile environments.</p>
+    <table>
+      <thead><tr><th>Component</th><th>Role</th><th>Strategic Justification</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Plaud</strong></td><td>Capture</td><td>High-bandwidth voice-to-text without a typing layer.</td></tr>
+        <tr><td><strong>Mac Mini / MBP</strong></td><td>Compute</td><td>Fixed primary for deep work; mobile mirror for travel.</td></tr>
+        <tr><td><strong>Samsung 49&quot;</strong></td><td>Display</td><td>Ultrawide real estate for parallel agent sessions.</td></tr>
+        <tr><td><strong>reMarkable</strong></td><td>Notes</td><td>E-ink tablet for longhand thinking and reflection.</td></tr>
+        <tr><td><strong>G-Tech RAID</strong></td><td>Storage</td><td>Enterprise-grade reliability; no spinning disks.</td></tr>
+        <tr><td><strong>iPhone 16 Pro Max</strong></td><td>Mobile</td><td>Remote control surface and Plaud companion.</td></tr>
+      </tbody>
+    </table>
+    <p>Splitting compute between a fixed primary and a mobile mirror preserves the discipline of the primary work environment. The stationary anchor holds the vault and sessions, while the mobile surface is for temporary travel needs.</p>
+
+    <h2>8. Posture and Cadence: The Path Forward</h2>
+    <p>The Arc&apos;kin Agency operates on a wave cadence. Wave 1 establishes the foundations. Higher-resolution complexity is only introduced once these structural logics are solidified.</p>
+    <p>The posture is strictly operator-to-operator. There is no call to action or subscription ask. The value of a functional, disciplined system is self-evident to a senior practitioner. The system provides the leverage, but the operator stays the operator.</p>
+    <p style="margin-top: 32px; font-family: var(--font-mono); font-size: 0.8125rem; color: var(--subtle); letter-spacing: 0.04em;">Arc&apos;kin Endeavors · Wave 1 · 2026-04</p>
+
+  </article>
+
+  <footer class="colophon">
+    <span>Arc&apos;kin Endeavors · Wave 1 · 2026-04</span>
+    <a href="../start/">Back to hub →</a>
+  </footer>
+
+</div>
+</body>
+</html>

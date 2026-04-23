@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Arc'kin Agency — Wave 1 · for Larry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:     #111113;
+  --fg:     #EDE9E1;
+  --accent: #FFAB40;
+  --subtle: #6B7280;
+  --rule:   #1F2937;
+  --hover:  #1A1C1F;
+  --focus:  #FFAB40;
+  --font-sans: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Syne', 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Menlo', 'Monaco', monospace;
+  --max-w: 960px;
+  --page-pad: 24px;
+  --lane-strategy:   #A8B5C7;
+  --lane-build:      #C9B391;
+  --lane-ops:        #9FB8A3;
+  --lane-life:       #BFA7C4;
+  --lane-engagement: #FFAB40;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:     #F5F4F2;
+    --fg:     #111113;
+    --accent: #B8590A;
+    --subtle: #6B7280;
+    --rule:   #D4D0CA;
+    --hover:  #ECEAE6;
+    --focus:  #B8590A;
+    --lane-strategy:   #5A6676;
+    --lane-build:      #8A6F3E;
+    --lane-ops:        #4D6B52;
+    --lane-life:       #6B5072;
+    --lane-engagement: #B8590A;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  font-weight: 400;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
+:focus:not(:focus-visible) { outline: none; }
+a { color: inherit; text-decoration: none; }
+
+@keyframes arrive {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.arrive { animation: arrive 520ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.arrive.d1 { animation-delay: 40ms; }
+.arrive.d2 { animation-delay: 140ms; }
+.arrive.d3 { animation-delay: 240ms; }
+.arrive.d4 { animation-delay: 340ms; }
+.arrive.d5 { animation-delay: 440ms; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  .arrive { animation: none; opacity: 1; transform: none; }
+}
+
+.page {
+  max-width: calc(var(--max-w) + var(--page-pad) * 2);
+  margin: 0 auto;
+  padding: 0 var(--page-pad);
+}
+
+.nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 0; border-bottom: 1px solid var(--rule);
+}
+.nav-brand {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--subtle); user-select: none;
+}
+.nav-brand span { color: var(--accent); }
+.nav-meta {
+  font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.06em;
+  color: var(--subtle);
+}
+
+/* HERO */
+.hero { padding: 72px 0 48px; }
+.eyebrow {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 0.6875rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 18px; display: block;
+}
+.hero h1 {
+  font-family: var(--font-sans); font-weight: 600;
+  font-size: clamp(2.25rem, 6vw, 3.25rem);
+  line-height: 1.05; letter-spacing: -0.025em;
+  margin-bottom: 28px;
+}
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero-prose { max-width: 620px; }
+.hero-prose p { margin-bottom: 14px; font-size: 1rem; }
+.hero-prose p:last-child { margin-bottom: 0; }
+.signoff {
+  margin-top: 32px;
+  font-family: var(--font-mono); font-size: 0.8125rem;
+  color: var(--subtle); letter-spacing: 0.02em;
+}
+
+/* SECTION */
+.section { padding: 56px 0; border-top: 1px solid var(--rule); }
+.section-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 16px; margin-bottom: 28px; flex-wrap: wrap;
+}
+.section-heading {
+  font-family: var(--font-sans); font-weight: 600;
+  font-size: 1.375rem; letter-spacing: -0.01em; line-height: 1.2;
+}
+.section-note {
+  font-family: var(--font-mono); font-size: 0.75rem; color: var(--subtle);
+  letter-spacing: 0.03em;
+}
+
+/* PRIMARY DOORS (2-col) */
+.doors-primary {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+}
+@media (max-width: 720px) { .doors-primary { grid-template-columns: 1fr; } }
+
+.door {
+  display: flex; flex-direction: column; justify-content: space-between;
+  background: var(--hover);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 28px 24px;
+  min-height: 220px;
+  position: relative;
+  transition: border-color 220ms ease-out, transform 220ms ease-out, background-color 220ms ease-out;
+}
+.door:hover, .door:focus-visible {
+  border-color: var(--accent);
+  background: var(--bg);
+  transform: translateY(-2px);
+}
+.door-primary {
+  border-left: 3px solid var(--accent);
+}
+.door-icon {
+  width: 28px; height: 28px; margin-bottom: 18px;
+  color: var(--accent);
+}
+.door-tag {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 0.6875rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 10px; display: block;
+}
+.door-title {
+  font-family: var(--font-sans); font-weight: 600;
+  font-size: 1.25rem; letter-spacing: -0.01em;
+  color: var(--fg); margin-bottom: 10px; line-height: 1.25;
+}
+.door-desc {
+  font-size: 0.9375rem; color: var(--subtle);
+  margin-bottom: 20px; max-width: 32ch;
+}
+.door-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--font-mono); font-size: 0.75rem; color: var(--subtle);
+  letter-spacing: 0.04em; text-transform: uppercase;
+  padding-top: 14px; border-top: 1px solid var(--rule);
+}
+.door-cta {
+  color: var(--accent); font-weight: 500;
+  transition: transform 220ms ease-out;
+}
+.door:hover .door-cta, .door:focus-visible .door-cta {
+  transform: translateX(4px);
+}
+
+/* SECONDARY DOORS (compact list) */
+.doors-secondary {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+}
+@media (max-width: 640px) { .doors-secondary { grid-template-columns: 1fr; } }
+
+.door-mini {
+  display: flex; align-items: center; gap: 16px;
+  background: var(--hover);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 18px 20px;
+  transition: border-color 180ms ease-out, background-color 180ms ease-out;
+}
+.door-mini:hover, .door-mini:focus-visible {
+  border-color: var(--accent);
+}
+.door-mini-icon {
+  width: 22px; height: 22px;
+  color: var(--subtle); flex-shrink: 0;
+  transition: color 180ms ease-out;
+}
+.door-mini:hover .door-mini-icon { color: var(--accent); }
+.door-mini-body { flex: 1; min-width: 0; }
+.door-mini-title {
+  font-weight: 600; font-size: 0.9375rem;
+  color: var(--fg); line-height: 1.3;
+}
+.door-mini-meta {
+  font-family: var(--font-mono); font-size: 0.6875rem;
+  color: var(--subtle); letter-spacing: 0.04em;
+  margin-top: 2px; text-transform: uppercase;
+}
+.door-mini-arrow {
+  color: var(--subtle); flex-shrink: 0;
+  transition: transform 180ms ease-out, color 180ms ease-out;
+}
+.door-mini:hover .door-mini-arrow {
+  color: var(--accent);
+  transform: translateX(3px);
+}
+
+/* CLOSER */
+.closer { padding: 56px 0 96px; border-top: 1px solid var(--rule); }
+.closer p {
+  max-width: 560px;
+  color: var(--fg);
+  font-size: 0.9375rem;
+  margin-bottom: 12px;
+}
+.closer p:last-child { margin-bottom: 0; }
+.closer .subtle { color: var(--subtle); }
+
+/* COLOPHON */
+.colophon {
+  padding: 28px 0 36px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-mono); font-size: 0.6875rem;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--subtle);
+  display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+}
+.colophon a { color: var(--subtle); border-bottom: 1px solid transparent; transition: color 180ms, border-color 180ms; }
+.colophon a:hover { color: var(--accent); border-color: var(--accent); }
+
+@media (max-width: 640px) {
+  .hero { padding: 56px 0 40px; }
+  .section { padding: 44px 0; }
+  .door { padding: 24px 20px; min-height: 200px; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <nav class="nav" aria-label="Wave 1 hub navigation">
+    <div class="nav-brand">Arc<span>&apos;</span>kin Endeavors</div>
+    <div class="nav-meta">Wave 1 · 2026-04 · Larry-only</div>
+  </nav>
+
+  <header class="hero">
+    <span class="eyebrow arrive d1">Wave 1 — Start Here</span>
+    <h1 class="arrive d2">Larry.</h1>
+    <div class="hero-prose">
+      <p class="arrive d3">One link, a few ways in. Same ground covered each way — pick whichever fits how you're reading this. The deck is the anchor; everything else is a different cut of it.</p>
+      <p class="arrive d4">If you&apos;re at your desk, start with the deck. If you&apos;re driving or walking, start with the walkthrough. Open the rest when it&apos;s useful.</p>
+      <div class="signoff arrive d5">— Michael</div>
+    </div>
+  </header>
+
+  <section class="section arrive d5" aria-labelledby="start-here">
+    <div class="section-head">
+      <h2 class="section-heading" id="start-here">Where to start</h2>
+      <span class="section-note">Two primary doors · same material</span>
+    </div>
+
+    <div class="doors-primary">
+      <a class="door door-primary" href="../" aria-label="Open the ecosystem deck — interactive web version, about ten minutes">
+        <div>
+          <svg class="door-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="14" rx="1.5"/>
+            <path d="M3 8h18"/>
+            <path d="M7 6h.01"/>
+            <path d="M10 6h.01"/>
+          </svg>
+          <span class="door-tag">At your desk</span>
+          <div class="door-title">The ecosystem deck</div>
+          <p class="door-desc">The full Arc&apos;kin Agency walk — philosophy, team, stack, workflow, ecosystem, closer. Interactive, readable on phone or desktop.</p>
+        </div>
+        <div class="door-foot">
+          <span>Live · ~10 min</span>
+          <span class="door-cta">Open →</span>
+        </div>
+      </a>
+
+      <a class="door door-primary" href="../media/walkthrough.html" aria-label="Play the walkthrough video, seven and a half minutes">
+        <div>
+          <svg class="door-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M10 9l5 3-5 3V9z" fill="currentColor" stroke="none"/>
+          </svg>
+          <span class="door-tag">On the move</span>
+          <div class="door-title">The walkthrough</div>
+          <p class="door-desc">Narrated video over the same material — system under the ship. Good for a commute or a second pass after the deck.</p>
+        </div>
+        <div class="door-foot">
+          <span>Video · 7:25</span>
+          <span class="door-cta">Play →</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="companions">
+    <div class="section-head">
+      <h2 class="section-heading" id="companions">When you want more</h2>
+      <span class="section-note">Companion cuts · open what&apos;s useful</span>
+    </div>
+
+    <div class="doors-secondary">
+
+      <a class="door-mini" href="../media/slides.pdf" aria-label="Open slide deck PDF, twenty slides">
+        <svg class="door-mini-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <rect x="4" y="3" width="16" height="18" rx="1.5"/>
+          <path d="M8 8h8M8 12h8M8 16h5"/>
+        </svg>
+        <div class="door-mini-body">
+          <div class="door-mini-title">Slide deck</div>
+          <div class="door-mini-meta">PDF · 20 slides</div>
+        </div>
+        <svg class="door-mini-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M10 7h7v7"/></svg>
+      </a>
+
+      <a class="door-mini" href="../media/discussion.html" aria-label="Play discussion overview audio, seventeen minutes">
+        <svg class="door-mini-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M12 3v12"/>
+          <rect x="9" y="3" width="6" height="10" rx="3"/>
+          <path d="M5 11a7 7 0 0014 0M12 18v3"/>
+        </svg>
+        <div class="door-mini-body">
+          <div class="door-mini-title">Discussion overview</div>
+          <div class="door-mini-meta">Audio · 16:50</div>
+        </div>
+        <svg class="door-mini-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M10 7h7v7"/></svg>
+      </a>
+
+      <a class="door-mini" href="../companions/stack-overview.html" aria-label="Read stack overview">
+        <svg class="door-mini-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M3 6h18M3 12h18M3 18h12"/>
+        </svg>
+        <div class="door-mini-body">
+          <div class="door-mini-title">Stack overview</div>
+          <div class="door-mini-meta">Read · ~4 min</div>
+        </div>
+        <svg class="door-mini-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M10 7h7v7"/></svg>
+      </a>
+
+      <a class="door-mini" href="../companions/architecture-manual.html" aria-label="Read systems architecture manual">
+        <svg class="door-mini-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+        </svg>
+        <div class="door-mini-body">
+          <div class="door-mini-title">Systems architecture manual</div>
+          <div class="door-mini-meta">Read · ~5 min</div>
+        </div>
+        <svg class="door-mini-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M10 7h7v7"/></svg>
+      </a>
+
+      <a class="door-mini" href="../companions/deployment-blueprint.html" aria-label="Read workflow deployment blueprint">
+        <svg class="door-mini-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M4 20V4h12l4 4v12z"/>
+          <path d="M16 4v4h4"/>
+          <path d="M8 12h8M8 16h6"/>
+        </svg>
+        <div class="door-mini-body">
+          <div class="door-mini-title">Workflow deployment blueprint</div>
+          <div class="door-mini-meta">Read · ~4 min</div>
+        </div>
+        <svg class="door-mini-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M10 7h7v7"/></svg>
+      </a>
+
+    </div>
+  </section>
+
+  <section class="closer" aria-labelledby="closer">
+    <h2 id="closer" style="font-family: var(--font-sans); font-weight: 600; font-size: 1.125rem; letter-spacing: -0.01em; margin-bottom: 16px;">Wave 1 is foundations.</h2>
+    <p>The system is the leverage. The operator stays the operator.</p>
+    <p class="subtle">Wave 2 runs the same system at higher resolution.</p>
+  </section>
+
+  <footer class="colophon">
+    <span>Arc&apos;kin Endeavors · Wave 1 · 2026-04</span>
+    <span>Drafted for Larry</span>
+  </footer>
+
+</div>
+
+</body>
+</html>

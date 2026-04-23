@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Discussion Overview — Arc'kin Agency Wave 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#111113; --fg:#EDE9E1; --accent:#FFAB40; --subtle:#6B7280;
+  --rule:#1F2937; --hover:#1A1C1F; --focus:#FFAB40;
+  --font-sans:'Space Grotesk','Helvetica Neue',Arial,sans-serif;
+  --font-display:'Syne','Space Grotesk',sans-serif;
+  --font-mono:'JetBrains Mono','Menlo','Monaco',monospace;
+  --max-w:720px; --page-pad:24px;
+}
+@media (prefers-color-scheme: light) {
+  :root { --bg:#F5F4F2; --fg:#111113; --accent:#B8590A; --subtle:#6B7280; --rule:#D4D0CA; --hover:#ECEAE6; --focus:#B8590A; }
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-sans);font-size:.9375rem;line-height:1.6;min-height:100vh;overflow-x:hidden}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:3px}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent;transition:border-color 180ms}
+a:hover{border-bottom-color:var(--accent)}
+.page{max-width:calc(var(--max-w) + var(--page-pad) * 2);margin:0 auto;padding:0 var(--page-pad)}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0;border-bottom:1px solid var(--rule)}
+.nav-brand{font-family:var(--font-display);font-weight:700;font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
+.nav-brand span{color:var(--accent)}
+.nav-back{font-family:var(--font-mono);font-size:.75rem;letter-spacing:.04em;color:var(--subtle);border:none}
+.nav-back:hover{color:var(--accent)}
+.nav-back::before{content:"← "}
+.hero{padding:48px 0 24px}
+.eyebrow{font-family:var(--font-display);font-weight:700;font-size:.6875rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:block}
+h1{font-family:var(--font-sans);font-weight:600;font-size:clamp(1.75rem,4vw,2.25rem);line-height:1.2;letter-spacing:-.02em;margin-bottom:12px}
+.meta{font-family:var(--font-mono);font-size:.75rem;color:var(--subtle);letter-spacing:.04em;text-transform:uppercase}
+.player{padding:32px 0 64px}
+.audio-frame{
+  background:var(--hover); border:1px solid var(--rule); border-radius:6px;
+  border-left:3px solid var(--accent);
+  padding:28px 24px;
+}
+audio{display:block;width:100%;margin-top:8px}
+.desc{color:var(--subtle);margin-top:20px;max-width:620px}
+.fallback{margin-top:20px;color:var(--subtle);font-size:.875rem}
+.colophon{padding:28px 0 36px;border-top:1px solid var(--rule);font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.08em;text-transform:uppercase;color:var(--subtle);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.colophon a{color:var(--subtle);border:none}
+.colophon a:hover{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="nav" aria-label="Back to hub">
+    <div class="nav-brand">Arc<span>&apos;</span>kin Endeavors</div>
+    <a class="nav-back" href="../start/">Back to hub</a>
+  </nav>
+
+  <header class="hero">
+    <span class="eyebrow">Wave 1 · Discussion</span>
+    <h1>The Arc&apos;kin system — discussion overview</h1>
+    <div class="meta">Audio · 16:50</div>
+  </header>
+
+  <section class="player">
+    <div class="audio-frame">
+      <p style="font-weight:600;margin-bottom:6px;font-size:.9375rem;color:var(--fg)">Discussion overview</p>
+      <p style="color:var(--subtle);font-size:.875rem;margin-bottom:12px">Long-form audio walk over the same ground as the deck — good for a commute, walk, or second pass.</p>
+      <audio controls preload="metadata">
+        <source src="discussion.m4a" type="audio/mp4">
+        Your browser can&apos;t play this audio. <a href="discussion.m4a">Download the M4A</a>.
+      </audio>
+    </div>
+    <p class="fallback">Direct file: <a href="discussion.m4a">discussion.m4a</a> (31 MB)</p>
+  </section>
+
+  <footer class="colophon">
+    <span>Arc&apos;kin Endeavors · Wave 1 · 2026-04</span>
+    <a href="../start/">Back to hub →</a>
+  </footer>
+
+</div>
+</body>
+</html>

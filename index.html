@@ -53,7 +53,7 @@
 
 /* === RESET + BASE === */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { font-size: 16px; scroll-behavior: smooth; scroll-padding-top: 60px; -webkit-text-size-adjust: 100%; }
 body {
   background: var(--bg);
   color: var(--fg);
@@ -1577,12 +1577,24 @@ role="img">
   laneGroups.forEach(function (el) {
     el.addEventListener('mouseenter', function () { clearLane(); rosterSvg.classList.add('lane-active-' + el.dataset.laneTrigger); });
     el.addEventListener('mouseleave', clearLane);
+    // Touch: tap-to-toggle without blocking scroll. Distinguish tap vs. drag by time + movement.
+    var touchStart = null;
     el.addEventListener('touchstart', function (e) {
-      e.preventDefault();
+      var t = e.touches[0];
+      touchStart = { x: t.clientX, y: t.clientY, time: Date.now() };
+    }, { passive: true });
+    el.addEventListener('touchend', function (e) {
+      if (!touchStart) return;
+      var t = e.changedTouches[0];
+      var dx = Math.abs(t.clientX - touchStart.x);
+      var dy = Math.abs(t.clientY - touchStart.y);
+      var dt = Date.now() - touchStart.time;
+      touchStart = null;
+      if (dx > 10 || dy > 10 || dt > 500) return; // drag/long-press — ignore
       var already = rosterSvg.classList.contains('lane-active-' + el.dataset.laneTrigger);
       clearLane();
       if (!already) rosterSvg.classList.add('lane-active-' + el.dataset.laneTrigger);
-    }, { passive: false });
+    }, { passive: true });
   });
   document.addEventListener('touchstart', function (e) {
     if (rosterSvg && !rosterSvg.contains(e.target)) clearLane();

@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stack Stress Test — Larry Kuhn / AspireVue · 2026-04-24</title>
+
+  <!-- Wave 1 font stack: Syne 700 / Space Grotesk 400+600 / JetBrains Mono 500 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Space+Grotesk:wght@400;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─── WAVE 1 TOKEN SYSTEM ─── */
+    :root {
+      --bg:        #111113;
+      --fg:        #EDE9E1;
+      --accent:    #FFAB40;
+      --subtle:    #6B7280;
+      --rule:      #1F2937;
+      --hover:     #1A1C1F;
+      --focus:     #FFAB40;
+      --slate:     #5B9BD5; /* one-off data token: Consider Adding border only */
+
+      --font-sans:    'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+      --font-display: 'Syne', 'Space Grotesk', sans-serif;
+      --font-mono:    'JetBrains Mono', 'Menlo', 'Monaco', monospace;
+
+      --space-2: 2px;
+      --space-8: 8px;
+      --space-12: 12px;
+      --space-16: 16px;
+      --space-20: 20px;
+      --space-24: 24px;
+      --space-32: 32px;
+      --space-40: 40px;
+      --space-56: 56px;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg:     #F5F4F2;
+        --fg:     #111113;
+        --accent: #B8590A;
+        --subtle: #6B7280;
+        --rule:   #D4D0CA;
+        --hover:  #ECEAE6;
+        --focus:  #B8590A;
+      }
+    }
+
+    /* ─── RESET & BASE ─── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      font-weight: 400;
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 0 var(--space-20);
+    }
+
+    /* ─── LAYOUT ─── */
+    .content-column {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* ─── TYPOGRAPHY ─── */
+    .eyebrow {
+      font-family: var(--font-display);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      line-height: 1.4;
+      text-transform: uppercase;
+      color: var(--subtle);
+    }
+
+    .eyebrow--accent {
+      color: var(--accent);
+    }
+
+    h2.section-title {
+      font-family: var(--font-sans);
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+      color: var(--fg);
+      margin-top: var(--space-8);
+    }
+
+    .section-descriptor {
+      font-size: 0.9375rem;
+      color: var(--subtle);
+      margin-top: var(--space-8);
+      line-height: 1.6;
+    }
+
+    .body-text {
+      font-size: 0.9375rem;
+      color: var(--fg);
+      line-height: 1.6;
+    }
+
+    .meta-text {
+      font-size: 0.8125rem;
+      color: var(--subtle);
+      line-height: 1.5;
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── RULES & DIVIDERS ─── */
+    .ember-rule {
+      display: block;
+      height: 1px;
+      background: var(--accent);
+      border: none;
+      margin: var(--space-12) 0;
+    }
+
+    .section-rule {
+      display: block;
+      height: 1px;
+      background: var(--rule);
+      border: none;
+    }
+
+    /* ─── SECTIONS ─── */
+    .section {
+      padding: var(--space-40) 0;
+    }
+
+    .section:first-child {
+      padding-top: var(--space-32);
+    }
+
+    /* ─── HEADER ─── */
+    .doc-header {
+      padding: var(--space-32) 0 0;
+    }
+
+    .wordmark {
+      font-family: var(--font-display);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--subtle);
+      display: block;
+      margin-bottom: var(--space-8);
+    }
+
+    /* ─── PART A SUMMARY CARD ─── */
+    .summary-card {
+      background: var(--hover);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 4px 4px 0;
+      padding: var(--space-20);
+      margin-top: var(--space-20);
+    }
+
+    .summary-card p {
+      font-size: 0.9375rem;
+      color: var(--fg);
+      line-height: 1.6;
+    }
+
+    .summary-card p + p {
+      margin-top: var(--space-12);
+    }
+
+    /* ─── PART A / PART B WALL ─── */
+    .wall-container {
+      margin: var(--space-40) 0;
+      position: relative;
+    }
+
+    .wall-rule {
+      display: block;
+      height: 2px;
+      background: var(--rule);
+      border: none;
+      width: 100%;
+    }
+
+    .wall-labels {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: var(--space-8);
+    }
+
+    .wall-label-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .wall-sub {
+      font-size: 0.8125rem;
+      color: var(--subtle);
+      line-height: 1.5;
+      max-width: 220px;
+    }
+
+    /* ─── VERDICT KEY ─── */
+    .verdict-key {
+      margin-top: var(--space-20);
+    }
+
+    .verdict-key-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+      margin-top: var(--space-12);
+    }
+
+    .verdict-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px var(--space-8);
+      border-radius: 3px;
+      font-family: var(--font-sans);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      background: var(--hover);
+      color: var(--fg);
+    }
+
+    .verdict-badge--keep {
+      border: 2px solid var(--accent);
+    }
+
+    .verdict-badge--consider {
+      border: 2px solid var(--slate);
+    }
+
+    .verdict-badge--watch {
+      border: 2px solid #9CA3AF;
+    }
+
+    .verdict-badge--oos {
+      background: transparent;
+      color: var(--subtle);
+      border: 1px solid var(--rule);
+    }
+
+    .verdict-key-item {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+      padding: var(--space-12);
+      background: var(--hover);
+      border-radius: 4px;
+    }
+
+    .verdict-key-desc {
+      font-size: 0.75rem;
+      color: var(--subtle);
+      line-height: 1.4;
+    }
+
+    /* ─── COMPARISON TABLE ─── */
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: var(--space-20);
+    }
+
+    .comparison-table caption {
+      display: none;
+    }
+
+    /* Hide the table-level column headers visually (screen-reader only) */
+    .comparison-table .col-headers {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .comparison-row {
+      display: block;
+      background: var(--hover);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 4px 4px 0;
+      padding: var(--space-16);
+      margin-bottom: var(--space-12);
+    }
+
+    .comparison-row--consider {
+      border-left-color: var(--slate);
+    }
+
+    .comparison-row--watch {
+      border-left-color: #9CA3AF;
+    }
+
+    .comparison-row--oos {
+      background: var(--bg);
+      border-left: none;
+      border-top: 1px solid var(--rule);
+      border-radius: 0;
+      padding: var(--space-12) var(--space-16);
+    }
+
+    .row-function {
+      font-family: var(--font-display);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--subtle);
+      margin-bottom: var(--space-8);
+    }
+
+    .row-tools {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-8);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-8);
+    }
+
+    .row-arrow {
+      color: var(--subtle);
+      font-size: 0.8125rem;
+      flex-shrink: 0;
+      line-height: 1.6;
+    }
+
+    .row-current,
+    .row-equiv {
+      font-size: 0.9375rem;
+      color: var(--fg);
+      line-height: 1.6;
+    }
+
+    .row-equiv {
+      font-weight: 600;
+    }
+
+    .row-bottom {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-12);
+      flex-wrap: wrap;
+      margin-top: var(--space-8);
+    }
+
+    .row-note {
+      font-size: 0.8125rem;
+      color: var(--subtle);
+      line-height: 1.5;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .row-badge-wrap {
+      flex-shrink: 0;
+    }
+
+    /* OOS row compact layout */
+    .row-oos-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-12);
+    }
+
+    .row-oos-label {
+      font-size: 0.9375rem;
+      color: var(--subtle);
+    }
+
+    /* ─── OOS GROUP DIVIDER ─── */
+    .oos-group-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-12);
+      margin: var(--space-24) 0 var(--space-8);
+    }
+
+    .oos-group-label {
+      font-family: var(--font-display);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--subtle);
+      white-space: nowrap;
+    }
+
+    .oos-group-rule {
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
+    }
+
+    /* ─── RADAR PANEL ─── */
+    .radar-section {
+      padding: var(--space-40) 0;
+    }
+
+    .radar-wrap {
+      display: flex;
+      justify-content: center;
+      margin: var(--space-24) 0;
+    }
+
+    .radar-svg {
+      width: 320px;
+      height: 320px;
+      overflow: visible;
+    }
+
+    @media (min-width: 768px) {
+      .radar-svg {
+        width: 480px;
+        height: 480px;
+      }
+    }
+
+    /* ─── RADAR LEGEND ─── */
+    .radar-legend {
+      display: flex;
+      gap: var(--space-24);
+      justify-content: center;
+      margin-bottom: var(--space-20);
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: var(--subtle);
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-dot--larry {
+      background: var(--accent);
+    }
+
+    /* ─── DIMENSION EXPLAINER ─── */
+    .dimension-list {
+      margin-top: var(--space-24);
+      display: grid;
+      gap: var(--space-8);
+    }
+
+    .dimension-item {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      gap: var(--space-12);
+      padding: var(--space-12) var(--space-16);
+      background: var(--hover);
+      border-radius: 4px;
+    }
+
+    .dimension-label {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      line-height: 1.4;
+      align-self: start;
+    }
+
+    .dimension-desc {
+      font-size: 0.8125rem;
+      color: var(--subtle);
+      line-height: 1.5;
+    }
+
+    /* ─── SOURCE ATTRIBUTION ─── */
+    .attribution {
+      padding: var(--space-32) 0 var(--space-40);
+      border-top: 1px solid var(--rule);
+    }
+
+    .attribution p {
+      font-family: var(--font-display);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--subtle);
+      line-height: 1.6;
+    }
+
+    /* ─── ARRIVE ANIMATION ─── */
+    @keyframes arrive {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .arrive {
+      opacity: 0;
+    }
+
+    .arrive.is-visible {
+      animation: arrive 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    /* Stagger children */
+    .arrive.is-visible:nth-child(2) { animation-delay: 80ms; }
+    .arrive.is-visible:nth-child(3) { animation-delay: 160ms; }
+    .arrive.is-visible:nth-child(4) { animation-delay: 240ms; }
+    .arrive.is-visible:nth-child(5) { animation-delay: 320ms; }
+
+    /* ─── REDUCED MOTION ─── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+
+      .arrive {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* ─── FOCUS RING ─── */
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+      border-radius: 3px;
+    }
+
+    :focus:not(:focus-visible) {
+      outline: none;
+    }
+
+    /* ─── DESKTOP REFLOW ─── */
+    @media (min-width: 768px) {
+      body {
+        padding: 0 var(--space-32);
+      }
+
+      h2.section-title {
+        font-size: 1.875rem;
+      }
+
+      .section {
+        padding: var(--space-56) 0;
+      }
+
+      .dimension-item {
+        grid-template-columns: 1fr 4fr;
+      }
+    }
+
+    /* ─── PRINT / PDF EXPORT ─── */
+    @media print {
+      body {
+        background: #fff;
+        color: #111113;
+        font-size: 11pt;
+        padding: 0.5in;
+      }
+
+      :root {
+        --bg:     #fff;
+        --fg:     #111113;
+        --accent: #B8590A;
+        --subtle: #6B7280;
+        --rule:   #D4D0CA;
+        --hover:  #F5F4F4;
+      }
+
+      .content-column {
+        max-width: 100%;
+      }
+
+      .arrive {
+        opacity: 1;
+        transform: none;
+      }
+
+      .comparison-row {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      .wall-container {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      .radar-section {
+        break-before: page;
+        page-break-before: always;
+      }
+
+      .attribution {
+        break-before: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="content-column">
+
+    <!-- ─── DOCUMENT HEADER ─── -->
+    <header class="doc-header arrive" role="banner">
+      <span class="wordmark">Arc'kin Endeavors</span>
+      <hr class="ember-rule" aria-hidden="true">
+      <span class="eyebrow">Prepared for Larry Kuhn / AspireVue &middot; 2026-04-24</span>
+    </header>
+
+    <!-- ─── PART A ─── -->
+    <!-- EDIT 1: h2 trimmed to "Stack Stress Test" -->
+    <!-- EDIT 2: section-descriptor updated to neutral 13-word description -->
+    <section class="section arrive" aria-labelledby="part-a-title">
+      <span class="eyebrow">Part A</span>
+      <h2 class="section-title" id="part-a-title">Stack Stress Test</h2>
+      <p class="section-descriptor">Six tools scored across seven dimensions. Trade-offs, validations, and one line item to retire.</p>
+      <hr class="section-rule" aria-hidden="true" style="margin-top: var(--space-16);">
+
+      <!-- Part A Summary Card -->
+      <!-- SUMMARY CARD UPDATE: paragraph 2 updated per SIGNAL AFTER block -->
+      <div class="summary-card arrive" role="region" aria-label="Part A summary findings">
+        <p class="body-text">Your current stack is stronger than most operators at your tier.</p>
+        <p class="body-text">
+          Three trade-offs surfaced. One is worth acting on this month (Google AI Pro &mdash; consolidates NotebookLM, Gemini, and Drive/Docs AI in one sub).
+          One is worth starting now for new work (Obsidian forward, Notion as archive).
+          One is a line item to retire at renewal (1Password &rarr; Apple Passwords).
+        </p>
+        <p class="body-text">Four elements of your current lean are correct and should not change.</p>
+      </div>
+    </section>
+
+    <!-- ─── PART A / PART B WALL ─── -->
+    <div class="wall-container arrive" role="separator" aria-label="Division between Part A stress test and Part B volunteered comparison">
+      <hr class="wall-rule" aria-hidden="true">
+      <div class="wall-labels">
+        <div class="wall-label-group">
+          <span class="eyebrow">Part A</span>
+        </div>
+        <div class="wall-label-group" style="text-align: right;">
+          <span class="eyebrow">Part B</span>
+          <span class="wall-sub">Volunteered &mdash; not part of the stress test ask.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── PART B ─── -->
+    <section class="section arrive" aria-labelledby="part-b-title">
+      <span class="eyebrow">Part B</span>
+      <h2 class="section-title" id="part-b-title">Arc'kin System Side-by-Side</h2>
+      <p class="section-descriptor">A broader comparison against the operator system I run, offered as a volunteered read. Not an answer to your ask.</p>
+      <hr class="section-rule" aria-hidden="true" style="margin-top: var(--space-16);">
+
+      <!-- Verdict Key -->
+      <!-- EDIT 3: OOS verdict-key-desc updated to "Needs unknown. Not mine to steer." -->
+      <div class="verdict-key arrive" role="note" aria-label="Verdict key definitions">
+        <span class="eyebrow">Verdict Key</span>
+        <div class="verdict-key-grid">
+          <div class="verdict-key-item">
+            <span class="verdict-badge verdict-badge--keep">Keep</span>
+            <span class="verdict-key-desc">No change. Your current choice holds.</span>
+          </div>
+          <div class="verdict-key-item">
+            <span class="verdict-badge verdict-badge--consider">Consider Adding</span>
+            <span class="verdict-key-desc">One layer missing. Low friction to adopt.</span>
+          </div>
+          <div class="verdict-key-item">
+            <span class="verdict-badge verdict-badge--watch">Watch</span>
+            <span class="verdict-key-desc">No urgency. Worth knowing.</span>
+          </div>
+          <div class="verdict-key-item">
+            <span class="verdict-badge verdict-badge--oos">Out of Scope</span>
+            <span class="verdict-key-desc">Needs unknown. Not mine to steer.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparison Table — 9 active rows (Row 3 NotebookLM collapsed into Row 2 per ATLAS Option A) -->
+      <table class="comparison-table" aria-label="Stack comparison: Larry's current tools versus Arc'kin System equivalents with verdicts" style="margin-top: var(--space-32);">
+        <caption>Arc'kin System Side-by-Side Comparison</caption>
+        <thead class="col-headers">
+          <tr>
+            <th scope="col">Function</th>
+            <th scope="col">Your Current</th>
+            <th scope="col">Arc'kin Equivalent</th>
+            <th scope="col">Verdict</th>
+            <th scope="col">Note</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- Row 1: AI Primary — KEEP -->
+          <tr>
+            <td colspan="5">
+              <div class="comparison-row arrive">
+                <div class="row-function">AI Primary</div>
+                <div class="row-tools">
+                  <span class="row-current">Claude (context stack)</span>
+                  <span class="row-arrow">&rarr;</span>
+                  <span class="row-equiv">Claude (specialist agents)</span>
+                </div>
+                <div class="row-bottom">
+                  <span class="row-note">Already operator-tier. The specialist-agent layer is an evolution, not a swap.</span>
+                  <span class="row-badge-wrap"><span class="verdict-badge verdict-badge--keep">Keep</span></span>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 2: AI Secondary — CONSIDER ADDING (Google AI Pro swap per EDIT 4a) -->
+          <!-- NotebookLM row absorbed here per ATLAS Option A; Row 3 deleted -->
+          <tr>
+            <td colspan="5">
+              <div class="comparison-row comparison-row--consider arrive">
+                <div class="row-function">AI Secondary</div>
+                <div class="row-tools">
+                  <span class="row-current">ChatGPT</span>
+                  <span class="row-arrow">&rarr;</span>
+                  <span class="row-equiv">Google AI Pro</span>
+                </div>
+                <div class="row-bottom">
+                  <span class="row-note">One sub: NotebookLM Pro, Gemini full access, and Drive/Docs AI. Redirecting the ChatGPT spend covers it &mdash; and it lines up with the Workspace direction already in motion.</span>
+                  <span class="row-badge-wrap"><span class="verdict-badge verdict-badge--consider">Consider Adding</span></span>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 3: Research Layer — CONSIDER ADDING (renumbered from Row 4) -->
+          <tr>
+            <td colspan="5">
+              <div class="comparison-row comparison-row--consider arrive">
+                <div class="row-function">Research Layer</div>
+                <div class="row-tools">
+                  <span class="row-current" style="color: var(--subtle);">—</span>
+                  <span class="row-arrow">&rarr;</span>
+                  <span class="row-equiv">Perplexity</span>
+                </div>
+                <div class="row-bottom">
+                  <span class="row-note">Lower priority than Google AI Pro. Free tier adequate for occasional use.</span>
+                  <span class="row-badge-wrap"><span class="verdict-badge verdict-badge--consider">Consider Adding</span></span>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 4: Voice Capture — CONSIDER ADDING (renumbered from Row 5) -->
+          <tr>
+            <td colspan="5">
+              <div class="comparison-row comparison-row--consider arrive">
+                <div class="row-function">Voice Capture</div>
+                <div class="row-tools">
+                  <span class="row-current">Whisper (desktop)</span>
+                  <span class="row-arrow">&rarr;</span>
+                  <span class="row-equiv">Plaud + Whisper</span>
+                </div>
+                <div class="row-bottom">
+                  <span class="row-note">Closes the off-desk capture gap you've already flagged.</span>
+                  <span class="row-badge-wrap"><span class="verdict-badge verdict-badge--consider">Consider Adding</span></span>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 5: Meeting Notes — KEEP (renumbered from Row 6) -->
+          <tr>
+            <td colspan="5">
+              <div class="comparison-row arrive">
+                <div class="row-function">Meeting Notes</div>
+                <div class="row-tools">
+                  <span class="row-current">Granola</span>
+                  <span class="row-arrow">&rarr;</span>
+                  <span class="row-equiv">Granola</span>
+                </div>
+                <div class="row-bottom">
+                  <span class="row-note">Same choice. No change.</span>
+                  <span class="row-badge-wrap"><span class="verdict-badge verdict-badge--keep">Keep</span></span>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 6: Knowledge OS — CONSIDER ADDING (EDIT 5: was Watch; verdict + note + CSS class updated) -->
+          <tr>
+            <td colspan="5">
+              <div class="comparison-row comparison-row--consider arrive">
+                <div class="row-function">Knowledge OS</div>
+                <div class="row-tools">
+                  <span class="row-current">Notion</span>
+                  <span class="row-arrow">&rarr;</span>
+                  <span class="row-equiv">Obsidian (forward-going) + Notion (archive)</span>
+                </div>
+                <div class="row-bottom">
+                  <span class="row-note">New work lives in Obsidian &mdash; plain Markdown, portable, local-first. Notion stays where it is for what's already there. No migration required.</span>
+                  <span class="row-badge-wrap"><span class="verdict-badge verdict-badge--consider">Consider Adding</span></span>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 7: Video + Scheduling — CONSIDER ADDING (renumbered from Row 8) -->
+          <tr>
+            <td colspan="5">
+              <div class="comparison-row comparison-row--consider arrive">
+                <div class="row-function">Video + Scheduling</div>
+                <div class="row-tools">
+                  <span class="row-current">Zoom + Google Cal</span>
+                  <span class="row-arrow">&rarr;</span>
+                  <span class="row-equiv">Zoom + Google Cal + Fathom</span>
+                </div>
+                <div class="row-bottom">
+                  <span class="row-note">Free tier adds meeting intelligence without new notification surface.</span>
+                  <span class="row-badge-wrap"><span class="verdict-badge verdict-badge--consider">Consider Adding</span></span>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 8: Analytics — WATCH (renumbered from Row 9) -->
+          <tr>
+            <td colspan="5">
+              <div class="comparison-row comparison-row--watch arrive">
+                <div class="row-function">Analytics</div>
+                <div class="row-tools">
+                  <span class="row-current" style="color: var(--subtle);">—</span>
+                  <span class="row-arrow">&rarr;</span>
+                  <span class="row-equiv">Looker Studio</span>
+                </div>
+                <div class="row-bottom">
+                  <span class="row-note">If you're building dashboards manually in Sheets, this is the zero-cost upgrade.</span>
+                  <span class="row-badge-wrap"><span class="verdict-badge verdict-badge--watch">Watch</span></span>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 9: Password Manager — WATCH (renumbered from Row 10) -->
+          <tr>
+            <td colspan="5">
+              <div class="comparison-row comparison-row--watch arrive">
+                <div class="row-function">Password Manager</div>
+                <div class="row-tools">
+                  <span class="row-current">1Password</span>
+                  <span class="row-arrow">&rarr;</span>
+                  <span class="row-equiv">Apple Passwords</span>
+                </div>
+                <div class="row-bottom">
+                  <span class="row-note">No urgency. A line item you could retire at renewal.</span>
+                  <span class="row-badge-wrap"><span class="verdict-badge verdict-badge--watch">Watch</span></span>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+      <!-- Out of Scope Group -->
+      <div class="oos-group-header arrive" aria-label="Out of scope lanes section">
+        <span class="oos-group-label">Pass-Through Lanes</span>
+        <span class="oos-group-rule" aria-hidden="true"></span>
+      </div>
+
+      <table class="comparison-table" aria-label="Out of scope lanes — not evaluated in this comparison">
+        <caption>Out of scope lanes</caption>
+        <thead class="col-headers">
+          <tr>
+            <th scope="col">Lane</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- Row 10: Creative Delivery — OOS (renumbered from Row 11) -->
+          <tr>
+            <td colspan="2">
+              <div class="comparison-row comparison-row--oos arrive" aria-label="Out of scope lane — not evaluated">
+                <div class="row-oos-inner">
+                  <span class="row-function" style="margin-bottom: 0;">Creative Delivery</span>
+                  <span class="row-oos-label">Creative &mdash; Out of Scope</span>
+                  <span class="row-badge-wrap"><span class="verdict-badge verdict-badge--oos">Out of Scope</span></span>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 11: Email / Workspace — OOS (renumbered from Row 12) -->
+          <tr>
+            <td colspan="2">
+              <div class="comparison-row comparison-row--oos arrive" aria-label="Out of scope lane — not evaluated">
+                <div class="row-oos-inner">
+                  <span class="row-function" style="margin-bottom: 0;">Email / Workspace</span>
+                  <span class="row-oos-label">Email &mdash; Out of Scope</span>
+                  <span class="row-badge-wrap"><span class="verdict-badge verdict-badge--oos">Out of Scope</span></span>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 12: Dev Infrastructure — OOS (renumbered from Row 13) -->
+          <tr>
+            <td colspan="2">
+              <div class="comparison-row comparison-row--oos arrive" aria-label="Out of scope lane — not evaluated">
+                <div class="row-oos-inner">
+                  <span class="row-function" style="margin-bottom: 0;">Dev Infrastructure</span>
+                  <span class="row-oos-label">Dev Infra &mdash; Out of Scope</span>
+                  <span class="row-badge-wrap"><span class="verdict-badge verdict-badge--oos">Out of Scope</span></span>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+      <!-- EDIT 4b: Antigravity callout block — inserted between end of Part B table and radar section -->
+      <!-- Uses .summary-card component class per SIGNAL structural note -->
+      <div class="summary-card arrive" role="note" aria-label="Antigravity — additional context" style="margin-top: var(--space-40);">
+        <p class="body-text" style="font-family: var(--font-display); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: var(--space-12);">Antigravity &mdash; worth a look before you decide</p>
+        <p class="body-text">Google's agentic environment. It runs multi-step work autonomously, inside the Google ecosystem the AI Pro sub already covers. Not a dev-tool call &mdash; Cursor sits with Paul. This is the planning and research work you run on your own: the sessions where you're currently the one holding the thread. Boss's early read: it belongs in the same category as the tools that changed how the work felt. Worth an hour before you decide.</p>
+      </div>
+
+    </section>
+
+    <!-- ─── RADAR SECTION ─── -->
+    <section class="radar-section arrive" aria-labelledby="rubric-title">
+      <hr class="section-rule" aria-hidden="true" style="margin-bottom: var(--space-40);">
+      <span class="eyebrow">Rubric</span>
+      <h2 class="section-title" id="rubric-title">How the Scores Work</h2>
+      <p class="section-descriptor">Seven dimensions. 1&ndash;10 scale. A 6 is category-competent. A 9 is best-in-class for a solo operator profile.</p>
+
+      <!-- Radar Legend -->
+      <div class="radar-legend" style="margin-top: var(--space-24);">
+        <div class="legend-item">
+          <span class="legend-dot legend-dot--larry"></span>
+          <span>Your current stack (aggregate)</span>
+        </div>
+      </div>
+
+      <!-- Radar SVG: 7-axis polygon, Larry's stack only (single trace per committed default Q1) -->
+      <div class="radar-wrap">
+        <svg
+          class="radar-svg"
+          viewBox="0 0 320 320"
+          preserveAspectRatio="xMidYMid meet"
+          role="img"
+          aria-label="Radar chart showing Larry's current stack aggregate scores across seven dimensions: Workflow Fit 7.8, Mobile/Offline 7.8, Integration 7.2, TCO 7.8, Portability 7.5, Adoption 7.2, Solo Scale 7.5. Single trace, Larry's current stack only."
+        >
+          <!-- Axis grid rings: 10, 8, 6, 4, 2 -->
+          <!-- Center: 160,160 | Max radius: 120px (= score 10) -->
+          <!-- Scale factor: 12px per unit -->
+
+          <!-- Grid rings at scale 2, 4, 6, 8, 10 -->
+          <g id="radar-grid" fill="none" stroke="var(--rule)" stroke-width="1">
+            <!-- 7-axis grid: angles at 0°, 51.43°, 102.86°, 154.29°, 205.71°, 257.14°, 308.57° -->
+            <!-- Axis 0 (top): 270° = -90° from standard = (160, 160-r) -->
+            <!-- Each axis offset by 360/7 = 51.4286° -->
+
+            <!-- Ring at r=24 (score 2) -->
+            <polygon points="
+              160,136
+              182.8,140.6
+              195.1,162.4
+              182.4,183.9
+              159.7,189.0
+              136.9,184.4
+              124.9,162.6
+            " stroke-dasharray="2,4"/>
+
+            <!-- Ring at r=48 (score 4) -->
+            <polygon points="
+              160,112
+              205.6,121.2
+              230.2,164.8
+              204.8,207.8
+              159.4,218.0
+              113.8,208.8
+              89.8,165.2
+            " stroke-dasharray="2,4"/>
+
+            <!-- Ring at r=72 (score 6) -->
+            <polygon points="
+              160,88
+              228.4,101.8
+              265.3,167.2
+              227.2,231.7
+              159.1,247.0
+              90.7,233.2
+              54.7,167.8
+            " stroke-dasharray="3,4"/>
+
+            <!-- Ring at r=96 (score 8) -->
+            <polygon points="
+              160,64
+              251.2,82.4
+              300.4,169.6
+              249.6,255.6
+              158.8,276.0
+              67.6,257.6
+              19.6,170.4
+            " stroke-dasharray="2,4"/>
+
+            <!-- Ring at r=120 (score 10) — outer boundary -->
+            <polygon points="
+              160,40
+              274.0,63.0
+              335.5,172.0
+              272.0,279.5
+              158.5,305.0
+              44.5,282.0
+              -15.5,173.0
+            " stroke-dasharray="2,4"/>
+          </g>
+
+          <!-- Axis spokes -->
+          <g id="radar-axes" stroke="var(--rule)" stroke-width="1">
+            <!-- Axis 0: Workflow Fit — top (270° standard = -90°) — (160, 40) -->
+            <line x1="160" y1="160" x2="160" y2="40"/>
+            <!-- Axis 1: Mobile/Offline — 51.43° past top = 321.43° standard — approx (229.7, 65.7) -->
+            <line x1="160" y1="160" x2="233.9" y2="63.5"/>
+            <!-- Axis 2: Integration — 102.86° past top = 12.86° standard — approx (272.2, 182.8) -->
+            <line x1="160" y1="160" x2="274.0" y2="186.9"/>
+            <!-- Axis 3: TCO — 154.29° past top = 64.29° standard — approx (249.0, 262.4) -->
+            <line x1="160" y1="160" x2="248.5" y2="262.4"/>
+            <!-- Axis 4: Portability — 205.71° past top = 115.71° standard — approx (107.2, 277.0) -->
+            <line x1="160" y1="160" x2="106.5" y2="277.0"/>
+            <!-- Axis 5: Adoption — 257.14° past top = 167.14° standard — approx (51.2, 198.0) -->
+            <line x1="160" y1="160" x2="47.3" y2="194.2"/>
+            <!-- Axis 6: Solo Scale — 308.57° past top = 218.57° standard — approx (80.6, 77.6) -->
+            <line x1="160" y1="160" x2="78.4" y2="74.8"/>
+          </g>
+
+          <!-- Score value labels on outer axis: scale 6 ring label positions -->
+          <g id="radar-scale-labels" font-family="'JetBrains Mono', monospace" font-size="9" fill="var(--subtle)" text-anchor="middle">
+            <text x="168" y="96">6</text>
+            <text x="168" y="72">8</text>
+          </g>
+
+          <!--
+            Larry's stack trace:
+            Scores: WF=7.8, MO=7.8, INT=7.2, TCO=7.8, PORT=7.5, ADO=7.2, SS=7.5
+            Radius = score * 12px
+            WF=7.8 → r=93.6   MO=7.8 → r=93.6   INT=7.2 → r=86.4   TCO=7.8 → r=93.6
+            PORT=7.5 → r=90    ADO=7.2 → r=86.4   SS=7.5 → r=90
+
+            Point = center + r * direction_unit_vector
+
+            Axis angles (from positive-Y-up convention, clockwise from top):
+            Axis 0 (WF):    angle = -90° (top)          → cos=-90°=0,  sin=-90°=-1  → (160, 160-r)
+            Axis 1 (MO):    angle = -90+51.43=-38.57°   → cos=0.7818, sin=-0.6235   → (160+r*0.7818, 160-r*0.6235)
+            Axis 2 (INT):   angle = -90+102.86=12.86°   → cos=0.9749, sin=0.2225    → (160+r*0.9749, 160+r*0.2225)
+            Axis 3 (TCO):   angle = -90+154.29=64.29°   → cos=0.4339, sin=0.9010    → (160+r*0.4339, 160+r*0.9010)
+            Axis 4 (PORT):  angle = -90+205.71=115.71°  → cos=-0.4339, sin=0.9010   → (160-r*0.4339, 160+r*0.9010)
+            Axis 5 (ADO):   angle = -90+257.14=167.14°  → cos=-0.9749, sin=0.2225   → (160-r*0.9749, 160+r*0.2225)
+            Axis 6 (SS):    angle = -90+308.57=218.57°  → cos=-0.7818, sin=-0.6235  → (160-r*0.7818, 160-r*0.6235)
+
+            Computing points:
+            WF   r=93.6: (160+0,      160-93.6)    = (160.0, 66.4)
+            MO   r=93.6: (160+73.18,  160-58.36)   = (233.2, 101.6)
+            INT  r=86.4: (160+84.23,  160+19.22)   = (244.2, 179.2)
+            TCO  r=93.6: (160+40.61,  160+84.33)   = (200.6, 244.3)
+            PORT r=90:   (160-39.05,  160+81.09)   = (121.0, 241.1)
+            ADO  r=86.4: (160-84.23,  160+19.22)   = (75.8, 179.2)
+            SS   r=90:   (160-70.36,  160-56.12)   = (89.6, 103.9)
+          -->
+
+          <!-- Larry's trace polygon — filled -->
+          <polygon
+            id="larry-trace"
+            points="
+              160.0,66.4
+              233.2,101.6
+              244.2,179.2
+              200.6,244.3
+              121.0,241.1
+              75.8,179.2
+              89.6,103.9
+            "
+            fill="var(--accent)"
+            fill-opacity="0.12"
+            stroke="var(--accent)"
+            stroke-width="1.5"
+            stroke-linejoin="round"
+          />
+
+          <!-- Data point dots on Larry's trace -->
+          <g id="larry-dots" fill="var(--accent)">
+            <circle cx="160.0" cy="66.4" r="3"/>
+            <circle cx="233.2" cy="101.6" r="3"/>
+            <circle cx="244.2" cy="179.2" r="3"/>
+            <circle cx="200.6" cy="244.3" r="3"/>
+            <circle cx="121.0" cy="241.1" r="3"/>
+            <circle cx="75.8" cy="179.2" r="3"/>
+            <circle cx="89.6" cy="103.9" r="3"/>
+          </g>
+
+          <!-- Score value callouts — JetBrains Mono, --accent, offset from dot -->
+          <g id="score-labels" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="500" fill="var(--accent)">
+            <text x="160.0" y="58" text-anchor="middle">7.8</text>
+            <text x="242" y="97" text-anchor="start">7.8</text>
+            <text x="250" y="181" text-anchor="start">7.2</text>
+            <text x="204" y="258" text-anchor="middle">7.8</text>
+            <text x="117" y="258" text-anchor="middle">7.5</text>
+            <text x="48" y="181" text-anchor="end">7.2</text>
+            <text x="80" y="98" text-anchor="end">7.5</text>
+          </g>
+
+          <!-- Axis labels — JetBrains Mono 11px --subtle -->
+          <!-- Offset further out from the score labels -->
+          <g id="axis-labels" font-family="'JetBrains Mono', monospace" font-size="10" font-weight="500" fill="var(--subtle)">
+            <!-- WF top -->
+            <text x="160" y="30" text-anchor="middle">WORKFLOW FIT</text>
+            <!-- MO upper right -->
+            <text x="248" y="54" text-anchor="start">MOBILE/</text>
+            <text x="248" y="65" text-anchor="start">OFFLINE</text>
+            <!-- INT right -->
+            <text x="280" y="184" text-anchor="start">INTEGRATION</text>
+            <!-- TCO lower right -->
+            <text x="214" y="275" text-anchor="middle">TCO</text>
+            <!-- PORT lower left -->
+            <text x="108" y="275" text-anchor="middle">PORTABILITY</text>
+            <!-- ADO left -->
+            <text x="40" y="180" text-anchor="end">ADOPTION</text>
+            <!-- SS upper left -->
+            <text x="65" y="90" text-anchor="end">SOLO</text>
+            <text x="65" y="101" text-anchor="end">SCALE</text>
+          </g>
+
+        </svg>
+      </div>
+
+      <!-- Dimension Explainer -->
+      <div class="dimension-list arrive" role="list" aria-label="Seven scoring dimensions explained">
+        <div class="dimension-item arrive" role="listitem">
+          <span class="dimension-label">Workflow<br>Fit</span>
+          <span class="dimension-desc">Does the tool match how you actually work, not how software vendors assume you work.</span>
+        </div>
+        <div class="dimension-item arrive" role="listitem">
+          <span class="dimension-label">Mobile /<br>Offline</span>
+          <span class="dimension-desc">Viability on a plane, in a hotel with bad Wi-Fi, between meetings.</span>
+        </div>
+        <div class="dimension-item arrive" role="listitem">
+          <span class="dimension-label">Integration</span>
+          <span class="dimension-desc">Native connectors, not Zapier duct tape.</span>
+        </div>
+        <div class="dimension-item arrive" role="listitem">
+          <span class="dimension-label">TCO</span>
+          <span class="dimension-desc">Seat fees plus setup time plus ongoing maintenance hours.</span>
+        </div>
+        <div class="dimension-item arrive" role="listitem">
+          <span class="dimension-label">Portability</span>
+          <span class="dimension-desc">Can you leave without losing your history.</span>
+        </div>
+        <div class="dimension-item arrive" role="listitem">
+          <span class="dimension-label">Adoption</span>
+          <span class="dimension-desc">Time from first open to productive, for a solo operator with no IT team.</span>
+        </div>
+        <div class="dimension-item arrive" role="listitem">
+          <span class="dimension-label">Solo<br>Scale</span>
+          <span class="dimension-desc">Does the tool stay useful as you add clients, or does it require an ops hire.</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ─── SOURCE ATTRIBUTION ─── -->
+    <footer class="attribution arrive" role="contentinfo">
+      <p>
+        Scoring sourced to: Gartner Magic Quadrant for Sales Force Automation 2024&ndash;25 &middot;
+        Forrester Wave Revenue Enablement Q3 2024 &middot; G2 Grid Research &middot;
+        Gartner TCO Toolkit doc 3084321 &middot; Asana Anatomy of Work Index
+      </p>
+    </footer>
+
+  </div><!-- /content-column -->
+
+  <script>
+    // ─── ARRIVE: IntersectionObserver scroll-entrance animation ───
+    (function() {
+      // Respect reduced-motion preference — skip observer if reduced motion set
+      var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (prefersReduced) {
+        // Make all arrive elements immediately visible
+        document.querySelectorAll('.arrive').forEach(function(el) {
+          el.style.opacity = '1';
+        });
+        return;
+      }
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -40px 0px'
+      });
+
+      document.querySelectorAll('.arrive').forEach(function(el) {
+        observer.observe(el);
+      });
+    })();
+  </script>
+
+</body>
+</html>

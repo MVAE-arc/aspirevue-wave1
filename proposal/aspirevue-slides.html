@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>AspireVue V4 — Scope Walkthrough · Arc'kin Endeavors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Space+Grotesk:wght@400;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+@charset "UTF-8";
+
+/* ─── Tokens ─── */
+:root {
+  --bg:      #111113;
+  --fg:      #EDE9E1;
+  --accent:  #FFAB40;
+  --subtle:  #6B7280;
+  --rule:    #1F2937;
+  --hover:   #1A1C1F;
+  --sans:    'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --display: 'Syne', sans-serif;
+  --mono:    'JetBrains Mono', 'Menlo', monospace;
+}
+
+/* ─── Reset ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+
+body {
+  background: #090909;
+  color: var(--fg);
+  font-family: var(--sans);
+  font-size: 16px;
+  overflow: hidden;
+}
+
+/* ─── Slide viewport ─── */
+.deck {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  padding: 56px 80px 48px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms ease-out;
+  overflow: hidden;
+}
+.slide.active { opacity: 1; pointer-events: auto; }
+
+/* ─── Slide layout zones ─── */
+.slide-head {
+  flex: 0 0 auto;
+  margin-bottom: 40px;
+}
+.slide-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ─── Brand strip ─── */
+.brand-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding-bottom: 10px;
+}
+.brand-name {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 0.5625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--subtle);
+}
+.brand-name span { color: var(--accent); }
+.brand-rule {
+  height: 1px;
+  background: var(--accent);
+  flex: 1;
+  margin: 0 20px;
+  opacity: 0.5;
+}
+
+/* ─── Eyebrow ─── */
+.eyebrow {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 0.5625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  display: block;
+  margin-bottom: 18px;
+}
+
+/* ─── Title typography ─── */
+.slide-title {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--fg);
+  margin-bottom: 0;
+}
+.slide-subtitle {
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: var(--subtle);
+  margin-top: 14px;
+}
+
+/* ─── Body text ─── */
+.slide-text {
+  font-size: clamp(0.875rem, 1.4vw, 1.0625rem);
+  line-height: 1.65;
+  max-width: 60ch;
+  color: var(--fg);
+  margin-bottom: 16px;
+}
+.slide-text:last-child { margin-bottom: 0; }
+
+/* ─── Item list (Ember left border, no bullets) ─── */
+.item-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 64ch;
+}
+.item-list li {
+  border-left: 2px solid var(--accent);
+  padding: 11px 0 11px 16px;
+  font-size: clamp(0.875rem, 1.3vw, 1rem);
+  color: var(--fg);
+  line-height: 1.45;
+  border-bottom: 1px solid var(--rule);
+}
+.item-list li:last-child { border-bottom: none; }
+
+/* ─── Data display (Slide 03) ─── */
+.data-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 58ch;
+}
+.data-row {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.data-row:last-child { border-bottom: none; }
+.data-label {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--accent);
+  min-width: 80px;
+  flex-shrink: 0;
+}
+.data-desc {
+  font-size: 0.9375rem;
+  color: var(--fg);
+  line-height: 1.35;
+}
+
+/* ─── Architecture stack (Slide 04) ─── */
+.arch-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 56ch;
+  position: relative;
+}
+.arch-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.arch-row:last-child { border-bottom: none; }
+.arch-name {
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--fg);
+  min-width: 160px;
+  flex-shrink: 0;
+}
+.arch-role {
+  font-size: 0.875rem;
+  color: var(--subtle);
+}
+/* Ember connector line */
+.arch-connector {
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  opacity: 0.3;
+}
+
+/* ─── Phase slides ─── */
+.phase-content {
+  border-left: 3px solid var(--accent);
+  padding-left: 24px;
+}
+
+/* ─── Milestone callout (bottom of phase slides) ─── */
+.milestone-row {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 2px solid var(--accent);
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.milestone-id {
+  font-family: var(--mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.milestone-text {
+  font-size: 0.875rem;
+  color: var(--fg);
+}
+.milestone-payment {
+  font-size: 0.875rem;
+  color: var(--fg);
+  font-family: var(--sans);
+}
+
+/* ─── Commercial terms table (Slide 08) ─── */
+.terms-table {
+  width: 100%;
+  border-collapse: collapse;
+  max-width: 600px;
+}
+.terms-table tr { border-bottom: 1px solid var(--rule); }
+.terms-table tr:last-child { border-bottom: none; }
+.terms-table td {
+  padding: 10px 14px 10px 0;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  vertical-align: top;
+}
+.terms-table td:first-child {
+  font-weight: 600;
+  color: var(--fg);
+  min-width: 140px;
+  padding-right: 24px;
+}
+.terms-table .mono { font-family: var(--mono); font-size: 0.875rem; font-weight: 500; }
+.terms-callout {
+  margin-top: 16px;
+  font-size: 0.875rem;
+  color: var(--subtle);
+  max-width: 56ch;
+}
+
+/* ─── Slide numbering ─── */
+.slide-num {
+  position: absolute;
+  bottom: 32px;
+  right: 56px;
+  font-family: var(--mono);
+  font-size: 0.5625rem;
+  color: var(--subtle);
+  letter-spacing: 0.1em;
+}
+
+/* ─── Navigation controls ─── */
+.nav-controls {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 200;
+}
+.nav-btn {
+  background: var(--hover);
+  border: 1px solid var(--rule);
+  color: var(--subtle);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: border-color 160ms, color 160ms;
+  border-radius: 2px;
+}
+.nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+.nav-btn:disabled { opacity: 0.3; cursor: default; }
+.nav-btn:disabled:hover { border-color: var(--rule); color: var(--subtle); }
+.nav-progress {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  color: var(--subtle);
+  letter-spacing: 0.08em;
+  min-width: 40px;
+  text-align: center;
+}
+
+/* ─── Print layout -- one slide per page ─── */
+@media print {
+  :root {
+    --bg: #FFFFFF; --fg: #111113; --accent: #B8590A;
+    --subtle: #6B7280; --rule: #D4D0CA; --hover: #F5F4F2;
+  }
+  html, body { height: auto; overflow: visible; background: #FFF; }
+  .deck { width: auto; height: auto; position: static; }
+  .slide {
+    position: static;
+    opacity: 1;
+    pointer-events: auto;
+    width: 100%;
+    height: 100vh;
+    page-break-after: always;
+    transition: none;
+    padding: 56px 72px 48px;
+  }
+  .nav-controls { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- ── 01 · Title ── -->
+  <div class="slide active" id="s01" role="region" aria-label="Slide 1: Title">
+    <div class="slide-head">
+      <div class="brand-strip">
+        <span class="brand-name">Arc<span>&apos;</span>kin Endeavors</span>
+        <div class="brand-rule"></div>
+      </div>
+    </div>
+    <div class="slide-body">
+      <span class="eyebrow">Scope Walkthrough &nbsp;&middot;&nbsp; AspireVue V4</span>
+      <h1 class="slide-title">AspireVue V4 &mdash;<br>30-Day Systems Architecture<br>Engagement</h1>
+      <p class="slide-subtitle">Arc&apos;kin Endeavors &nbsp;&bull;&nbsp; mike@arckin.io &nbsp;&bull;&nbsp; 2026-04-28</p>
+    </div>
+    <span class="slide-num">01 / 10</span>
+  </div>
+
+  <!-- ── 02 · This Is Not ── -->
+  <div class="slide" id="s02" role="region" aria-label="Slide 2: What this deck is not">
+    <div class="slide-head">
+      <div class="brand-strip">
+        <span class="brand-name">Arc<span>&apos;</span>kin Endeavors</span>
+        <div class="brand-rule"></div>
+      </div>
+    </div>
+    <div class="slide-body">
+      <span class="eyebrow">Scope Context</span>
+      <h2 class="slide-title" style="font-size: clamp(1.375rem, 2.5vw, 2rem); margin-bottom: 28px;">What this deck is not</h2>
+      <ul class="item-list">
+        <li>Not a vendor proposal</li>
+        <li>Not a pitch for services they didn&apos;t ask about</li>
+        <li>Not a performance review</li>
+        <li>Not a financial justification for a decision already made</li>
+      </ul>
+      <p class="slide-text" style="margin-top: 28px; color: var(--subtle); max-width: 56ch;">What it is: a walkthrough of the 30-day scope, who does what, and what the team has access to as it progresses.</p>
+    </div>
+    <span class="slide-num">02 / 10</span>
+  </div>
+
+  <!-- ── 03 · Starting Condition ── -->
+  <div class="slide" id="s03" role="region" aria-label="Slide 3: Starting condition">
+    <div class="slide-head">
+      <div class="brand-strip">
+        <span class="brand-name">Arc<span>&apos;</span>kin Endeavors</span>
+        <div class="brand-rule"></div>
+      </div>
+    </div>
+    <div class="slide-body">
+      <span class="eyebrow">Before Day 1</span>
+      <h2 class="slide-title" style="font-size: clamp(1.375rem, 2.5vw, 2rem); margin-bottom: 28px;">Where things stood before Day 1</h2>
+      <div class="data-stack">
+        <div class="data-row">
+          <span class="data-label">14 files</span>
+          <span class="data-desc">Claude context stack &mdash; no unified architecture</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">245 KB</span>
+          <span class="data-desc">Voice operating system running in parallel</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">4 apps</span>
+          <span class="data-desc">ChatGPT, Notion, Granola, Whisper &mdash; all parallel, no spine</span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">0 loops</span>
+          <span class="data-desc">No end-to-end capture-to-structured-output pipeline</span>
+        </div>
+      </div>
+      <p class="slide-text" style="margin-top: 24px; color: var(--subtle); font-size: 0.875rem; max-width: 58ch;">That&apos;s not a criticism of any of the tools. It&apos;s the natural state of an AI-forward operator who&apos;s been building faster than the system can catch up.</p>
+    </div>
+    <span class="slide-num">03 / 10</span>
+  </div>
+
+  <!-- ── 04 · Architecture ── -->
+  <div class="slide" id="s04" role="region" aria-label="Slide 4: One spine, four tools">
+    <div class="slide-head">
+      <div class="brand-strip">
+        <span class="brand-name">Arc<span>&apos;</span>kin Endeavors</span>
+        <div class="brand-rule"></div>
+      </div>
+    </div>
+    <div class="slide-body">
+      <span class="eyebrow">The Architecture</span>
+      <h2 class="slide-title" style="font-size: clamp(1.375rem, 2.5vw, 2rem); margin-bottom: 32px;">One spine, four tools</h2>
+      <div class="arch-stack">
+        <div class="arch-connector"></div>
+        <div class="arch-row">
+          <span class="arch-name">Mac Studio M2</span>
+          <span class="arch-role">Operating Hub</span>
+        </div>
+        <div class="arch-row">
+          <span class="arch-name">Plaud</span>
+          <span class="arch-role">Capture</span>
+        </div>
+        <div class="arch-row">
+          <span class="arch-name">Obsidian</span>
+          <span class="arch-role">Synthesis and Storage</span>
+        </div>
+        <div class="arch-row">
+          <span class="arch-name">Google AI Pro</span>
+          <span class="arch-role">Intelligence Layer</span>
+        </div>
+      </div>
+    </div>
+    <span class="slide-num">04 / 10</span>
+  </div>
+
+  <!-- ── 05 · Phase 1 ── -->
+  <div class="slide" id="s05" role="region" aria-label="Slide 5: Phase 1">
+    <div class="slide-head">
+      <div class="brand-strip">
+        <span class="brand-name">Arc<span>&apos;</span>kin Endeavors</span>
+        <div class="brand-rule"></div>
+      </div>
+      <span class="eyebrow">Phase 1 &nbsp;&middot;&nbsp; Days 1&ndash;10</span>
+    </div>
+    <div class="slide-body">
+      <div class="phase-content">
+        <h2 class="slide-title" style="font-size: clamp(1.375rem, 2.5vw, 1.875rem); margin-bottom: 22px;">Stack Foundation and Capture Loop</h2>
+        <ul class="item-list">
+          <li>Mac Studio M2 configured to Larry&apos;s patterns &mdash; not a template</li>
+          <li>Plaud live in the field workflow</li>
+          <li>End state: Larry runs the full capture-to-vault cycle unassisted</li>
+        </ul>
+        <div class="milestone-row">
+          <span class="milestone-id">Milestone A &mdash; Day 10</span>
+          <span class="milestone-text">Full capture-to-vault cycle, unassisted, observed.</span>
+        </div>
+      </div>
+    </div>
+    <span class="slide-num">05 / 10</span>
+  </div>
+
+  <!-- ── 06 · Phase 2 ── -->
+  <div class="slide" id="s06" role="region" aria-label="Slide 6: Phase 2">
+    <div class="slide-head">
+      <div class="brand-strip">
+        <span class="brand-name">Arc<span>&apos;</span>kin Endeavors</span>
+        <div class="brand-rule"></div>
+      </div>
+      <span class="eyebrow">Phase 2 &nbsp;&middot;&nbsp; Days 11&ndash;22</span>
+    </div>
+    <div class="slide-body">
+      <div class="phase-content">
+        <h2 class="slide-title" style="font-size: clamp(1.375rem, 2.5vw, 1.875rem); margin-bottom: 22px;">Workflow Fluency and Asset Production</h2>
+        <ul class="item-list">
+          <li>Three highest-frequency workflows built and in daily use</li>
+          <li>AI surface integrated into synthesis &mdash; Larry stays the Architect</li>
+          <li>Team visibility: AspireVue AI team consuming structured output</li>
+        </ul>
+        <div class="milestone-row">
+          <span class="milestone-id">Milestone B &mdash; Day 22</span>
+          <span class="milestone-payment">Milestone B triggers the second payment event.</span>
+        </div>
+      </div>
+    </div>
+    <span class="slide-num">06 / 10</span>
+  </div>
+
+  <!-- ── 07 · Phase 3 ── -->
+  <div class="slide" id="s07" role="region" aria-label="Slide 7: Phase 3">
+    <div class="slide-head">
+      <div class="brand-strip">
+        <span class="brand-name">Arc<span>&apos;</span>kin Endeavors</span>
+        <div class="brand-rule"></div>
+      </div>
+      <span class="eyebrow">Phase 3 &nbsp;&middot;&nbsp; Days 23&ndash;30</span>
+    </div>
+    <div class="slide-body">
+      <div class="phase-content">
+        <h2 class="slide-title" style="font-size: clamp(1.375rem, 2.5vw, 1.875rem); margin-bottom: 22px;">Codification and Handoff Readiness</h2>
+        <ul class="item-list">
+          <li>System documentation written by Larry, edited by Arc&apos;kin</li>
+          <li>Three failure scenarios worked through explicitly</li>
+          <li style="color: var(--fg); font-size: 1rem; font-weight: 600; border-left-color: var(--accent);">Day 30: Larry owns the system whether he extends or closes clean.</li>
+        </ul>
+        <div class="milestone-row">
+          <span class="milestone-id">Milestone C &mdash; Day 30</span>
+          <span class="milestone-text">Engagement closes. Renewal decision lives here.</span>
+        </div>
+      </div>
+    </div>
+    <span class="slide-num">07 / 10</span>
+  </div>
+
+  <!-- ── 08 · Commercial Terms ── -->
+  <div class="slide" id="s08" role="region" aria-label="Slide 8: Commercial terms">
+    <div class="slide-head">
+      <div class="brand-strip">
+        <span class="brand-name">Arc<span>&apos;</span>kin Endeavors</span>
+        <div class="brand-rule"></div>
+      </div>
+      <span class="eyebrow">Commercial Terms</span>
+    </div>
+    <div class="slide-body">
+      <h2 class="slide-title" style="font-size: clamp(1.375rem, 2.5vw, 2rem); margin-bottom: 28px;">How it&apos;s structured</h2>
+      <table class="terms-table" aria-label="Commercial terms summary">
+        <tbody>
+          <tr>
+            <td>Investment</td>
+            <td><span class="mono">$8,500</span></td>
+          </tr>
+          <tr>
+            <td>Payment 1</td>
+            <td><span class="mono">$4,250</span> &mdash; signed SOW</td>
+          </tr>
+          <tr>
+            <td>Payment 2</td>
+            <td><span class="mono">$4,250</span> &mdash; Milestone B (observable, not calendar-based)</td>
+          </tr>
+          <tr>
+            <td>Term</td>
+            <td>30 days</td>
+          </tr>
+          <tr>
+            <td>NDA</td>
+            <td>Signed April 18, both directions</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="terms-callout">No multi-month commitment. Cancel after Week 1 with written notice and prorated refund.</p>
+    </div>
+    <span class="slide-num">08 / 10</span>
+  </div>
+
+  <!-- ── 09 · Extension Menu ── -->
+  <div class="slide" id="s09" role="region" aria-label="Slide 9: Phase 2 Extension Menu">
+    <div class="slide-head">
+      <div class="brand-strip">
+        <span class="brand-name">Arc<span>&apos;</span>kin Endeavors</span>
+        <div class="brand-rule"></div>
+      </div>
+      <span class="eyebrow">Post-30-Day Options</span>
+    </div>
+    <div class="slide-body">
+      <h2 class="slide-title" style="font-size: clamp(1.375rem, 2.5vw, 2rem); margin-bottom: 28px;">Phase 2 Extension Menu<br><span style="font-size: 0.875rem; font-weight: 400; color: var(--subtle); letter-spacing: 0;">not in scope &mdash; available if earned</span></h2>
+      <ul class="item-list">
+        <li>Marketing Asset Build and Team Enablement</li>
+        <li>Design System Rebrand and Team Enablement</li>
+        <li>VC and Customer-Facing Deliverables</li>
+      </ul>
+      <p class="slide-text" style="margin-top: 24px; color: var(--subtle); font-size: 0.875rem; max-width: 56ch;">Each scoped and priced at Day 30, using actual data from the first month.</p>
+    </div>
+    <span class="slide-num">09 / 10</span>
+  </div>
+
+  <!-- ── 10 · Close ── -->
+  <div class="slide" id="s10" role="region" aria-label="Slide 10: Close">
+    <div class="slide-head">
+      <div class="brand-strip">
+        <span class="brand-name">Arc<span>&apos;</span>kin Endeavors</span>
+        <div class="brand-rule"></div>
+      </div>
+    </div>
+    <div class="slide-body">
+      <span class="eyebrow">Arc&apos;kin Endeavors &nbsp;&middot;&nbsp; AspireVue V4</span>
+      <p class="slide-text" style="font-size: clamp(1rem, 1.8vw, 1.25rem); max-width: 50ch; line-height: 1.55; margin-bottom: 28px;">&ldquo;The stack Larry is building over the next 30 days is one I run myself. Getting it to your team in a form that holds after I&apos;m gone is what this engagement is built around.&rdquo;</p>
+      <p class="slide-text" style="color: var(--subtle); font-size: 0.9375rem; max-width: 50ch;">Questions, scope concerns, or additions &mdash; <a href="mailto:mike@arckin.io" style="color: var(--accent); border: none;">mike@arckin.io</a></p>
+    </div>
+    <span class="slide-num">10 / 10</span>
+  </div>
+
+</div><!-- /.deck -->
+
+<!-- ── Nav Controls ── -->
+<nav class="nav-controls" aria-label="Slide navigation">
+  <button class="nav-btn" id="btn-prev" aria-label="Previous slide" disabled>&larr; Prev</button>
+  <span class="nav-progress" id="nav-progress" aria-live="polite">01 / 10</span>
+  <button class="nav-btn" id="btn-next" aria-label="Next slide">Next &rarr;</button>
+</nav>
+
+<script>
+(function () {
+  'use strict';
+
+  var slides = document.querySelectorAll('.slide');
+  var btnPrev = document.getElementById('btn-prev');
+  var btnNext = document.getElementById('btn-next');
+  var progress = document.getElementById('nav-progress');
+  var current = 0;
+  var total = slides.length;
+
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+  function go(idx) {
+    slides[current].classList.remove('active');
+    current = Math.max(0, Math.min(total - 1, idx));
+    slides[current].classList.add('active');
+    btnPrev.disabled = (current === 0);
+    btnNext.disabled = (current === total - 1);
+    progress.textContent = pad(current + 1) + ' / ' + pad(total);
+  }
+
+  btnPrev.addEventListener('click', function () { go(current - 1); });
+  btnNext.addEventListener('click', function () { go(current + 1); });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); go(current + 1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { e.preventDefault(); go(current - 1); }
+  });
+})();
+</script>
+
+</body>
+</html>

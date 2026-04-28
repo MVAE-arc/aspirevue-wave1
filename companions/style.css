@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 :root {
   --bg:     #111113;
   --fg:     #EDE9E1;
@@ -162,4 +164,35 @@ a:hover { border-bottom-color: var(--accent); }
   .doc { padding: 44px 0 64px; }
   .doc table { font-size: 0.875rem; }
   .doc table th, .doc table td { padding: 10px 10px; }
+}
+
+@media print {
+  :root {
+    --bg:     #FFFFFF;
+    --fg:     #111113;
+    --accent: #B8590A;
+    --subtle: #6B7280;
+    --rule:   #D4D0CA;
+    --hover:  #F5F4F2;
+  }
+
+  .nav { display: none; }
+
+  body { font-size: 10pt; line-height: 1.5; background: #FFFFFF; color: #111113; }
+
+  .page { max-width: 100%; padding: 0; }
+
+  .doc { padding: 20pt 0; }
+  .doc h1 { font-size: 20pt; }
+  .doc h2 { font-size: 14pt; }
+  .doc h3 { font-size: 11pt; }
+  .doc p { font-size: 10pt; max-width: 100%; }
+
+  .doc table { page-break-inside: avoid; }
+  .colophon { border-top: 0.5pt solid #D4D0CA; font-size: 8pt; }
+
+  @page {
+    size: letter;
+    margin: 0.875in 1in 1in 1.25in;
+  }
 }

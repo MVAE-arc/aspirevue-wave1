@@ -1,0 +1,474 @@
+@charset "UTF-8";
+
+/*
+  /sow/style.css -- Arc'kin Endeavors -- AspireVue V4 SOW
+  Extends Wave 1 token system. Self-contained (no @import).
+  Token source: /companions/style.css
+  If /companions/ tokens change, update the :root block below to match.
+*/
+
+/* ----------------------------------------------------------------
+   TOKENS (copied verbatim from /companions/style.css Wave 1 set)
+   SOW-specific additions: --sow-max-w, --sow-page-pad
+   NOTE: --pulse intentionally excluded -- payment semantic belongs
+   to the proposal timeline graphic, not a legal document.
+   ---------------------------------------------------------------- */
+:root {
+  --bg:            #111113;
+  --fg:            #EDE9E1;
+  --accent:        #FFAB40;
+  --subtle:        #6B7280;
+  --rule:          #1F2937;
+  --hover:         #1A1C1F;
+  --focus:         #FFAB40;
+  --font-sans:     'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --font-display:  'Syne', 'Space Grotesk', sans-serif;
+  --font-mono:     'JetBrains Mono', 'Menlo', 'Monaco', monospace;
+  --sow-max-w:     680px;
+  --sow-page-pad:  32px;
+  --sig-line:      1px solid var(--rule);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:     #F5F4F2;
+    --fg:     #111113;
+    --accent: #B8590A;
+    --subtle: #6B7280;
+    --rule:   #D4D0CA;
+    --hover:  #ECEAE6;
+    --focus:  #B8590A;
+  }
+}
+
+/* ----------------------------------------------------------------
+   RESET
+   ---------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  font-weight: 400;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+:focus:not(:focus-visible) { outline: none; }
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 180ms;
+}
+a:hover { border-bottom-color: var(--accent); }
+
+/* ----------------------------------------------------------------
+   LAYOUT
+   The SOW is a single document column. No nav. No sticky elements.
+   ---------------------------------------------------------------- */
+.sow-page {
+  max-width: calc(var(--sow-max-w) + var(--sow-page-pad) * 2);
+  margin: 0 auto;
+  padding: 0 var(--sow-page-pad);
+}
+
+/* ----------------------------------------------------------------
+   HEADER
+   ---------------------------------------------------------------- */
+.sow-header {
+  padding: 48px 0 36px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 0;
+}
+
+.sow-header-lockup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--rule);
+  flex-wrap: wrap;
+}
+
+/* Arc'kin text mark -- mirrors nav-brand from proposal */
+.nav-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  user-select: none;
+  line-height: 1;
+}
+.nav-brand span { color: var(--accent); }
+
+/* AspireVue logo image mark */
+.aspirevue-mark {
+  height: 36px;
+  width: auto;
+  display: block;
+  opacity: 0.92;
+}
+
+.sow-header h1 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: clamp(1.625rem, 3.5vw, 2rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  color: var(--fg);
+}
+
+.doc-prepared {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 0.8125rem;
+  color: var(--subtle);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* Parties table -- compact two-row, no header row */
+.parties-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.parties-table tr { border-bottom: 1px solid var(--rule); }
+.parties-table tr:last-child { border-bottom: none; }
+.parties-table td {
+  padding: 10px 0;
+  vertical-align: top;
+  line-height: 1.45;
+}
+.parties-table td:first-child {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  width: 34%;
+  color: var(--subtle);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  padding-right: 16px;
+}
+.parties-table td:last-child {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  color: var(--fg);
+}
+
+/* ----------------------------------------------------------------
+   SOW EYEBROW -- legal register
+   Slightly tighter than proposal eyebrow (0.625rem vs 0.6875rem)
+   ---------------------------------------------------------------- */
+.sow-eyebrow {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  margin-bottom: 16px;
+}
+
+/* ----------------------------------------------------------------
+   SECTIONS
+   ---------------------------------------------------------------- */
+.sow-section {
+  padding: 32px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.sow-section:last-of-type { border-bottom: none; }
+
+.sow-section h2 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  margin-bottom: 18px;
+  color: var(--fg);
+}
+
+.sow-section p {
+  max-width: 65ch;
+  margin-bottom: 16px;
+  line-height: 1.65;
+  font-size: 0.9375rem;
+}
+.sow-section p:last-child { margin-bottom: 0; }
+
+/* Engagement summary sits directly after header -- no eyebrow */
+.sow-summary { padding-top: 32px; }
+
+/* ----------------------------------------------------------------
+   TERMS TABLE -- reuses proposal .terms-table DNA
+   ---------------------------------------------------------------- */
+.terms-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 20px;
+  font-size: 0.9375rem;
+}
+.terms-table tr { border-bottom: 1px solid var(--rule); }
+.terms-table tr:last-child { border-bottom: none; }
+.terms-table tr:nth-child(even) td { background: var(--hover); }
+.terms-table td {
+  padding: 12px 16px;
+  vertical-align: top;
+  line-height: 1.45;
+}
+.terms-table td:first-child {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  width: 38%;
+  color: var(--fg);
+}
+.terms-table td:last-child { color: var(--fg); }
+
+/* Three-column variant for phase scope and milestones */
+.terms-table.three-col td:first-child { width: 42%; }
+.terms-table.three-col td:nth-child(2) {
+  width: 16%;
+  white-space: nowrap;
+  color: var(--subtle);
+}
+.terms-table.three-col td:nth-child(3) { width: auto; }
+
+/* Payment trigger cell -- most legally load-bearing cell */
+.terms-table .payment-trigger {
+  font-weight: 600;
+  color: var(--fg);
+}
+
+/* ----------------------------------------------------------------
+   MONO HELPER -- dollar amounts and day references
+   ---------------------------------------------------------------- */
+.mono {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.875em;
+  letter-spacing: 0.01em;
+}
+
+/* ----------------------------------------------------------------
+   SIGNATURE BLOCK
+   ---------------------------------------------------------------- */
+.sig-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  padding-top: 40px;
+  margin-top: 48px;
+  border-top: 1px solid var(--rule);
+}
+
+.sig-party {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sig-line {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--rule);
+  margin-bottom: 4px;
+}
+
+.sig-label {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--subtle);
+  letter-spacing: 0.04em;
+}
+
+.sig-name {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--fg);
+  line-height: 1.4;
+}
+
+.sig-title {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  color: var(--subtle);
+  line-height: 1.4;
+}
+
+.sig-date {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--subtle);
+}
+
+/* Printed-name blank line for manual countersigning */
+.sig-printed-name {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--rule);
+  margin-bottom: 4px;
+  opacity: 0.5;
+}
+
+/* ----------------------------------------------------------------
+   COLOPHON / FOOTER
+   ---------------------------------------------------------------- */
+.sow-colophon {
+  padding: 24px 0 40px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  line-height: 1.6;
+}
+
+/* ----------------------------------------------------------------
+   MOBILE
+   ---------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .sow-page { padding: 0 20px; }
+  .sow-header { padding: 36px 0 28px; }
+  .sow-header-lockup { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .aspirevue-mark { height: 28px; }
+  .sig-block { grid-template-columns: 1fr; gap: 40px; }
+  .terms-table.three-col td:nth-child(2) { display: none; }
+  .terms-table td { padding: 10px 12px; }
+  .terms-table td:first-child { width: 40%; }
+}
+
+/* ----------------------------------------------------------------
+   PRINT / PDF OVERRIDE BLOCK
+   This is the critical section for Larry's countersigned PDF.
+   Chrome's headless renderer and CMD+P both respect these rules.
+   Do NOT use WeasyPrint or Preview -- they do not honor @page margins.
+   ---------------------------------------------------------------- */
+@media print {
+
+  :root {
+    --bg:     #FFFFFF;
+    --fg:     #111113;
+    --accent: #B8590A;
+    --subtle: #6B7280;
+    --rule:   #D4D0CA;
+    --hover:  #F5F4F2;
+  }
+
+  body {
+    font-size: 10pt;
+    line-height: 1.5;
+    background: #FFFFFF;
+    color: #111113;
+  }
+
+  /* Reset layout for print column */
+  .sow-page {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  /* Header */
+  .sow-header {
+    padding-bottom: 16pt;
+    border-bottom: 1pt solid #D4D0CA;
+    padding-top: 0;
+  }
+  .sow-header-lockup {
+    border-bottom: 0.5pt solid #D4D0CA;
+    margin-bottom: 16pt;
+    padding-bottom: 12pt;
+  }
+  .aspirevue-mark { height: 28pt; }
+  .sow-header h1 { font-size: 18pt; }
+  .doc-prepared { font-size: 8pt; }
+
+  /* Eyebrow */
+  .sow-eyebrow {
+    font-size: 6pt;
+    letter-spacing: 0.14em;
+    color: #6B7280;
+  }
+
+  /* Sections */
+  .sow-section {
+    padding: 14pt 0;
+    border-bottom: 0.5pt solid #D4D0CA;
+  }
+  .sow-section h2 { font-size: 12pt; }
+  .sow-section p {
+    font-size: 10pt;
+    max-width: 100%;
+    margin-bottom: 8pt;
+  }
+
+  /* Tables -- all must avoid page-break within */
+  .terms-table { page-break-inside: avoid; }
+  .terms-table td {
+    padding: 8pt 10pt;
+    font-size: 9.5pt;
+    border-bottom: 0.5pt solid #D4D0CA;
+  }
+  .terms-table td:first-child { font-size: 9pt; }
+  .terms-table tr:nth-child(even) td { background: #F5F4F2; }
+
+  /* Parties table */
+  .parties-table td { font-size: 9pt; padding: 7pt 0; }
+
+  /* Signature block -- critical: must not split across pages */
+  .sig-block {
+    page-break-inside: avoid;
+    border-top: 1pt solid #D4D0CA;
+    margin-top: 32pt;
+    padding-top: 28pt;
+    gap: 40px;
+  }
+  /* 1.5pt line per CANVAS spec -- visible enough for ink signature */
+  .sig-line {
+    height: 1.5pt;
+    background: #D4D0CA;
+  }
+  .sig-printed-name {
+    height: 1pt;
+    background: #D4D0CA;
+    opacity: 0.6;
+  }
+  .sig-name  { font-size: 10pt; color: #111113; }
+  .sig-label, .sig-title, .sig-date { color: #6B7280; font-size: 8.5pt; }
+
+  /* Colophon */
+  .sow-colophon {
+    border-top: 0.5pt solid #D4D0CA;
+    font-size: 7pt;
+    padding: 10pt 0;
+    color: #6B7280;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @page {
+    size: letter;
+    margin: 0.875in 1in 1in 1.25in;
+  }
+}

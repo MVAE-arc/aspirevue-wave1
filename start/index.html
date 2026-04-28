@@ -135,6 +135,53 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: 0.03em;
 }
 
+/* PROPOSAL DOOR — full-width engagement entry */
+.door-proposal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  background: var(--hover);
+  border: 1px solid var(--lane-engagement);
+  border-radius: 6px;
+  padding: 32px 28px;
+  position: relative;
+  transition: background-color 220ms ease-out, transform 220ms ease-out;
+}
+.door-proposal:hover, .door-proposal:focus-visible {
+  background: var(--bg);
+  transform: translateY(-2px);
+}
+.door-proposal-body { flex: 1; min-width: 0; }
+.door-proposal-eyebrow {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 0.5625rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--lane-engagement); margin-bottom: 8px; display: block;
+}
+.door-proposal-title {
+  font-family: var(--font-sans); font-weight: 600;
+  font-size: 1.375rem; letter-spacing: -0.015em; line-height: 1.2;
+  color: var(--fg); margin-bottom: 10px;
+}
+.door-proposal-desc {
+  font-size: 0.9375rem; color: var(--subtle);
+  max-width: 52ch; line-height: 1.55;
+}
+.door-proposal-cta {
+  font-family: var(--font-mono); font-size: 0.8125rem; letter-spacing: 0.04em;
+  color: var(--lane-engagement); font-weight: 500; flex-shrink: 0;
+  display: flex; align-items: center; gap: 6px;
+  transition: transform 220ms ease-out;
+}
+.door-proposal:hover .door-proposal-cta,
+.door-proposal:focus-visible .door-proposal-cta {
+  transform: translateX(4px);
+}
+@media (max-width: 640px) {
+  .door-proposal { flex-direction: column; align-items: flex-start; gap: 20px; padding: 24px 20px; }
+  .door-proposal-cta { align-self: flex-end; }
+}
+
 /* PRIMARY DOORS (2-col) */
 .doors-primary {
   display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
@@ -278,11 +325,25 @@ a { color: inherit; text-decoration: none; }
     <div class="hero-prose">
       <p class="arrive d3">One link, a few ways in. Same ground covered each way — pick whichever fits how you're reading this. The deck is the anchor; everything else is a different cut of it.</p>
       <p class="arrive d4">If you&apos;re at your desk, start with the deck. If you&apos;re driving or walking, start with the walkthrough. Open the rest when it&apos;s useful.</p>
-      <div class="signoff arrive d5">— Michael</div>
+      <div class="signoff arrive d5">— Mike</div>
     </div>
   </header>
 
-  <section class="section arrive d5" aria-labelledby="start-here">
+  <section class="section arrive d5" aria-labelledby="proposal-heading">
+    <div class="section-head">
+      <h2 class="section-heading" id="proposal-heading">Proposal</h2>
+    </div>
+    <a class="door-proposal" href="../proposal/" aria-label="Read the 30-day engagement proposal — scope, terms, and sign-off">
+      <div class="door-proposal-body">
+        <span class="door-proposal-eyebrow">Engagement</span>
+        <div class="door-proposal-title">30-Day Systems Architecture Engagement</div>
+        <p class="door-proposal-desc">Scope, terms, milestone structure, and a one-pager SOW. Read it, sign it, and tell me what start date works.</p>
+      </div>
+      <span class="door-proposal-cta" aria-hidden="true">Read the proposal &#8594;</span>
+    </a>
+  </section>
+
+  <section class="section" aria-labelledby="start-here">
     <div class="section-head">
       <h2 class="section-heading" id="start-here">Where to start</h2>
       <span class="section-note">Two primary doors · same material</span>

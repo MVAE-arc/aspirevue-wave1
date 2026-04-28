@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>AspireVue V4 — 30-Day Systems Architecture Engagement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Space+Grotesk:wght@400;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:,">
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ── Sticky Nav ── -->
+  <nav class="nav" aria-label="Proposal navigation">
+    <div class="nav-brand">Arc<span>&apos;</span>kin Endeavors</div>
+    <div class="nav-links">
+      <a class="nav-link" href="#overview">Overview</a>
+      <a class="nav-link" href="#phases">Phases</a>
+      <a class="nav-link" href="../sow/">SOW</a>
+      <a class="nav-back" href="../start/">Hub</a>
+    </div>
+  </nav>
+
+  <!-- ── Document Header ── -->
+  <header class="doc-header reveal" id="overview">
+    <span class="eyebrow" style="color: var(--accent);">AspireVue V4 &middot; Prepared by Arc&apos;kin Endeavors</span>
+    <h1>30-Day Systems Architecture<br>Engagement</h1>
+    <p class="doc-prepared">Prepared by Arc&apos;kin Endeavors &nbsp;&bull;&nbsp; <a href="mailto:mike@arckin.io">mike@arckin.io</a></p>
+  </header>
+
+  <!-- ── Overview ── -->
+  <section class="doc-section arrive-target" aria-labelledby="sec-overview">
+    <span class="eyebrow">Overview</span>
+    <p>Larry &mdash; what follows is a scope and structure for the 30-day engagement we talked through on Thursday. I want it in writing because it deserves more than a handshake, not because we&apos;re strangers who need a contract to trust each other.</p>
+    <p>The short version: I build out your operating stack over 30 days &mdash; Plaud, Obsidian, Google AI Pro, Mac Studio M2 &mdash; so it runs as a single system instead of a set of independent tools pulling in different directions. By Day 30, you run the loop yourself. The system is documented in a form you can hand someone without sitting next to them while they read it, and your team can see what you&apos;re producing in a format that&apos;s actually useful to them.</p>
+    <p>You bought the Plaud and Google AI Pro the same day we talked. That told me more than anything you said. This proposal reflects that same speed.</p>
+  </section>
+
+  <!-- ── How We Work ── -->
+  <section class="doc-section arrive-target" aria-labelledby="sec-how">
+    <span class="eyebrow">How We Work</span>
+    <p>No clock-in, no ticket queue. You call or text when something needs attention &mdash; I respond same-day for anything non-urgent, within two hours when it&apos;s time-sensitive. One standing weekly session, 60 to 90 minutes, scheduled on your terms. When a workflow needs to land on your machine and talking through it would burn an hour, I take the wheel remotely and we do it together.</p>
+    <p>Your team gets access to whatever you want them to see. I fold in whoever you bring in, stay out of whatever stays private &mdash; that&apos;s your call, not mine. The shared workspace lives in your accounts, under your control.</p>
+    <p>What this doesn&apos;t look like: vendors who charge by the hour and need a purchase order before they&apos;ll pick up the phone. I&apos;m in your phonebook. You use me when you need me. That&apos;s the shape.</p>
+  </section>
+
+  <!-- ── Commercial Terms ── -->
+  <section class="doc-section arrive-target" aria-labelledby="sec-terms">
+    <span class="eyebrow">Commercial Terms</span>
+    <div class="table-wrap">
+      <table class="terms-table" aria-label="Commercial terms">
+        <tbody>
+          <tr>
+            <td>Term</td>
+            <td>30 days from signed start date</td>
+          </tr>
+          <tr>
+            <td>Investment</td>
+            <td class="mono-cell"><span class="mono">$8,500</span></td>
+          </tr>
+          <tr>
+            <td>Payment</td>
+            <td><span class="mono">$4,250</span> at start &nbsp;/&nbsp; <span class="mono">$4,250</span> when Milestone B ships (<span class="mono">Day 22</span>)</td>
+          </tr>
+          <tr>
+            <td>Cancellation</td>
+            <td>Anytime after Week 1 &mdash; written notice, prorated refund of any unstarted milestone work</td>
+          </tr>
+          <tr>
+            <td>NDA</td>
+            <td>Already signed. April 18. Both directions.</td>
+          </tr>
+          <tr>
+            <td>Paperwork</td>
+            <td>One-page SOW, countersigned. No attorney pass needed.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cost-justification">The <span class="mono">$8,500</span> reflects what&apos;s actually getting built &mdash; Mac Studio configuration, capture and synthesis infrastructure, three repeatable workflows built to your patterns, team visibility layer, system documentation, failure-mode coverage. That&apos;s not a billing rate applied to an hour count; it&apos;s what a month of building something that runs after I leave costs. If the scope, cadence, or terms need to flex, that&apos;s a conversation worth having &mdash; this is a partner engagement, not a vendor invoice.</p>
+    <p class="cost-justification" style="margin-top: 12px;">The second payment triggers when you ship a structured intellectual asset through the stack, end-to-end, without me touching production. That&apos;s the milestone. Observable, not calendar-based.</p>
+  </section>
+
+  <!-- ── Video Slot (Fold A) ── -->
+  <section id="proposal-video" class="media-slot arrive-target" aria-label="Proposal overview video">
+    <span class="eyebrow">Watch It Walked Through</span>
+    <video
+      id="proposal-video-player"
+      controls
+      preload="metadata"
+      playsinline
+      poster="../media/walkthrough-poster.jpg"
+    >
+      <source src="../media/walkthrough.mp4" type="video/mp4">
+      Your browser does not support the video element.
+      <a href="../media/walkthrough.mp4">Download the video</a>.
+    </video>
+    <p class="media-disclosure">A narrated walkthrough of this proposal &mdash; about seven and a half minutes. Same material, system under the ship.</p>
+  </section>
+
+  <!-- ── After Day 30 ── -->
+  <section class="after-block arrive-target" aria-labelledby="sec-after30">
+    <span class="eyebrow" id="sec-after30">What This Looks Like After 30 Days</span>
+    <p>Month One is the heavy lift. Everything after it is structured to stay useful without becoming an obligation.</p>
+    <p>If you want to keep going past <span class="mono">Day 30</span>, the rolling shape is <span class="mono">$5,000</span> per month, open-term. What gets worked on each month is decided at the start of that month &mdash; you and me, based on what AspireVue V4 has in front of it. That might be refinement on something from Phase 2. It might be deeper workflow buildout. It might be coaching your team on parts of the stack they&apos;re still unsure of. The structure is flexible by design because what you need in Month 2 isn&apos;t something either of us can scope today.</p>
+    <p>Either side can close at any time with written notice. No multi-month commitment required to access the rolling rate.</p>
+    <p>The Phase 2 Extension Menu items &mdash; marketing assets, design system, VC decks &mdash; sit above the <span class="mono">$5,000</span> baseline. When you want one, we scope and price it at that point, as a separate add-on. The baseline doesn&apos;t include them. You&apos;re not pre-paying for things you haven&apos;t decided you need.</p>
+    <p>None of this is a decision you need to make now. <span class="mono">Day 30</span> is where that conversation happens.</p>
+  </section>
+
+  <!-- ── Phase Timeline Graphic (Fold B) — v3 Production Component ── -->
+  <!-- CANVAS EXCEPTION: .tl-canvas-wrapper breaks the 720px column rule.
+       Presentation graphic. 1440px intentional. See CANVAS-Hub-Proposal-Direction-2026-04-28.md Section 11.2.
+       REFINEMENT A: negative-margin breakout centers at all viewports including 1920×1080. -->
+  <div class="tl-canvas-wrapper">
+    <section id="engagement-timeline" class="phase-timeline arrive-target" aria-labelledby="timeline-eyebrow">
+
+      <span id="timeline-eyebrow" class="eyebrow">ENGAGEMENT TIMELINE</span>
+
+      <svg class="tl-svg"
+           viewBox="0 0 1440 320"
+           xmlns="http://www.w3.org/2000/svg"
+           role="img"
+           aria-label="30-day engagement phase timeline: three phases, two payments, three milestones">
+
+        <!-- Phase band fills -->
+        <rect class="tl-phase-fill" x="80" y="144" width="384" height="32" fill="var(--accent)" fill-opacity="0.06"/>
+        <rect class="tl-phase-fill" x="464" y="144" width="512" height="32" fill="var(--accent)" fill-opacity="0.04"/>
+        <rect class="tl-phase-fill" x="976" y="144" width="384" height="32" fill="var(--accent)" fill-opacity="0.03"/>
+
+        <!-- Baseline rule -->
+        <line class="tl-baseline" x1="80" y1="160" x2="1360" y2="160" stroke="var(--fg)" stroke-width="1.5" stroke-opacity="0.35"/>
+
+        <!-- Tick marks -->
+        <line class="tl-tick-start" x1="80" y1="148" x2="80" y2="172" stroke="var(--rule)" stroke-width="1.5"/>
+        <line class="tl-tick-milestone" x1="464" y1="148" x2="464" y2="172" stroke="var(--accent)" stroke-width="2"/>
+        <line class="tl-tick-milestone" x1="976" y1="148" x2="976" y2="172" stroke="var(--accent)" stroke-width="2"/>
+        <line class="tl-tick-milestone" x1="1360" y1="148" x2="1360" y2="172" stroke="var(--accent)" stroke-width="2"/>
+
+        <!-- Registration cross-marks (defense-tech Move 1) -->
+        <line x1="76" y1="160" x2="84" y2="160" stroke="var(--rule)" stroke-width="0.5"/>
+        <line x1="460" y1="160" x2="468" y2="160" stroke="var(--rule)" stroke-width="0.5"/>
+        <line x1="972" y1="160" x2="980" y2="160" stroke="var(--rule)" stroke-width="0.5"/>
+        <line x1="1356" y1="160" x2="1364" y2="160" stroke="var(--rule)" stroke-width="0.5"/>
+
+        <!-- Phase band labels -->
+        <text class="tl-phase-label" x="272" y="158" font-family="var(--font-display)" font-weight="700" font-size="14" letter-spacing="0.14em" text-anchor="middle" fill="var(--subtle)">PHASE 1</text>
+        <text class="tl-phase-label-short" x="272" y="158" font-family="var(--font-display)" font-weight="700" font-size="18" letter-spacing="0.08em" text-anchor="middle" fill="var(--subtle)">P1</text>
+        <text class="tl-phase-label" x="720" y="158" font-family="var(--font-display)" font-weight="700" font-size="14" letter-spacing="0.14em" text-anchor="middle" fill="var(--subtle)">PHASE 2</text>
+        <text class="tl-phase-label-short" x="720" y="158" font-family="var(--font-display)" font-weight="700" font-size="18" letter-spacing="0.08em" text-anchor="middle" fill="var(--subtle)">P2</text>
+        <text class="tl-phase-label" x="1168" y="158" font-family="var(--font-display)" font-weight="700" font-size="14" letter-spacing="0.14em" text-anchor="middle" fill="var(--subtle)">PHASE 3</text>
+        <text class="tl-phase-label-short" x="1168" y="158" font-family="var(--font-display)" font-weight="700" font-size="18" letter-spacing="0.08em" text-anchor="middle" fill="var(--subtle)">P3</text>
+
+        <!-- Day labels -->
+        <text class="tl-day-label" x="80" y="188" font-family="var(--font-mono)" font-weight="500" font-size="16" letter-spacing="0.04em" text-anchor="middle" fill="var(--subtle)">DAY 1</text>
+        <text class="tl-day-label" x="464" y="188" font-family="var(--font-mono)" font-weight="500" font-size="16" letter-spacing="0.04em" text-anchor="middle" fill="var(--subtle)">DAY 10</text>
+        <text class="tl-day-label" x="976" y="188" font-family="var(--font-mono)" font-weight="500" font-size="16" letter-spacing="0.04em" text-anchor="middle" fill="var(--subtle)">DAY 22</text>
+        <text class="tl-day-label" x="1360" y="188" font-family="var(--font-mono)" font-weight="500" font-size="16" letter-spacing="0.04em" text-anchor="middle" fill="var(--subtle)">DAY 30</text>
+
+        <!-- Payment connectors — neutral scaffolding (var(--rule)) -->
+        <line class="tl-payment-connector" x1="80" y1="172" x2="80" y2="208" stroke="var(--rule)" stroke-width="1" stroke-dasharray="3 4"/>
+        <line class="tl-payment-connector" x1="976" y1="172" x2="976" y2="208" stroke="var(--rule)" stroke-width="1" stroke-dasharray="3 4"/>
+
+        <!-- Payment amounts — REFINEMENT B: Pulse (#00FFAB) -->
+        <text class="tl-payment-amount" x="80" y="222" font-family="var(--font-mono)" font-weight="500" font-size="16" letter-spacing="0.02em" text-anchor="middle" fill="var(--pulse)">$4,250</text>
+        <text class="tl-payment-sublabel tl-payment-sublabel-full" x="80" y="240" font-family="var(--font-display)" font-weight="700" font-size="11" letter-spacing="0.12em" text-anchor="middle" fill="var(--subtle)">START</text>
+        <text class="tl-payment-amount" x="976" y="222" font-family="var(--font-mono)" font-weight="500" font-size="16" letter-spacing="0.02em" text-anchor="middle" fill="var(--pulse)">$4,250</text>
+        <text class="tl-payment-sublabel tl-payment-sublabel-full" x="976" y="240" font-family="var(--font-display)" font-weight="700" font-size="11" letter-spacing="0.12em" text-anchor="middle" fill="var(--subtle)">MILESTONE B</text>
+        <text class="tl-payment-sublabel tl-payment-sublabel-short" x="976" y="240" font-family="var(--font-display)" font-weight="700" font-size="11" letter-spacing="0.12em" text-anchor="middle" fill="var(--subtle)">MIL. B</text>
+
+        <!-- Outcome phrases above milestones -->
+        <text class="tl-outcome-text" x="464" y="72" font-family="var(--font-sans)" font-weight="400" font-size="14" text-anchor="middle" fill="var(--subtle)">Full cycle, unassisted</text>
+        <text class="tl-outcome-text" x="976" y="72" font-family="var(--font-sans)" font-weight="400" font-size="14" text-anchor="middle" fill="var(--subtle)">Team-readable asset shipped</text>
+        <text class="tl-outcome-text" x="1360" y="72" font-family="var(--font-sans)" font-weight="400" font-size="14" text-anchor="middle" fill="var(--subtle)">Stack fully transferred</text>
+
+        <!-- Milestone A — Day 10 -->
+        <g class="tl-milestone-group" id="tl-ms-a" data-ms="a" tabindex="0" role="button"
+           aria-label="Milestone A — Day 10: Larry runs the full capture-to-vault cycle unassisted"
+           aria-expanded="false">
+          <rect x="424" y="88" width="80" height="80" fill="transparent"/>
+          <polygon class="tl-milestone-diamond" points="464,116 476,128 464,140 452,128" fill="var(--accent)" stroke="var(--accent)" stroke-width="1"/>
+          <text class="tl-milestone-letter" x="464" y="108" font-family="var(--font-display)" font-weight="700" font-size="20" letter-spacing="0.02em" text-anchor="middle" dominant-baseline="middle" fill="var(--accent)">A</text>
+        </g>
+
+        <!-- Milestone B — Day 22 -->
+        <g class="tl-milestone-group" id="tl-ms-b" data-ms="b" tabindex="0" role="button"
+           aria-label="Milestone B — Day 22: Larry ships one structured intellectual asset through the stack, team-readable, with no production assistance from Mike. Triggers second $4,250 payment."
+           aria-expanded="false">
+          <rect x="936" y="88" width="80" height="80" fill="transparent"/>
+          <polygon class="tl-milestone-diamond" points="976,116 988,128 976,140 964,128" fill="var(--accent)" stroke="var(--accent)" stroke-width="1"/>
+          <text class="tl-milestone-letter" x="976" y="108" font-family="var(--font-display)" font-weight="700" font-size="20" letter-spacing="0.02em" text-anchor="middle" dominant-baseline="middle" fill="var(--accent)">B</text>
+        </g>
+
+        <!-- Milestone C — Day 30 -->
+        <g class="tl-milestone-group" id="tl-ms-c" data-ms="c" tabindex="0" role="button"
+           aria-label="Milestone C — Day 30: Engagement closes. The continuation decision lives at the Day 30 retrospective."
+           aria-expanded="false">
+          <rect x="1320" y="88" width="80" height="80" fill="transparent"/>
+          <polygon class="tl-milestone-diamond" points="1360,116 1372,128 1360,140 1348,128" fill="var(--accent)" stroke="var(--accent)" stroke-width="1"/>
+          <text class="tl-milestone-letter" x="1360" y="108" font-family="var(--font-display)" font-weight="700" font-size="20" letter-spacing="0.02em" text-anchor="middle" dominant-baseline="middle" fill="var(--accent)">C</text>
+        </g>
+
+        <!-- Legend strip -->
+        <line x1="80" y1="276" x2="1360" y2="276" stroke="var(--rule)" stroke-width="0.8"/>
+        <polygon points="120,288 126,294 120,300 114,294" fill="var(--accent)"/>
+        <text x="132" y="297" font-family="var(--font-mono)" font-weight="500" font-size="11" letter-spacing="0.06em" dominant-baseline="middle" fill="var(--subtle)">MILESTONE</text>
+        <rect x="300" y="288" width="12" height="12" fill="var(--accent)" fill-opacity="0.15"/>
+        <text x="318" y="297" font-family="var(--font-mono)" font-weight="500" font-size="11" letter-spacing="0.06em" dominant-baseline="middle" fill="var(--subtle)">PHASE</text>
+        <line x1="480" y1="294" x2="498" y2="294" stroke="var(--rule)" stroke-width="1" stroke-dasharray="3 4"/>
+        <text x="504" y="297" font-family="var(--font-mono)" font-weight="500" font-size="11" letter-spacing="0.06em" dominant-baseline="middle" fill="var(--subtle)">PAYMENT</text>
+      </svg>
+
+      <!-- Panel A — Milestone A — Day 10 -->
+      <div class="tl-panel-overlay" id="tl-panel-a" aria-hidden="true">
+        <span class="tl-panel-eyebrow">MILESTONE A — DAY 10</span>
+        <p class="tl-panel-outcome">Larry runs the full capture-to-vault cycle unassisted while Mike observes. Milestone A gates Phase 2. It does not trigger payment.</p>
+        <hr class="tl-panel-rule">
+        <span class="tl-panel-steps-eyebrow">STEPS WITHIN PHASE 1</span>
+        <ul class="tl-panel-steps">
+          <li>Step 1.1 — Mac Studio M2 Operating Configuration</li>
+          <li>Step 1.2 — Capture Layer</li>
+          <li>Step 1.3 — Synthesis Layer</li>
+        </ul>
+      </div>
+
+      <!-- Panel B — Milestone B — Day 22 -->
+      <div class="tl-panel-overlay" id="tl-panel-b" aria-hidden="true">
+        <span class="tl-panel-eyebrow">MILESTONE B — DAY 22</span>
+        <p class="tl-panel-outcome">Larry ships one structured intellectual asset — memo, framework, internal brief, his selection — produced end-to-end through the stack, team-readable, with no production assistance from Mike.</p>
+        <hr class="tl-panel-rule">
+        <span class="tl-panel-steps-eyebrow">STEPS WITHIN PHASE 2</span>
+        <ul class="tl-panel-steps">
+          <li>Step 2.1 — Repeatable Workflows</li>
+          <li>Step 2.2 — Agentic Surface Integration</li>
+          <li>Step 2.3 — Team Visibility Surface</li>
+        </ul>
+        <hr class="tl-panel-rule">
+        <span class="tl-panel-payment-trigger">TRIGGERS SECOND $4,250 PAYMENT</span>
+      </div>
+
+      <!-- Panel C — Milestone C — Day 30 -->
+      <div class="tl-panel-overlay" id="tl-panel-c" aria-hidden="true">
+        <span class="tl-panel-eyebrow">MILESTONE C — DAY 30</span>
+        <p class="tl-panel-outcome">Engagement closes. The continuation decision lives at the Day 30 retrospective.</p>
+        <hr class="tl-panel-rule">
+        <span class="tl-panel-steps-eyebrow">STEPS WITHIN PHASE 3</span>
+        <ul class="tl-panel-steps">
+          <li>Step 3.1 — System Documentation</li>
+          <li>Step 3.2 — Failure-Mode Coverage</li>
+          <li>Step 3.3 — Renewal Decision Gate</li>
+        </ul>
+      </div>
+
+      <!-- Screen reader summary -->
+      <div class="sr-only" style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;">
+        <p>30-day engagement timeline with three phases and two payment events.</p>
+        <p>Phase 1 (Days 1 to 10): Stack Foundation and Capture Loop. Steps: Mac Studio M2 Operating Configuration; Capture Layer; Synthesis Layer. Milestone A at Day 10: Larry runs the full capture-to-vault cycle unassisted. Does not trigger payment.</p>
+        <p>Phase 2 (Days 11 to 22): Workflow Fluency and Asset Production. Steps: Repeatable Workflows; Agentic Surface Integration; Team Visibility Surface. Milestone B at Day 22: Larry ships one structured intellectual asset through the stack, team-readable, with no production assistance from Mike. Triggers the second $4,250 payment.</p>
+        <p>Phase 3 (Days 23 to 30): Codification and Handoff Readiness. Steps: System Documentation; Failure-Mode Coverage; Renewal Decision Gate. Milestone C at Day 30: Engagement closes. The continuation decision lives at the Day 30 retrospective.</p>
+        <p>Payments: $4,250 at engagement start (Day 1). $4,250 at Milestone B (Day 22).</p>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────────────
+       PHASES
+  ──────────────────────────────────────────────────────────────── -->
+
+  <!-- ── Phase 1 ── -->
+  <article class="phase-block arrive-target" aria-labelledby="phase1-title">
+    <span class="eyebrow">Phase 1 &nbsp;&middot;&nbsp; Days 1&ndash;10</span>
+    <h2 id="phase1-title">Stack Foundation and Capture Loop</h2>
+    <p class="phase-day-outcome"><span class="mono">Day 10:</span> You run a full capture-to-structured-note cycle on your own, with me watching. No prompts from me, no real-time guidance. The Mac Studio M2 is configured to your patterns &mdash; not a template, yours. Plaud is in the field workflow. Obsidian has an architecture that makes sense given what AspireVue V4 actually produces. Google AI Pro is wired in.</p>
+
+    <h3>Step 1.1 &mdash; Mac Studio M2 Operating Configuration</h3>
+    <p>Before we touch any AI tools, the hardware needs to be right. Account linkage, environment configuration, file system architecture built around how you actually work. Backup and sync layer that won&apos;t surprise you six months from now.</p>
+
+    <h3>Step 1.2 &mdash; Capture Layer</h3>
+    <p>Plaud setup and mobile app integration. Then the protocol: when to record, how to tag it, where it goes after. The first five real-world captures we review together &mdash; not because you need hand-holding, but because that&apos;s where the captures that break a system live, and catching them early is cheaper than fixing them in Week 3.</p>
+
+    <h3>Step 1.3 &mdash; Synthesis Layer</h3>
+    <p>Vault architecture in Obsidian tuned to AspireVue V4&apos;s content shape &mdash; investor prep, client work, internal team communication. The pipeline from Plaud transcript to cleaned, linked note. Then the AI-assisted synthesis pass: what gets summarized, what gets structured, what gets discarded. Before this engagement, you were managing a 14-file Claude context stack with <span class="mono">245KB</span> of voice OS alongside ChatGPT, Notion, Granola, and Whisper, all running parallel with no unified system pulling it together. By <span class="mono">Day 10</span>, there&apos;s one spine. ChatGPT and Notion don&apos;t disappear &mdash; they just stop being the center of gravity.</p>
+
+    <div class="phase-replaces">
+      <span class="eyebrow">What This Phase Replaces</span>
+      <p>The gap between &ldquo;thinking it through on a call&rdquo; and &ldquo;that thought existing anywhere useful afterward.&rdquo; Right now, a meeting ends and most of what was sharp in the room evaporates &mdash; either into a voice memo no one processes, or into a note that doesn&apos;t connect to anything. This closes that loop.</p>
+    </div>
+
+    <div class="milestone">
+      <span class="milestone-label">Milestone A &nbsp;&mdash;&nbsp; Day 10</span>
+      <p class="milestone-desc">You run the full capture-to-vault cycle unassisted while I observe. Milestone A gates Phase 2.</p>
+      <p class="milestone-note">Does not trigger payment.</p>
+    </div>
+  </article>
+
+  <!-- ── Phase 2 ── -->
+  <article class="phase-block arrive-target" aria-labelledby="phase2-title">
+    <span class="eyebrow">Phase 2 &nbsp;&middot;&nbsp; Days 11&ndash;22</span>
+    <h2 id="phase2-title">Workflow Fluency and Asset Production</h2>
+    <p class="phase-day-outcome"><span class="mono">Day 22:</span> You&apos;re not asking &ldquo;how do I do this&rdquo; anymore. You&apos;re asking &ldquo;what should I do next.&rdquo; The stack is producing things your team can read and use &mdash; memos, decision frameworks, briefing docs &mdash; built through your thinking, not assembled manually afterward.</p>
+
+    <h3>Step 2.1 &mdash; Repeatable Workflows</h3>
+    <p>On <span class="mono">Day 11</span>, we identify your three highest-frequency knowledge-work patterns. Investor update prep. Customer-call synthesis. Internal team brief. Whatever they actually are &mdash; we confirm on <span class="mono">Day 11</span>, not in advance. For each one: a vault template, a capture protocol, a first production run side-by-side. By the end of this step, those three workflows are not experiments; they&apos;re the way you do it.</p>
+
+    <h3>Step 2.2 &mdash; Agentic Surface Integration</h3>
+    <p>This is where the stack goes from &ldquo;organized notes&rdquo; to &ldquo;produces work.&rdquo; The AI layer gets wired into the synthesis loop without breaking your mental model. You stay the Architect. The surface assists. You feed the system; the system doesn&apos;t replace your thinking. The distinction between those two modes is one you&apos;ll feel clearly by <span class="mono">Day 22</span> &mdash; it&apos;s not theoretical.</p>
+
+    <h3>Step 2.3 &mdash; Team Visibility Surface</h3>
+    <p>Shared workspace structure: what&apos;s visible to the AspireVue AI team, how they consume what you produce, who gets access to what. One handoff demonstration &mdash; you produce something, what you produce reaches the AspireVue AI team cleanly. The system doesn&apos;t stay inside your head after this phase.</p>
+
+    <div class="phase-replaces">
+      <span class="eyebrow">What This Phase Replaces</span>
+      <p>Meeting-to-meeting evaporation. You do the thinking, do the work, but by the time you need to brief your team or write it up for a different audience, the sharpest version of it is gone. This phase is about making sure what you produce in Architect mode is legible to everyone else without you having to perform &ldquo;writing it up&rdquo; separately.</p>
+    </div>
+
+    <div class="milestone">
+      <span class="milestone-label">Milestone B &nbsp;&mdash;&nbsp; Day 22</span>
+      <p class="milestone-desc">You ship one structured intellectual asset &mdash; memo, framework, internal brief, your call &mdash; produced end-to-end through the stack. Team-readable. No Mike touch on production.</p>
+      <p class="milestone-note payment">This triggers the second <span class="mono">$4,250</span> payment.</p>
+    </div>
+  </article>
+
+  <!-- ── Phase 3 ── -->
+  <article class="phase-block arrive-target" aria-labelledby="phase3-title">
+    <span class="eyebrow">Phase 3 &nbsp;&middot;&nbsp; Days 23&ndash;30</span>
+    <h2 id="phase3-title">Codification and Handoff Readiness</h2>
+    <p class="phase-day-outcome">By close of <span class="mono">Day 30:</span> The system is documented in a form you own, can extend, and can give to a future team member without needing to re-explain the architecture from scratch. Whether you extend or close clean, the stack is yours.</p>
+
+    <h3>Step 3.1 &mdash; System Documentation</h3>
+    <p>You write it; I edit it. One-page operating doctrine: how the stack works, what each tool does, why it&apos;s configured the way it is. Cheat-sheets for the three repeatable workflows from Phase 2. The document is yours because you wrote it &mdash; edited by someone who knows what needs to be in it, but not authored by the consultant for the client.</p>
+
+    <h3>Step 3.2 &mdash; Failure-Mode Coverage</h3>
+    <p>Three scenarios we work through explicitly: what happens when the AI surface returns garbage (you recognize it, you correct it, you don&apos;t lose the underlying thought); what happens when capture fails (recovery protocol so one bad week doesn&apos;t wipe progress); what happens when the team needs to operate the stack without you for a stretch. All three get worked through before <span class="mono">Day 30</span> closes.</p>
+
+    <h3>Step 3.3 &mdash; Renewal Decision Gate</h3>
+    <p><span class="mono">Day 30</span> retrospective &mdash; what landed, what&apos;s still partial, what&apos;s worth carrying into Month 2 if you extend on the rolling structure described above. Phase 2 Extension Menu items sit on top of that baseline if you want to fire one. We scope and price based on what the first 30 days actually produced, not on projections from before we started.</p>
+
+    <div class="phase-replaces">
+      <span class="eyebrow">What This Phase Replaces</span>
+      <p>The scenario where a consultant exits and the thing they built doesn&apos;t survive the month. Whatever you&apos;ve built by <span class="mono">Day 30</span> runs without me.</p>
+    </div>
+
+    <div class="milestone">
+      <span class="milestone-label">Milestone C &nbsp;&mdash;&nbsp; Day 30</span>
+      <p class="milestone-desc">Engagement closes. Renewal decision lives here.</p>
+      <p class="milestone-note">No additional payment event.</p>
+    </div>
+  </article>
+
+  <!-- ── Payment Summary ── -->
+  <section class="doc-section arrive-target" aria-labelledby="sec-payment">
+    <span class="eyebrow" id="sec-payment">Payment Summary</span>
+    <div class="payment-callout">
+      <div class="table-wrap">
+        <table class="payment-table" aria-label="Payment summary">
+          <thead>
+            <tr>
+              <th>Event</th>
+              <th>Amount</th>
+              <th>Trigger</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Engagement Start</td>
+              <td class="amount-col"><span class="mono">$4,250</span></td>
+              <td>Signed SOW, countersigned</td>
+            </tr>
+            <tr>
+              <td>Milestone B &mdash; <span class="mono">Day 22</span></td>
+              <td class="amount-col"><span class="mono">$4,250</span></td>
+              <td>Structured asset shipped through stack, no Mike touch on production</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="payment-closer">Two payment events. That&apos;s it.</p>
+    </div>
+  </section>
+
+  <!-- ── Risk Reversal ── -->
+  <section class="risk-block arrive-target" aria-labelledby="sec-risk">
+    <span class="eyebrow" id="sec-risk">Risk Reversal</span>
+    <p>The NDA&apos;s already signed. That covers confidentiality in both directions from Day 0, not from the first call &mdash; April 18.</p>
+    <p>Cancellation is clean: anytime after Week 1, written notice, prorated refund of anything we haven&apos;t started. The milestone definitions in writing mean the second payment triggers on something you can see, not on whether the calendar hit <span class="mono">Day 22</span>.</p>
+    <p>No scope creep without a written add-on. The Phase 2 Extension Menu items below are explicitly outside this engagement. If you want one of them during the 30 days, we write a one-page add-on and both sign it. That&apos;s not bureaucracy &mdash; it&apos;s how engagements that start on good terms stay that way.</p>
+  </section>
+
+  <!-- ── Phase 2 Extension Menu ── -->
+  <section class="extension-block arrive-target" aria-labelledby="sec-extension">
+    <span class="eyebrow" id="sec-extension">Phase 2 Extension Menu</span>
+    <h2 style="margin-bottom: 20px; font-size: 1.0625rem; font-weight: 400; color: var(--subtle); max-width: 58ch; line-height: 1.5;">Available After Day 30</h2>
+    <p style="max-width: 62ch; margin-bottom: 24px; color: var(--fg); line-height: 1.65;">These aren&apos;t what we&apos;re not doing now &mdash; they&apos;re what&apos;s available if the 30-day engagement earns it and you want to continue. Each is scoped and priced at <span class="mono">Day 30</span> using actual data from the first month, not guesses from before we started.</p>
+
+    <div class="extension-stack">
+
+      <div class="extension-card arrive-target">
+        <h3>Marketing Asset Build and Team Enablement</h3>
+        <p>Arc&apos;kin builds marketing assets for AspireVue V4 while teaching the team to extend them. You end up with an asset library your team owns and can operate, not a deliverable that sits in a vendor&apos;s folder.</p>
+      </div>
+
+      <div class="extension-card arrive-target">
+        <h3>Design System Rebrand and Team Enablement</h3>
+        <p>Your digital aesthetic gets rebuilt or restyled &mdash; design tokens, visual system, the whole layer &mdash; and the team learns to manage it. They keep running it once the engagement closes.</p>
+      </div>
+
+      <div class="extension-card arrive-target">
+        <h3>VC and Customer-Facing Deliverables</h3>
+        <p>Decks, dashboards, board-facing materials, customer presentations produced through the stack. High-leverage external output built the same way everything else gets built.</p>
+      </div>
+
+    </div>
+
+    <p class="extension-note">None of these require you to decide anything today.</p>
+  </section>
+
+  <!-- ── What's Outside This Engagement ── -->
+  <section class="outside-block arrive-target" aria-labelledby="sec-outside">
+    <span class="eyebrow" id="sec-outside">What&rsquo;s Outside This Engagement</span>
+    <p style="max-width: 60ch; margin-bottom: 20px; line-height: 1.65;">So there are no surprises:</p>
+    <ul class="outside-list" role="list">
+      <li>Marketing asset production &mdash; Phase 2 Extension Menu, not this scope</li>
+      <li>Design system rebrand &mdash; Phase 2 Extension Menu, not this scope</li>
+      <li>External-facing deliverables for investors or clients &mdash; Phase 2 Extension Menu, not this scope</li>
+      <li>Direct execution work for AspireVue&apos;s clients or partners &mdash; I&apos;m building your operating capability, not operating as AspireVue V4</li>
+      <li>AWS Workmail migration &mdash; the March 2027 hard date is on the radar; that migration is its own project, not a 30-day deliverable. It&apos;s a constraint I&apos;ll account for during Phase 1 environment setup so it doesn&apos;t become a surprise later.</li>
+      <li>Ongoing maintenance after <span class="mono">Day 30</span> &mdash; the system you own at <span class="mono">Day 30</span> is yours to run; continued support is a renewal decision</li>
+    </ul>
+  </section>
+
+  <!-- ── Close ── -->
+  <section class="close-block arrive-target" aria-labelledby="sec-close">
+    <span class="eyebrow" id="sec-close">Close</span>
+    <p>Larry &mdash; I&apos;ve been building systems like this for years, mostly for myself, because I needed them to work a certain way and nothing off the shelf did. The stack you&apos;re building over the next 30 days is one I run myself. What you walk away with at <span class="mono">Day 30</span> is yours to share &mdash; with your team, with anyone you bring in next, with whoever needs to see how AspireVue V4 actually runs. It doesn&apos;t live on my laptop. It lives with you, end to end, and it stays useful after I&apos;m gone.</p>
+    <p>Everything in here is negotiable. The shape, the price, the cadence, the scope &mdash; every line is on the table, and I&apos;ll move on any of it with all the will in the world. I built this draft with deliberate risk-reversals &mdash; half-at-start, half-at-delivery, an observable milestone you don&apos;t pay the second half against unless I deliver &mdash; because I wanted the structure itself to land Larry-friendly before we ever sit down to talk about what to change.</p>
+    <p>If this reads right, the SOW&apos;s a one-pager. Sign it, send it back, and tell me what start date works &mdash; I&apos;ll be ready the day you say go.</p>
+    <p class="signature">Mike</p>
+  </section>
+
+  <!-- ── SOW Actions ── -->
+  <div class="sow-actions" role="group" aria-label="Statement of Work">
+    <a href="../sow/" class="sow-link sow-link--primary">Read the SOW</a>
+    <a href="../sow/Arc'kin-AspireVue-V4-SOW-2026-04-29.pdf" class="sow-link sow-link--secondary" download>Download PDF</a>
+  </div>
+
+  <!-- ── Footer ── -->
+  <footer class="footer">
+    <span>Arc&apos;kin Endeavors &nbsp;&middot;&nbsp; <a href="mailto:mike@arckin.io">mike@arckin.io</a></span>
+    <span>Confidential &nbsp;&mdash;&nbsp; NDA in effect, April 18, 2026</span>
+  </footer>
+
+</div><!-- /.page -->
+
+<script>
+(function () {
+  'use strict';
+
+  /* IntersectionObserver ARRIVE -- same threshold and timing as Wave 1 */
+  var targets = document.querySelectorAll('.arrive-target');
+  if (!targets.length) return;
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  targets.forEach(function (el) { observer.observe(el); });
+
+  /* Extension card HOVER-NUDGE -- subtle lift handled via CSS :hover already */
+  /* No additional JS needed for hover state */
+})();
+</script>
+
+<!-- ================================================================
+     TIMELINE COMPONENT — v3 Production Controller
+     REFINEMENT C: all reveal sequence timings ×1.2. Total ~6420ms.
+     Hover-card transition overrides also ×1.2.
+     ================================================================ -->
+<script>
+(function() {
+  'use strict';
+
+  var timeline  = document.querySelector('.phase-timeline');
+  var wrapper   = document.querySelector('.tl-canvas-wrapper');
+  var svg       = document.querySelector('.tl-svg');
+
+  if (!timeline || !wrapper || !svg) return;
+
+  var groupA = document.getElementById('tl-ms-a');
+  var groupB = document.getElementById('tl-ms-b');
+  var groupC = document.getElementById('tl-ms-c');
+  var panelA = document.getElementById('tl-panel-a');
+  var panelB = document.getElementById('tl-panel-b');
+  var panelC = document.getElementById('tl-panel-c');
+
+  var baseline       = svg.querySelector('.tl-baseline');
+  var tickStart      = svg.querySelector('.tl-tick-start');
+  var tickMilestones = svg.querySelectorAll('.tl-tick-milestone');
+  var dayLabels      = svg.querySelectorAll('.tl-day-label');
+  var phaseFills     = svg.querySelectorAll('.tl-phase-fill');
+  var phaseLabels    = svg.querySelectorAll('.tl-phase-label, .tl-phase-label-short');
+  var diamonds       = svg.querySelectorAll('.tl-milestone-diamond');
+  var letters        = svg.querySelectorAll('.tl-milestone-letter');
+  var connectors     = svg.querySelectorAll('.tl-payment-connector');
+  var amounts        = svg.querySelectorAll('.tl-payment-amount');
+  var sublabels      = svg.querySelectorAll('.tl-payment-sublabel');
+
+  var revealHasFired = false;
+
+  function positionPanel(panelEl, groupEl) {
+    var diaRect  = groupEl.getBoundingClientRect();
+    var panelW   = panelEl.offsetWidth;
+    var panelH   = panelEl.offsetHeight;
+    var wrapRect = wrapper.getBoundingClientRect();
+    var idealLeft = (diaRect.left - wrapRect.left) + (diaRect.width / 2) - (panelW / 2);
+    var maxLeft   = wrapRect.width - panelW - 8;
+    var left      = Math.max(8, Math.min(idealLeft, maxLeft));
+    var top       = (diaRect.top - wrapRect.top) - panelH - 8;
+    panelEl.style.left = left + 'px';
+    panelEl.style.top  = top  + 'px';
+  }
+
+  function openPanel(id) {
+    var panelEl = document.getElementById('tl-panel-' + id);
+    var groupEl = document.getElementById('tl-ms-'    + id);
+    if (!panelEl || !groupEl) return;
+    panelEl.style.visibility = 'hidden';
+    panelEl.classList.add('visible');
+    positionPanel(panelEl, groupEl);
+    panelEl.style.visibility = '';
+    panelEl.setAttribute('aria-hidden', 'false');
+    groupEl.setAttribute('aria-expanded', 'true');
+  }
+
+  function closePanel(id) {
+    var panelEl = document.getElementById('tl-panel-' + id);
+    var groupEl = document.getElementById('tl-ms-'    + id);
+    if (!panelEl) return;
+    panelEl.classList.remove('visible');
+    panelEl.setAttribute('aria-hidden', 'true');
+    if (groupEl) groupEl.setAttribute('aria-expanded', 'false');
+  }
+
+  function closeAllPanels() {
+    ['a', 'b', 'c'].forEach(function(id) { closePanel(id); });
+  }
+
+  var milestoneData = [
+    { group: groupA, id: 'a', panel: panelA },
+    { group: groupB, id: 'b', panel: panelB },
+    { group: groupC, id: 'c', panel: panelC }
+  ];
+
+  milestoneData.forEach(function(m) {
+    if (!m.group) return;
+
+    m.group.addEventListener('mouseenter', function() {
+      if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        closeAllPanels();
+        openPanel(m.id);
+      }
+    });
+    m.group.addEventListener('mouseleave', function() {
+      if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        closePanel(m.id);
+      }
+    });
+
+    m.group.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        var expanded = m.group.getAttribute('aria-expanded') === 'true';
+        if (expanded) { closePanel(m.id); } else { closeAllPanels(); openPanel(m.id); }
+      }
+      if (e.key === 'Escape') { closePanel(m.id); m.group.blur(); }
+    });
+
+    m.group.addEventListener('focus', function() { closeAllPanels(); openPanel(m.id); });
+    m.group.addEventListener('blur',  function() { closePanel(m.id); });
+
+    m.group.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      var expanded = m.group.getAttribute('aria-expanded') === 'true';
+      if (expanded) { closePanel(m.id); } else { closeAllPanels(); openPanel(m.id); }
+    }, { passive: false });
+  });
+
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+      milestoneData.forEach(function(m) {
+        if (m.panel && m.panel.classList.contains('visible')) {
+          positionPanel(m.panel, m.group);
+        }
+      });
+    }, 100);
+  });
+
+  /* ARRIVE observer */
+  if (window.IntersectionObserver) {
+    var arriveObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          timeline.classList.add('arrived');
+          arriveObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    arriveObserver.observe(timeline);
+  } else {
+    timeline.classList.add('arrived');
+  }
+
+  function revealCleanup() {
+    timeline.classList.remove('tl-reveal-pre');
+    var allAnimated = svg.querySelectorAll(
+      '.tl-baseline, .tl-tick-start, .tl-tick-milestone, .tl-day-label, ' +
+      '.tl-phase-fill, .tl-phase-label, .tl-phase-label-short, ' +
+      '.tl-milestone-diamond, .tl-milestone-letter, ' +
+      '.tl-payment-connector, .tl-payment-amount, .tl-payment-sublabel'
+    );
+    allAnimated.forEach(function(el) { el.removeAttribute('style'); });
+    closeAllPanels();
+    ['a', 'b', 'c'].forEach(function(id) {
+      var p = document.getElementById('tl-panel-' + id);
+      if (p) { p.classList.remove('retracting'); p.style.transition = ''; }
+    });
+  }
+
+  /* REFINEMENT C: all timings ×1.2 from R3 v2 */
+  function fireRevealSequence() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      timeline.classList.remove('tl-reveal-pre');
+      closeAllPanels();
+      return;
+    }
+
+    /* Step 1: Baseline — 0ms start, 720ms */
+    setTimeout(function() {
+      if (!baseline) return;
+      baseline.style.transition = 'clip-path 720ms cubic-bezier(0.22, 1, 0.36, 1)';
+      baseline.style.clipPath   = 'inset(0 0% 0 0)';
+    }, 0);
+
+    /* Step 2: Ticks — 480ms start + 96ms stagger, 480ms each */
+    var allTicks = [tickStart, tickMilestones[0], tickMilestones[1], tickMilestones[2]];
+    allTicks.forEach(function(el, i) {
+      if (!el) return;
+      setTimeout(function() {
+        el.style.transition = 'opacity 480ms ease-out, transform 480ms ease-out';
+        el.style.opacity    = '1';
+        el.style.transform  = 'scale(1)';
+      }, 480 + (i * 96));
+    });
+
+    /* Step 3: Day labels — 840ms start, 420ms */
+    setTimeout(function() {
+      dayLabels.forEach(function(el) {
+        el.style.transition = 'opacity 420ms ease-out';
+        el.style.opacity    = '1';
+      });
+    }, 840);
+
+    /* Step 4: Phase bands — 1080ms start + 120ms stagger, 600ms each */
+    phaseFills.forEach(function(el, i) {
+      setTimeout(function() {
+        el.style.transition = 'clip-path 600ms ease-out';
+        el.style.clipPath   = 'inset(0 0% 0 0)';
+      }, 1080 + (i * 120));
+    });
+
+    /* Step 5: Phase labels — 1560ms start, 360ms */
+    setTimeout(function() {
+      phaseLabels.forEach(function(el) {
+        el.style.transition = 'opacity 360ms ease-out';
+        el.style.opacity    = '1';
+      });
+    }, 1560);
+
+    /* Step 6: Diamonds — 1800ms start + 144ms stagger, 480ms each, overshoot easing */
+    diamonds.forEach(function(el, i) {
+      setTimeout(function() {
+        el.style.transition = 'opacity 480ms cubic-bezier(0.34, 1.4, 0.64, 1), transform 480ms cubic-bezier(0.34, 1.4, 0.64, 1)';
+        el.style.opacity    = '1';
+        el.style.transform  = 'scale(1)';
+      }, 1800 + (i * 144));
+    });
+
+    /* Step 7: Milestone letters — 2280ms start + 120ms stagger, 300ms each */
+    letters.forEach(function(el, i) {
+      setTimeout(function() {
+        el.style.transition = 'opacity 300ms ease-out';
+        el.style.opacity    = '1';
+      }, 2280 + (i * 120));
+    });
+
+    /* Step 8: Payment connectors — 2640ms start + 120ms stagger, 420ms each */
+    connectors.forEach(function(el, i) {
+      setTimeout(function() {
+        el.style.transition = 'clip-path 420ms ease-out';
+        el.style.clipPath   = 'inset(0 0 0% 0)';
+      }, 2640 + (i * 120));
+    });
+
+    /* Step 9: Payment amounts — 3000ms start + 120ms stagger, 360ms each */
+    amounts.forEach(function(el, i) {
+      setTimeout(function() {
+        el.style.transition = 'opacity 360ms ease-out';
+        el.style.opacity    = '1';
+      }, 3000 + (i * 120));
+    });
+
+    /* Step 9b: Payment sublabels — 3120ms start + 120ms stagger, 360ms each */
+    sublabels.forEach(function(el, i) {
+      setTimeout(function() {
+        el.style.transition = 'opacity 360ms ease-out';
+        el.style.opacity    = '1';
+      }, 3120 + (i * 120));
+    });
+
+    /* Step 10: Panel A — 3480ms start, 600ms */
+    setTimeout(function() {
+      openPanel('a');
+      if (panelA) panelA.style.transition = 'opacity 600ms cubic-bezier(0.22, 1, 0.36, 1), transform 600ms cubic-bezier(0.22, 1, 0.36, 1)';
+    }, 3480);
+
+    /* Step 11: Panel B — 3840ms start, 600ms */
+    setTimeout(function() {
+      openPanel('b');
+      if (panelB) panelB.style.transition = 'opacity 600ms cubic-bezier(0.22, 1, 0.36, 1), transform 600ms cubic-bezier(0.22, 1, 0.36, 1)';
+    }, 3840);
+
+    /* Step 12: Panel C — 4200ms start, 600ms */
+    setTimeout(function() {
+      openPanel('c');
+      if (panelC) panelC.style.transition = 'opacity 600ms cubic-bezier(0.22, 1, 0.36, 1), transform 600ms cubic-bezier(0.22, 1, 0.36, 1)';
+    }, 4200);
+
+    /* Step 13: HOLD 840ms (4800ms–5640ms) — no action */
+
+    /* Step 14: Retract all panels — 5640ms start, 720ms */
+    setTimeout(function() {
+      ['a', 'b', 'c'].forEach(function(id) {
+        var panel = document.getElementById('tl-panel-' + id);
+        if (!panel) return;
+        panel.style.transition = 'opacity 720ms cubic-bezier(0.4, 0, 0.2, 1), transform 720ms cubic-bezier(0.4, 0, 0.2, 1)';
+        panel.classList.remove('visible');
+      });
+      setTimeout(function() { revealCleanup(); }, 780);
+    }, 5640);
+  }
+
+  /* Reveal observer — 25% threshold, fires once */
+  if (window.IntersectionObserver) {
+    timeline.classList.add('tl-reveal-pre');
+    var revealObserver = new IntersectionObserver(function(entries, obs) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting && !revealHasFired) {
+          revealHasFired = true;
+          obs.unobserve(entry.target);
+          fireRevealSequence();
+        }
+      });
+    }, { threshold: 0.25 });
+    revealObserver.observe(timeline);
+  } else {
+    timeline.classList.add('tl-reveal-pre');
+    revealHasFired = true;
+    fireRevealSequence();
+  }
+
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,909 @@
+@charset "UTF-8";
+
+/* /proposal -- Arc'kin Endeavors -- Wave 3 */
+/* Extends /companions/style.css tokens; does not override them. */
+/* This file is /proposal-specific layout and components only. */
+
+/* ─── Custom properties (dark-first; light override at bottom) ─── */
+:root {
+  --bg:            #111113;
+  --fg:            #EDE9E1;
+  --accent:        #FFAB40;
+  --subtle:        #6B7280;
+  --rule:          #1F2937;
+  --hover:         #1A1C1F;
+  --focus:         #FFAB40;
+  --font-sans:     'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --font-display:  'Syne', 'Space Grotesk', sans-serif;
+  --font-mono:     'JetBrains Mono', 'Menlo', 'Monaco', monospace;
+  --max-w:         1440px;
+  --page-pad:      24px;
+  --phase-border:  3px solid var(--accent);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:     #F5F4F2;
+    --fg:     #111113;
+    --accent: #B8590A;
+    --subtle: #6B7280;
+    --rule:   #D4D0CA;
+    --hover:  #ECEAE6;
+    --focus:  #B8590A;
+  }
+}
+
+/* ─── Reset ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  font-weight: 400;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
+:focus:not(:focus-visible) { outline: none; }
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 180ms; }
+a:hover { border-bottom-color: var(--accent); }
+
+/* ─── Motion ─── */
+@keyframes arrive {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.arrive-target { opacity: 0; }
+.arrive-target.is-visible { animation: arrive 480ms cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.reveal { animation: reveal 560ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .arrive-target, .arrive-target.is-visible { animation: none; opacity: 1; transform: none; }
+  .reveal { animation: none; opacity: 1; transform: none; }
+}
+
+/* ─── Layout wrapper ─── */
+.page {
+  max-width: calc(var(--max-w) + var(--page-pad) * 2);
+  margin: 0 auto;
+  padding: 0 var(--page-pad);
+}
+
+/* ─── Sticky nav bar ─── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg);
+  background: oklch(from var(--bg) l c h / 0.95);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.nav-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  user-select: none;
+}
+.nav-brand span { color: var(--accent); }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.nav-link {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.5625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  border-bottom: none;
+  transition: color 160ms;
+}
+.nav-link:hover { color: var(--fg); border-bottom: none; }
+.nav-back {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: var(--subtle);
+  border-bottom: none;
+  transition: color 180ms;
+}
+.nav-back:hover { color: var(--accent); border-bottom: none; }
+.nav-back::before { content: "← "; }
+
+/* ─── Document header ─── */
+.doc-header {
+  padding: 64px 0 0;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 40px;
+  margin-bottom: 0;
+}
+.doc-header h1 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: clamp(1.875rem, 5vw, 2.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  margin-bottom: 12px;
+}
+.doc-prepared {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 0.8125rem;
+  color: var(--subtle);
+  margin-top: 4px;
+}
+
+/* ─── Section eyebrow ─── */
+.eyebrow {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  margin-bottom: 18px;
+}
+
+/* ─── Main content sections ─── */
+.doc-section {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.doc-section:last-of-type { border-bottom: none; }
+
+.doc-section h2 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin-bottom: 20px;
+}
+.doc-section h3 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1.0625rem;
+  line-height: 1.3;
+  margin: 28px 0 10px;
+}
+.doc-section h3:first-of-type { margin-top: 0; }
+
+.doc-section p {
+  max-width: 65ch;
+  margin-bottom: 16px;
+  line-height: 1.65;
+}
+.doc-section p:last-child { margin-bottom: 0; }
+
+/* ─── Mono numbers (inline) ─── */
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* ─── Commercial Terms table ─── */
+.terms-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 20px;
+  font-size: 0.9375rem;
+}
+.terms-table tr { border-bottom: 1px solid var(--rule); }
+.terms-table tr:last-child { border-bottom: none; }
+.terms-table tr:nth-child(even) td { background: var(--hover); }
+.terms-table td {
+  padding: 12px 16px;
+  vertical-align: top;
+  line-height: 1.45;
+}
+.terms-table td:first-child {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  width: 38%;
+  color: var(--fg);
+}
+.terms-table td:last-child { color: var(--fg); }
+.terms-table .mono-cell {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.9375rem;
+}
+
+/* ─── Cost justification paragraph ─── */
+.cost-justification {
+  font-size: 0.9375rem;
+  color: var(--fg);
+  line-height: 1.65;
+  max-width: 65ch;
+  margin-top: 8px;
+}
+
+/* ─── Media slot (video walkthrough) ─── */
+.media-slot {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.media-slot video {
+  width: 100%;
+  max-width: 920px;
+  display: block;
+  margin: 12px 0;
+  background: #000;
+  border-radius: 4px;
+}
+.media-disclosure {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  color: var(--subtle);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+.audio-transcript-toggle {
+  margin-top: 12px;
+}
+.audio-transcript-toggle summary {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--subtle);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.audio-transcript-toggle summary::-webkit-details-marker { display: none; }
+.audio-transcript-toggle summary::before {
+  content: '+ ';
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--accent);
+}
+.audio-transcript-toggle[open] summary::before { content: '- '; }
+.audio-transcript-body {
+  padding-top: 16px;
+  font-size: 0.875rem;
+  color: var(--subtle);
+  line-height: 1.65;
+  max-width: 65ch;
+}
+.audio-transcript-body p { margin-bottom: 12px; }
+
+/* ─── Phase timeline ─── */
+.phase-timeline {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.phase-timeline svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-top: 16px;
+}
+
+/* ─── Phase blocks ─── */
+.phase-block {
+  border-left: var(--phase-border);
+  padding-left: 24px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--rule);
+}
+.phase-block:last-of-type { border-bottom: none; }
+
+.phase-day-outcome {
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: var(--fg);
+  line-height: 1.55;
+  max-width: 60ch;
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* What this phase replaces -- inset */
+.phase-replaces {
+  margin-left: 16px;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+}
+.phase-replaces p {
+  font-size: 0.9375rem;
+  color: var(--subtle);
+  line-height: 1.65;
+  max-width: 58ch;
+}
+
+/* ─── Milestone callouts ─── */
+.milestone {
+  margin-top: 28px;
+  border-top: 2px solid var(--accent);
+  padding-top: 14px;
+}
+.milestone-label {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.milestone-desc {
+  font-size: 0.9375rem;
+  color: var(--fg);
+  margin-bottom: 6px;
+  max-width: 60ch;
+}
+.milestone-note {
+  font-size: 0.8125rem;
+  color: var(--subtle);
+}
+.milestone-note.payment { color: var(--fg); }
+
+/* ─── Payment summary callout ─── */
+.payment-callout {
+  background: var(--hover);
+  border-top: 2px solid var(--accent);
+  padding: 20px 20px 16px;
+  margin: 0;
+}
+.payment-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  margin: 0 0 12px;
+}
+.payment-table thead th {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  text-align: left;
+  padding: 0 12px 10px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.payment-table thead th:last-child { padding-right: 0; }
+.payment-table tbody td {
+  padding: 10px 12px 10px 0;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+  line-height: 1.4;
+}
+.payment-table tbody tr:last-child td { border-bottom: none; }
+.payment-table .amount-col {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.payment-closer {
+  font-size: 0.875rem;
+  color: var(--fg);
+}
+
+/* ─── After Day 30 section ─── */
+.after-block {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.after-block p {
+  max-width: 65ch;
+  margin-bottom: 16px;
+  line-height: 1.65;
+}
+
+/* ─── Risk Reversal ─── */
+.risk-block {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.risk-block p {
+  max-width: 65ch;
+  margin-bottom: 16px;
+  line-height: 1.65;
+}
+
+/* ─── Extension Menu cards ─── */
+.extension-block {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.extension-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.extension-card {
+  background: var(--hover);
+  border-left: 3px solid var(--accent);
+  padding: 20px 20px 18px 18px;
+  transition: background 200ms ease-out;
+}
+.extension-card:hover { background: var(--rule); }
+.extension-card h3 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1.0625rem;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.extension-card p {
+  font-size: 0.9375rem;
+  color: var(--subtle);
+  line-height: 1.6;
+  max-width: 58ch;
+  margin: 0;
+}
+.extension-note {
+  font-size: 0.9375rem;
+  color: var(--subtle);
+  max-width: 60ch;
+  line-height: 1.6;
+}
+
+/* ─── Outside section ─── */
+.outside-block {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.outside-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+}
+.outside-list li {
+  border-left: 2px solid var(--accent);
+  padding: 10px 0 10px 14px;
+  font-size: 0.9375rem;
+  color: var(--fg);
+  line-height: 1.5;
+  border-bottom: 1px solid var(--rule);
+}
+.outside-list li:last-child { border-bottom: none; }
+
+/* ─── Close block ─── */
+.close-block {
+  padding: 48px 0 40px;
+  border-bottom: 1px solid var(--rule);
+}
+.close-block p {
+  max-width: 60ch;
+  margin-bottom: 16px;
+  line-height: 1.7;
+}
+.signature {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1.0625rem;
+  margin-top: 28px;
+  margin-bottom: 0;
+}
+
+/* ─── Footer ─── */
+.footer {
+  padding: 28px 0 40px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--subtle);
+}
+.footer a { color: var(--subtle); border-bottom: none; transition: color 180ms; }
+.footer a:hover { color: var(--accent); }
+
+/* ─── Mobile overrides ─── */
+@media (max-width: 640px) {
+  .doc-header { padding: 44px 0 32px; }
+  .doc-header h1 { font-size: 1.875rem; }
+  .nav-links { gap: 14px; }
+  .terms-table td { padding: 10px 12px; }
+  .terms-table td:first-child { width: 42%; }
+  .phase-block { padding-left: 16px; }
+}
+
+/* overflow-x on tables for narrow mobile */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* ─── SOW action row ─── */
+.sow-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 28px 0 32px;
+  border-bottom: 1px solid var(--rule);
+  flex-wrap: wrap;
+}
+.sow-link {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: none;
+  border-radius: 3px;
+  padding: 9px 18px;
+  transition: background-color 180ms ease-out, color 180ms ease-out, border-color 180ms ease-out;
+}
+.sow-link:hover { border-bottom: none; }
+.sow-link--primary {
+  background: var(--accent);
+  color: var(--bg);
+  border: 1px solid var(--accent);
+}
+.sow-link--primary:hover {
+  background: transparent;
+  color: var(--accent);
+}
+.sow-link--secondary {
+  background: transparent;
+  color: var(--subtle);
+  border: 1px solid var(--rule);
+}
+.sow-link--secondary:hover {
+  color: var(--fg);
+  border-color: var(--subtle);
+}
+
+/* ─── Print / PDF override block ─── */
+@media print {
+  :root {
+    --bg:     #FFFFFF;
+    --fg:     #111113;
+    --accent: #B8590A;
+    --subtle: #6B7280;
+    --rule:   #D4D0CA;
+    --hover:  #F5F4F2;
+  }
+
+  .nav { display: none; }
+  .media-slot { display: none; }
+  .sow-actions { display: none; }
+
+  .arrive-target { opacity: 1; animation: none; transform: none; }
+  .reveal { animation: none; opacity: 1; transform: none; }
+
+  body { font-size: 10pt; line-height: 1.5; background: #FFFFFF; color: #111113; }
+
+  .page { max-width: 100%; padding: 0; }
+
+  .doc-header { padding: 0 0 20pt; border-bottom: 1pt solid #D4D0CA; }
+  .doc-header h1 { font-size: 22pt; }
+
+  .doc-section { padding: 16pt 0; border-bottom: 0.5pt solid #D4D0CA; }
+  .doc-section h2 { font-size: 15pt; }
+  .doc-section h3 { font-size: 12pt; }
+  .doc-section p { max-width: 100%; font-size: 10pt; }
+
+  /* Phase blocks keep left border in print */
+  .phase-block { padding-left: 18pt; page-break-before: always; }
+
+  .payment-callout { background: #F5F4F2; border-top: 2pt solid #B8590A; page-break-inside: avoid; }
+  .terms-table { page-break-inside: avoid; }
+  .milestone { page-break-inside: avoid; }
+
+  /* Extension cards simplified for print */
+  .extension-card { border-left: 2pt solid #B8590A; background: none; padding: 8pt 0 8pt 12pt; }
+
+  /* Outside list simplified */
+  .outside-list li { border-left: 2pt solid #B8590A; border-bottom: 0.5pt solid #D4D0CA; }
+
+  /* Timeline SVG: print color override is handled via CSS custom property inheritance -- the SVG uses var() */
+  .phase-timeline { page-break-inside: avoid; }
+
+  .footer { border-top: 0.5pt solid #D4D0CA; font-size: 8pt; }
+
+  /* Running header note: CSS @page running headers require Paged Media Module
+     which browser print does not implement. For true running headers, use
+     WeasyPrint or Puppeteer with page margin boxes. This stylesheet handles
+     the screen+basic-print case; CANVAS spec Section 13 calls this out. */
+  @page {
+    size: letter;
+    margin: 0.875in 1in 1in 1.25in;
+  }
+}
+
+
+/* ================================================================
+   TIMELINE COMPONENT — LIFT: CSS
+   Phase Timeline v3 Production Component
+   FORGE-Timeline-Production-v3-2026-04-28
+   Refinements A (centering), B (Pulse payments), C (×1.2 timing)
+   ================================================================ */
+
+/* REFINEMENT B: Pulse token — Arc'kin secondary accent.
+   Reserved for payment-trigger emphasis only. Do not apply to milestones,
+   phase bands, eyebrows, or bullet markers (those stay Ember, var(--accent)).
+   Scoped to /proposal only — not promoted to /companions/style.css. */
+:root {
+  --pulse: #00FFAB;
+}
+
+/* ----------------------------------------------------------------
+   CANVAS EXCEPTION — presentation graphic, not body column content.
+   This wrapper intentionally breaks max-width: 720px column rule.
+   The 1440px width is intentional. Do NOT narrow it.
+   See CANVAS-Hub-Proposal-Direction-2026-04-28.md Section 11.2.
+
+   REFINEMENT A: negative-margin breakout pattern.
+   Previous left/transform pattern caused right-wall hug at 1920px
+   because left:50% was relative to parent column (720px), not viewport.
+   This pattern works correctly at 1920, 1440, 1280, 768, and all mobile.
+   ---------------------------------------------------------------- */
+.tl-canvas-wrapper {
+  width: 100vw;
+  max-width: 1440px;
+  margin-left: calc(50% - min(50vw, 720px));
+  margin-right: calc(50% - min(50vw, 720px));
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  position: relative;
+}
+
+/* Override old .phase-timeline section padding (was set in proposal styles above) */
+section#engagement-timeline.phase-timeline {
+  padding: 32px 48px 40px;
+  border-bottom: none;
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 480ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+section#engagement-timeline.phase-timeline.arrived {
+  opacity: 1;
+  transform: translateY(0);
+  will-change: auto;
+}
+section#engagement-timeline.phase-timeline.is-visible {
+  /* is-visible from page ARRIVE observer — mirrors arrived */
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.phase-timeline svg.tl-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+/* ----------------------------------------------------------------
+   PANEL OVERLAYS
+   REFINEMENT C: hover-card transition was 200ms, now 240ms (×1.2)
+   ---------------------------------------------------------------- */
+.tl-panel-overlay {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+  width: 280px;
+  background: var(--hover);
+  border: 1px solid var(--rule);
+  padding: 20px 24px;
+  opacity: 0;
+  transform: translateY(6px) scaleY(0.95);
+  transform-origin: bottom center;
+  /* REFINEMENT C: was 200ms, now 240ms */
+  transition:
+    opacity 240ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 240ms cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform, opacity;
+}
+.tl-panel-overlay.visible {
+  opacity: 1;
+  transform: translateY(0) scaleY(1);
+  pointer-events: auto;
+}
+.tl-panel-overlay.retracting {
+  opacity: 0;
+  transform: translateY(6px) scaleY(0.95);
+}
+.tl-panel-overlay * { line-height: 1.5; }
+
+/* Panel typography */
+.tl-panel-eyebrow {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 8px;
+}
+.tl-panel-outcome {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--fg);
+  line-height: 1.5;
+  margin: 0 0 8px;
+}
+.tl-panel-rule {
+  width: 100%;
+  height: 1px;
+  background: var(--rule);
+  margin: 8px 0;
+  border: none;
+  display: block;
+}
+.tl-panel-steps-eyebrow {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--subtle);
+  display: block;
+  margin-bottom: 8px;
+}
+.tl-panel-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 4px;
+}
+.tl-panel-steps li {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--fg);
+  line-height: 1.45;
+  padding-left: 16px;
+  position: relative;
+  margin-bottom: 4px;
+}
+/* Ember bullet — stays Ember (not Pulse). Milestones own Ember. */
+.tl-panel-steps li::before {
+  content: "\2022";
+  color: var(--accent);
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+/* REFINEMENT B: Payment trigger row — Pulse (#00FFAB).
+   Semantic split: Ember = milestones, Pulse = payments. */
+.tl-panel-payment-trigger {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--pulse);
+  background: color-mix(in srgb, var(--pulse) 8%, transparent);
+  padding: 6px 8px;
+  margin: 0;
+  display: block;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Mobile panel */
+@media (max-width: 414px) {
+  .tl-panel-overlay { width: 220px; padding: 16px 18px; }
+}
+
+/* Mobile SVG text suppression */
+@media (max-width: 414px) {
+  .tl-outcome-text           { display: none; }
+  .tl-phase-label            { display: none; }
+  .tl-phase-label-short      { display: inline; }
+  .tl-payment-sublabel-full  { display: none; }
+  .tl-payment-sublabel-short { display: inline; }
+}
+.tl-phase-label-short       { display: none; }
+.tl-payment-sublabel-short  { display: none; }
+
+/* Touch devices: disable hover scale on diamonds */
+@media (hover: none), (pointer: coarse) {
+  .tl-milestone-group:hover .tl-milestone-diamond { transform: none; }
+}
+
+/* Reveal pre-state */
+.tl-reveal-pre .tl-baseline          { clip-path: inset(0 100% 0 0); }
+.tl-reveal-pre .tl-tick-start,
+.tl-reveal-pre .tl-tick-milestone    { opacity: 0; transform: scale(0.6); transform-box: fill-box; transform-origin: center; }
+.tl-reveal-pre .tl-day-label         { opacity: 0; }
+.tl-reveal-pre .tl-phase-fill        { clip-path: inset(0 100% 0 0); }
+.tl-reveal-pre .tl-phase-label,
+.tl-reveal-pre .tl-phase-label-short { opacity: 0; }
+.tl-reveal-pre .tl-milestone-diamond { opacity: 0; transform: scale(0.6); transform-box: fill-box; transform-origin: center; }
+.tl-reveal-pre .tl-milestone-letter  { opacity: 0; }
+.tl-reveal-pre .tl-payment-connector { clip-path: inset(0 0 100% 0); }
+.tl-reveal-pre .tl-payment-amount,
+.tl-reveal-pre .tl-payment-sublabel  { opacity: 0; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  section#engagement-timeline.phase-timeline {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    will-change: auto;
+  }
+  .tl-reveal-pre .tl-baseline,
+  .tl-reveal-pre .tl-tick-start,
+  .tl-reveal-pre .tl-tick-milestone,
+  .tl-reveal-pre .tl-day-label,
+  .tl-reveal-pre .tl-phase-fill,
+  .tl-reveal-pre .tl-phase-label,
+  .tl-reveal-pre .tl-phase-label-short,
+  .tl-reveal-pre .tl-milestone-diamond,
+  .tl-reveal-pre .tl-milestone-letter,
+  .tl-reveal-pre .tl-payment-connector,
+  .tl-reveal-pre .tl-payment-amount,
+  .tl-reveal-pre .tl-payment-sublabel {
+    clip-path: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .tl-panel-overlay { animation: none !important; transition: none !important; }
+  .tl-milestone-diamond { transition: none !important; }
+}
+
+/* Print: override negative-margin breakout for static layout */
+@media print {
+  .tl-canvas-wrapper {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 100%;
+    position: static;
+  }
+  section#engagement-timeline.phase-timeline {
+    opacity: 1 !important;
+    transform: none !important;
+    padding: 24px 0;
+  }
+  .tl-panel-overlay {
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: none;
+    position: static;
+    display: block;
+    width: auto;
+    margin-top: 12px;
+    page-break-inside: avoid;
+  }
+  .tl-outcome-text { display: block !important; }
+  .tl-phase-label  { display: block !important; }
+}
+/* ================================================================
+   END TIMELINE COMPONENT LIFT: CSS
+   ================================================================ */

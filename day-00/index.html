@@ -378,14 +378,7 @@ button { font: inherit; color: inherit; background: none; border: none; padding:
   flex-direction: column;
   align-items: flex-start;
   gap: 5px;
-  cursor: pointer;
-  text-align: left;
-  padding: 4px 2px;
-  margin: -4px -2px;
-  background: none;
-  border: none;
   opacity: 0.62;
-  transition: opacity 220ms var(--ease-out), color 220ms var(--ease-out), transform 220ms var(--ease-out);
   animation: step-fade-in 540ms var(--ease-out) both;
 }
 .step-node:nth-child(1) { animation-delay: 80ms; }
@@ -393,9 +386,6 @@ button { font: inherit; color: inherit; background: none; border: none; padding:
 .step-node:nth-child(3) { animation-delay: 180ms; }
 .step-node:nth-child(4) { animation-delay: 230ms; }
 .step-node:nth-child(5) { animation-delay: 280ms; }
-.step-node:hover,
-.step-node:focus-visible { opacity: 1; color: var(--accent-ember); transform: translateY(-1px); }
-.step-node:active { transform: translateY(0); }
 .step-node-num {
   font-family: var(--font-mono);
   font-size: 13px;
@@ -409,10 +399,7 @@ button { font: inherit; color: inherit; background: none; border: none; padding:
   color: var(--fg-muted);
   max-width: 13ch;
   line-height: 1.5;
-  transition: color 220ms var(--ease-out);
 }
-.step-node:hover .step-node-label,
-.step-node:focus-visible .step-node-label { color: var(--accent-ember); }
 @keyframes step-fade-in {
   from { opacity: 0; transform: translateY(4px); }
   to   { opacity: 0.62; transform: translateY(0); }
@@ -421,98 +408,6 @@ button { font: inherit; color: inherit; background: none; border: none; padding:
   .step-node { animation: none; opacity: 0.62; transform: none; }
 }
 
-/* ===== SECTION MAP — accordion preview ===== */
-.section-map {
-  display: flex;
-  flex-direction: column;
-  border-top: 1px solid var(--hairline);
-  margin-bottom: 36px;
-}
-.section-map-item {
-  border-bottom: 1px solid var(--hairline);
-  scroll-margin-top: 24px;
-}
-.section-map-item > summary {
-  list-style: none;
-  cursor: pointer;
-  padding: 18px 0;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  transition: color 220ms var(--ease-out);
-}
-.section-map-item > summary::-webkit-details-marker { display: none; }
-.section-map-item > summary:hover .section-map-num,
-.section-map-item > summary:hover .section-map-title,
-.section-map-item > summary:hover .section-map-toggle { color: var(--accent-ember); }
-.section-map-num {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  color: var(--fg-muted);
-  min-width: 28px;
-  flex-shrink: 0;
-  transition: color 220ms var(--ease-out);
-}
-.section-map-title {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(15px, 1.4vw, 18px);
-  letter-spacing: -0.005em;
-  text-transform: uppercase;
-  color: var(--fg-primary);
-  flex: 1;
-  transition: color 220ms var(--ease-out);
-}
-.section-map-toggle {
-  position: relative;
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-  color: var(--fg-muted);
-  transition: color 220ms var(--ease-out), transform 280ms var(--ease-out);
-}
-.section-map-toggle::before,
-.section-map-toggle::after {
-  content: '';
-  position: absolute;
-  background: currentColor;
-  top: 50%;
-  left: 50%;
-}
-.section-map-toggle::before {
-  width: 12px;
-  height: 1px;
-  transform: translate(-50%, -50%);
-}
-.section-map-toggle::after {
-  width: 1px;
-  height: 12px;
-  transform: translate(-50%, -50%);
-  transition: transform 280ms var(--ease-out);
-}
-.section-map-item[open] .section-map-toggle::after {
-  transform: translate(-50%, -50%) scaleY(0);
-}
-.section-map-item[open] .section-map-num,
-.section-map-item[open] .section-map-title { color: var(--accent-ember); }
-.section-map-body {
-  padding: 0 0 22px 44px;
-  font-family: var(--font-sans);
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--fg-primary);
-  opacity: 0.86;
-  max-width: 56ch;
-  animation: accordion-reveal 280ms var(--ease-out) both;
-}
-@keyframes accordion-reveal {
-  from { opacity: 0; transform: translateY(-4px); }
-  to   { opacity: 0.86; transform: translateY(0); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .section-map-body { animation: none; }
-}
 
 .right-heading {
   font-family: var(--font-display);
@@ -809,74 +704,31 @@ footer {
     <section class="pane pane--right themable" aria-labelledby="form-heading">
       <div class="right-section-label arrive">(THE BRIEF)</div>
 
-      <nav class="step-rail arrive d1" aria-label="Section quick-jump">
-        <button class="step-node" type="button" data-section="section-01">
+      <div class="step-rail arrive d1" aria-hidden="true">
+        <span class="step-node">
           <span class="step-node-num">(01)</span>
           <span class="step-node-label">Identity<br>&amp; Vision</span>
-        </button>
-        <button class="step-node" type="button" data-section="section-02">
+        </span>
+        <span class="step-node">
           <span class="step-node-num">(02)</span>
           <span class="step-node-label">Workflows<br>&amp; Automations</span>
-        </button>
-        <button class="step-node" type="button" data-section="section-03">
+        </span>
+        <span class="step-node">
           <span class="step-node-num">(03)</span>
           <span class="step-node-label">Agents<br>&amp; Roles</span>
-        </button>
-        <button class="step-node" type="button" data-section="section-04">
+        </span>
+        <span class="step-node">
           <span class="step-node-num">(04)</span>
           <span class="step-node-label">Current<br>State</span>
-        </button>
-        <button class="step-node" type="button" data-section="section-05">
+        </span>
+        <span class="step-node">
           <span class="step-node-num">(05)</span>
           <span class="step-node-label">Open<br>Questions</span>
-        </button>
-      </nav>
+        </span>
+      </div>
 
       <h2 class="right-heading arrive d2" id="form-heading">Five sections<span class="ember-dot">.</span></h2>
       <div class="right-sub arrive d2">Start wherever feels most alive. Submit any section on its own.</div>
-
-      <div class="section-map themable arrive d2" aria-label="Section preview">
-        <details class="section-map-item" id="section-01">
-          <summary>
-            <span class="section-map-num">01</span>
-            <span class="section-map-title">Identity &amp; Vision</span>
-            <span class="section-map-toggle" aria-hidden="true"></span>
-          </summary>
-          <div class="section-map-body">AspireVue in your own words. The mental model, not the website.</div>
-        </details>
-        <details class="section-map-item" id="section-02">
-          <summary>
-            <span class="section-map-num">02</span>
-            <span class="section-map-title">Workflows &amp; Automations</span>
-            <span class="section-map-toggle" aria-hidden="true"></span>
-          </summary>
-          <div class="section-map-body">What needs to happen, by whom, on what trigger. The biggest section.</div>
-        </details>
-        <details class="section-map-item" id="section-03">
-          <summary>
-            <span class="section-map-num">03</span>
-            <span class="section-map-title">Agents, Roles &amp; Responsibilities</span>
-            <span class="section-map-toggle" aria-hidden="true"></span>
-          </summary>
-          <div class="section-map-body">The characters in your operating system. One role per submission.</div>
-        </details>
-        <details class="section-map-item" id="section-04">
-          <summary>
-            <span class="section-map-num">04</span>
-            <span class="section-map-title">Current State</span>
-            <span class="section-map-toggle" aria-hidden="true"></span>
-          </summary>
-          <div class="section-map-body">What's already running. What I shouldn't break.</div>
-        </details>
-        <details class="section-map-item" id="section-05">
-          <summary>
-            <span class="section-map-num">05</span>
-            <span class="section-map-title">Open Questions</span>
-            <span class="section-map-toggle" aria-hidden="true"></span>
-          </summary>
-          <div class="section-map-body">Anything that doesn't fit elsewhere. The catch-all.</div>
-        </details>
-      </div>
 
       <div class="form-shell themable arrive d3" id="form-shell">
         <div class="form-shell-header">
@@ -924,21 +776,6 @@ footer {
       var next = current === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
       try { localStorage.setItem('arckin_theme', next); } catch (e) {}
-    });
-  })();
-
-  // Step-rail nav: click → expand corresponding accordion + smooth-scroll to it.
-  (function () {
-    var nodes = document.querySelectorAll('.step-node[data-section]');
-    nodes.forEach(function (node) {
-      node.addEventListener('click', function () {
-        var id = node.getAttribute('data-section');
-        var target = document.getElementById(id);
-        if (!target) return;
-        target.open = true;
-        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
-      });
     });
   })();
 

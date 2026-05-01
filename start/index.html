@@ -135,51 +135,55 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: 0.03em;
 }
 
-/* PROPOSAL DOOR — full-width engagement entry */
-.door-proposal {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 28px;
+/* ENGAGEMENT DOORS — 2-up active-action cluster (SOW + Day 00) */
+.doors-engagement {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+@media (max-width: 720px) { .doors-engagement { grid-template-columns: 1fr; } }
+
+.door-engagement {
+  display: flex; flex-direction: column; justify-content: space-between;
+  gap: 24px;
   background: var(--hover);
   border: 1px solid var(--lane-engagement);
+  border-left: 3px solid var(--lane-engagement);
   border-radius: 6px;
-  padding: 32px 28px;
-  position: relative;
+  padding: 28px 24px;
+  min-height: 200px;
   transition: background-color 220ms ease-out, transform 220ms ease-out;
 }
-.door-proposal:hover, .door-proposal:focus-visible {
+.door-engagement:hover, .door-engagement:focus-visible {
   background: var(--bg);
   transform: translateY(-2px);
 }
-.door-proposal-body { flex: 1; min-width: 0; }
-.door-proposal-eyebrow {
+.door-engagement-eyebrow {
   font-family: var(--font-display); font-weight: 700;
   font-size: 0.5625rem; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--lane-engagement); margin-bottom: 8px; display: block;
+  color: var(--lane-engagement); margin-bottom: 10px; display: block;
 }
-.door-proposal-title {
+.door-engagement-title {
   font-family: var(--font-sans); font-weight: 600;
   font-size: 1.375rem; letter-spacing: -0.015em; line-height: 1.2;
   color: var(--fg); margin-bottom: 10px;
 }
-.door-proposal-desc {
+.door-engagement-desc {
   font-size: 0.9375rem; color: var(--subtle);
-  max-width: 52ch; line-height: 1.55;
+  max-width: 38ch; line-height: 1.55;
 }
-.door-proposal-cta {
+.door-engagement-cta {
   font-family: var(--font-mono); font-size: 0.8125rem; letter-spacing: 0.04em;
-  color: var(--lane-engagement); font-weight: 500; flex-shrink: 0;
-  display: flex; align-items: center; gap: 6px;
+  color: var(--lane-engagement); font-weight: 500;
+  display: inline-flex; align-items: center; gap: 6px;
   transition: transform 220ms ease-out;
 }
-.door-proposal:hover .door-proposal-cta,
-.door-proposal:focus-visible .door-proposal-cta {
+.door-engagement:hover .door-engagement-cta,
+.door-engagement:focus-visible .door-engagement-cta {
   transform: translateX(4px);
 }
 @media (max-width: 640px) {
-  .door-proposal { flex-direction: column; align-items: flex-start; gap: 20px; padding: 24px 20px; }
-  .door-proposal-cta { align-self: flex-end; }
+  .door-engagement { padding: 24px 20px; min-height: 180px; }
 }
 
 /* PRIMARY DOORS (2-col) */
@@ -329,18 +333,31 @@ a { color: inherit; text-decoration: none; }
     </div>
   </header>
 
-  <section class="section arrive d5" aria-labelledby="proposal-heading">
+  <section class="section arrive d5" aria-labelledby="engagement-heading">
     <div class="section-head">
-      <h2 class="section-heading" id="proposal-heading">Proposal</h2>
+      <h2 class="section-heading" id="engagement-heading">Engagement</h2>
+      <span class="section-note">Sign &middot; start filling</span>
     </div>
-    <a class="door-proposal" href="../proposal/" aria-label="Read the 30-day engagement proposal — scope, terms, and sign-off">
-      <div class="door-proposal-body">
-        <span class="door-proposal-eyebrow">Engagement</span>
-        <div class="door-proposal-title">30-Day Systems Architecture Engagement</div>
-        <p class="door-proposal-desc">Scope, terms, milestone structure, and a one-pager SOW. Read it, sign it, and tell me what start date works.</p>
-      </div>
-      <span class="door-proposal-cta" aria-hidden="true">Read the proposal &#8594;</span>
-    </a>
+
+    <div class="doors-engagement">
+      <a class="door-engagement" href="../sow/" aria-label="Read the V5 Statement of Work and download the PDF for countersignature">
+        <div>
+          <span class="door-engagement-eyebrow">V5 &middot; Sign &amp; return</span>
+          <div class="door-engagement-title">Statement of Work</div>
+          <p class="door-engagement-desc">60-day engagement &mdash; $10,000, four biweekly installments. Read it, download the PDF, countersign, return.</p>
+        </div>
+        <span class="door-engagement-cta" aria-hidden="true">Open the SOW &#8594;</span>
+      </a>
+
+      <a class="door-engagement" href="../day-00/" aria-label="Open the Day 00 spec brief intake form">
+        <div>
+          <span class="door-engagement-eyebrow">Day 00 &middot; Live intake</span>
+          <div class="door-engagement-title">Spec Brief</div>
+          <p class="door-engagement-desc">Continuously-evolving intake. Submit often, sloppy is right, partials are fine. This is what Day 1 launches from.</p>
+        </div>
+        <span class="door-engagement-cta" aria-hidden="true">Start filling &#8594;</span>
+      </a>
+    </div>
   </section>
 
   <section class="section" aria-labelledby="start-here">
@@ -393,6 +410,18 @@ a { color: inherit; text-decoration: none; }
     </div>
 
     <div class="doors-secondary">
+
+      <a class="door-mini" href="../proposal/" aria-label="Read the engagement proposal — narrative context for the SOW">
+        <svg class="door-mini-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <rect x="4" y="3" width="16" height="18" rx="1.5"/>
+          <path d="M8 7h8M8 11h8M8 15h6"/>
+        </svg>
+        <div class="door-mini-body">
+          <div class="door-mini-title">Proposal</div>
+          <div class="door-mini-meta">Read &middot; Narrative context</div>
+        </div>
+        <svg class="door-mini-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M10 7h7v7"/></svg>
+      </a>
 
       <a class="door-mini" href="../stack-compare/" aria-label="Read stack stress test and side-by-side comparison">
         <svg class="door-mini-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">

@@ -1,17 +1,17 @@
 @charset "UTF-8";
 
 /*
-  /sow/style.css -- Arc'kin Endeavors -- AspireVue V4 SOW
+  /sow/style.css -- Arc'kin Endeavors -- AspireVue V5 SOW
+  Letterhead edition -- 2026-05-01.
   Extends Wave 1 token system. Self-contained (no @import).
-  Token source: /companions/style.css
-  If /companions/ tokens change, update the :root block below to match.
+  Token source: /companions/style.css -- if companions tokens change, update :root below.
+  CSS em-dash doctrine: @charset UTF-8 on line 1; no non-ASCII in CSS comments.
 */
 
 /* ----------------------------------------------------------------
    TOKENS (copied verbatim from /companions/style.css Wave 1 set)
-   SOW-specific additions: --sow-max-w, --sow-page-pad
-   NOTE: --pulse intentionally excluded -- payment semantic belongs
-   to the proposal timeline graphic, not a legal document.
+   SOW-specific additions: --sow-max-w, --sow-page-pad, --sig-line
+   --pulse intentionally excluded (payment timeline semantic, not legal doc).
    ---------------------------------------------------------------- */
 :root {
   --bg:            #111113;
@@ -27,17 +27,24 @@
   --sow-max-w:     680px;
   --sow-page-pad:  32px;
   --sig-line:      1px solid var(--rule);
+  /* Ember accent -- print-mode color for letterhead rule and brand apostrophe */
+  --ember:         #FFAB40;
+  --ember-print:   #B8590A;
+  /* Chevron mark stroke -- screen uses Ember amber, print uses Ember dark */
+  --ember-mark:    #FFAB40;
 }
 
 @media (prefers-color-scheme: light) {
   :root {
-    --bg:     #F5F4F2;
-    --fg:     #111113;
-    --accent: #B8590A;
-    --subtle: #6B7280;
-    --rule:   #D4D0CA;
-    --hover:  #ECEAE6;
-    --focus:  #B8590A;
+    --bg:          #F5F4F2;
+    --fg:          #111113;
+    --accent:      #B8590A;
+    --subtle:      #6B7280;
+    --rule:        #D4D0CA;
+    --hover:       #ECEAE6;
+    --focus:       #B8590A;
+    --ember:       #B8590A;
+    --ember-mark:  #B8590A;
   }
 }
 
@@ -72,7 +79,7 @@ a:hover { border-bottom-color: var(--accent); }
 
 /* ----------------------------------------------------------------
    LAYOUT
-   The SOW is a single document column. No nav. No sticky elements.
+   Single document column. No nav. No sticky elements.
    ---------------------------------------------------------------- */
 .sow-page {
   max-width: calc(var(--sow-max-w) + var(--sow-page-pad) * 2);
@@ -81,26 +88,68 @@ a:hover { border-bottom-color: var(--accent); }
 }
 
 /* ----------------------------------------------------------------
-   HEADER
+   SCREEN-ONLY NAV STRIP
+   Visible on screen above the letterhead. Hidden in print.
+   Hub link (left) + Download PDF (right). Mono small caps.
    ---------------------------------------------------------------- */
-.sow-header {
-  padding: 48px 0 36px;
-  border-bottom: 1px solid var(--rule);
-  margin-bottom: 0;
-}
-
-.sow-header-lockup {
+.sow-screen-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  margin-bottom: 28px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--rule);
-  flex-wrap: wrap;
+  gap: 16px;
+  padding: 18px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.sow-screen-nav a {
+  color: var(--subtle);
+  border-bottom: 1px solid transparent;
+  transition: color 180ms, border-color 180ms;
+  padding: 4px 0;
+}
+.sow-screen-nav a:hover,
+.sow-screen-nav a:focus-visible {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.sow-nav-pdf { color: var(--accent) !important; }
+.sow-nav-pdf:hover, .sow-nav-pdf:focus-visible { border-bottom-color: var(--accent); }
+
+/* ----------------------------------------------------------------
+   LETTERHEAD BLOCK
+   Page 1 only on screen. In print, this is the professional header.
+   Wordmark + contact line + Ember hairline rule + 28pt+ breathing room.
+   ---------------------------------------------------------------- */
+.sow-letterhead {
+  padding: 48px 0 0;
 }
 
-/* Arc'kin text mark -- mirrors nav-brand from proposal */
+/* Wordmark and contact stacked vertically */
+.letterhead-mark {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+/* Chevron mark + wordmark on one baseline row */
+.letterhead-logo-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Inline SVG chevron -- constrained to 32pt height, Ember stroke */
+.letterhead-chevron {
+  width: 32px;
+  height: 27px;
+  flex-shrink: 0;
+  display: block;
+}
+
+/* Arc'kin Endeavors text mark */
 .nav-brand {
   font-family: var(--font-display);
   font-weight: 700;
@@ -111,17 +160,38 @@ a:hover { border-bottom-color: var(--accent); }
   user-select: none;
   line-height: 1;
 }
-.nav-brand span { color: var(--accent); }
 
-/* AspireVue logo image mark */
-.aspirevue-mark {
-  height: 36px;
-  width: auto;
-  display: block;
-  opacity: 0.92;
+/* Ember accent on the apostrophe -- the brand inflection point */
+.brand-apostrophe {
+  color: var(--ember);
 }
 
-.sow-header h1 {
+/* Contact line directly under the wordmark */
+.letterhead-contact {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: var(--subtle);
+  line-height: 1;
+}
+
+/* Ember hairline rule -- the only chromatic flourish in the document */
+.letterhead-rule {
+  width: 100%;
+  height: 0;
+  border: none;
+  border-top: 0.75pt solid var(--ember);
+  margin-bottom: 32px;
+}
+
+/* Document title block -- sits below letterhead breathing room */
+.sow-header-title {
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 0;
+}
+
+.sow-header-title h1 {
   font-family: var(--font-sans);
   font-weight: 600;
   font-size: clamp(1.625rem, 3.5vw, 2rem);
@@ -210,7 +280,7 @@ a:hover { border-bottom-color: var(--accent); }
 }
 .sow-section p:last-child { margin-bottom: 0; }
 
-/* SOW list -- bulleted scope items, mirrors paragraph register */
+/* SOW list -- bulleted out-of-scope items */
 .sow-list {
   max-width: 65ch;
   margin: 0 0 16px 0;
@@ -224,7 +294,7 @@ a:hover { border-bottom-color: var(--accent); }
 }
 .sow-list li::marker { color: var(--subtle); }
 
-/* Engagement summary sits directly after header -- no eyebrow */
+/* Engagement summary sits directly after header -- no top padding adjustment needed */
 .sow-summary { padding-top: 32px; }
 
 /* ----------------------------------------------------------------
@@ -252,23 +322,23 @@ a:hover { border-bottom-color: var(--accent); }
 }
 .terms-table td:last-child { color: var(--fg); }
 
-/* Three-column variant for phase scope and milestones */
+/* Three-column variant for 7-row phase scope table */
 .terms-table.three-col td:first-child { width: 42%; }
 .terms-table.three-col td:nth-child(2) {
-  width: 16%;
+  width: 14%;
   white-space: nowrap;
   color: var(--subtle);
 }
 .terms-table.three-col td:nth-child(3) { width: auto; }
 
-/* Payment trigger cell -- most legally load-bearing cell */
+/* Payment trigger cell -- most legally load-bearing */
 .terms-table .payment-trigger {
   font-weight: 600;
   color: var(--fg);
 }
 
 /* ----------------------------------------------------------------
-   MONO HELPER -- dollar amounts and day references
+   MONO HELPER -- dollar amounts and dates
    ---------------------------------------------------------------- */
 .mono {
   font-family: var(--font-mono);
@@ -279,6 +349,8 @@ a:hover { border-bottom-color: var(--accent); }
 
 /* ----------------------------------------------------------------
    SIGNATURE BLOCK
+   Two columns at desktop, single column below 640px.
+   page-break-inside: avoid must keep this together in print.
    ---------------------------------------------------------------- */
 .sig-block {
   display: grid;
@@ -293,6 +365,22 @@ a:hover { border-bottom-color: var(--accent); }
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+/* Signature field wrapper -- positions image above the rule line */
+.sig-field {
+  position: relative;
+}
+
+/* Signature image -- floats above the sig-line, touches/crosses it */
+.sig-image {
+  display: block;
+  height: 44px;
+  width: auto;
+  max-width: 100%;
+  margin-bottom: -10px; /* pull down to overlap the sig-line */
+  filter: brightness(0);  /* force pure black regardless of source */
+  opacity: 1;
 }
 
 .sig-line {
@@ -311,6 +399,7 @@ a:hover { border-bottom-color: var(--accent); }
 }
 
 .sig-name {
+  display: block;
   font-family: var(--font-sans);
   font-weight: 600;
   font-size: 0.9375rem;
@@ -319,6 +408,7 @@ a:hover { border-bottom-color: var(--accent); }
 }
 
 .sig-title {
+  display: block;
   font-family: var(--font-sans);
   font-size: 0.8125rem;
   color: var(--subtle);
@@ -339,6 +429,24 @@ a:hover { border-bottom-color: var(--accent); }
   background: var(--rule);
   margin-bottom: 4px;
   opacity: 0.5;
+}
+
+/* Filled-in printed-name (executed side, replaces blank rule with text) */
+.sig-printed-name--filled {
+  height: auto;
+  background: transparent;
+  opacity: 1;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--fg);
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+/* Filled-in date (executed side) -- emphasized over blank fill-in */
+.sig-date--filled {
+  color: var(--fg);
 }
 
 /* ----------------------------------------------------------------
@@ -364,9 +472,8 @@ a:hover { border-bottom-color: var(--accent); }
    ---------------------------------------------------------------- */
 @media (max-width: 640px) {
   .sow-page { padding: 0 20px; }
-  .sow-header { padding: 36px 0 28px; }
-  .sow-header-lockup { flex-direction: column; align-items: flex-start; gap: 16px; }
-  .aspirevue-mark { height: 28px; }
+  .sow-letterhead { padding-top: 32px; }
+  .sow-header-title { padding-bottom: 28px; }
   .sig-block { grid-template-columns: 1fr; gap: 40px; }
   .terms-table.three-col td:nth-child(2) { display: none; }
   .terms-table td { padding: 10px 12px; }
@@ -375,19 +482,24 @@ a:hover { border-bottom-color: var(--accent); }
 
 /* ----------------------------------------------------------------
    PRINT / PDF OVERRIDE BLOCK
-   This is the critical section for Larry's countersigned PDF.
-   Chrome's headless renderer and CMD+P both respect these rules.
-   Do NOT use WeasyPrint or Preview -- they do not honor @page margins.
+   Chrome headless + CMD+P both respect these rules.
+   Do NOT use WeasyPrint or Preview -- they strip @page margins.
+   The --print-to-pdf-no-header flag suppresses browser chrome strings.
+   If that flag is unavailable, @page margin-top keeps content clear.
+   Running header on continuation pages: JetBrains Mono 7pt, subtle.
    ---------------------------------------------------------------- */
 @media print {
 
   :root {
-    --bg:     #FFFFFF;
-    --fg:     #111113;
-    --accent: #B8590A;
-    --subtle: #6B7280;
-    --rule:   #D4D0CA;
-    --hover:  #F5F4F2;
+    --bg:          #FFFFFF;
+    --fg:          #111113;
+    --accent:      #B8590A;
+    --subtle:      #6B7280;
+    --rule:        #D4D0CA;
+    --hover:       #F5F4F2;
+    --ember:       #B8590A;
+    --ember-print: #B8590A;
+    --ember-mark:  #B8590A;
   }
 
   body {
@@ -403,19 +515,46 @@ a:hover { border-bottom-color: var(--accent); }
     padding: 0;
   }
 
-  /* Header */
-  .sow-header {
-    padding-bottom: 16pt;
-    border-bottom: 1pt solid #D4D0CA;
+  /* Letterhead -- full treatment, page 1 only */
+  .sow-letterhead {
     padding-top: 0;
   }
-  .sow-header-lockup {
-    border-bottom: 0.5pt solid #D4D0CA;
-    margin-bottom: 16pt;
-    padding-bottom: 12pt;
+
+  .letterhead-mark {
+    gap: 5pt;
+    margin-bottom: 12pt;
   }
-  .aspirevue-mark { height: 28pt; }
-  .sow-header h1 { font-size: 18pt; }
+
+  .nav-brand {
+    font-size: 8pt;
+    letter-spacing: 0.14em;
+    color: #6B7280;
+  }
+
+  .brand-apostrophe {
+    color: #B8590A;
+  }
+
+  .letterhead-contact {
+    font-size: 7pt;
+    color: #6B7280;
+    letter-spacing: 0.04em;
+  }
+
+  /* Ember hairline rule -- 0.75pt solid Ember, full content width */
+  .letterhead-rule {
+    border-top: 0.75pt solid #B8590A;
+    margin-bottom: 28pt;
+  }
+
+  /* Document title block */
+  .sow-header-title {
+    padding-bottom: 16pt;
+    border-bottom: 0.5pt solid #D4D0CA;
+  }
+
+  .sow-header-title h1 { font-size: 18pt; }
+
   .doc-prepared { font-size: 8pt; }
 
   /* Eyebrow */
@@ -444,8 +583,13 @@ a:hover { border-bottom-color: var(--accent); }
   }
   .sow-list li { margin-bottom: 4pt; }
 
-  /* Tables -- all must avoid page-break within */
-  .terms-table { page-break-inside: avoid; }
+  /* Terms table: allow page breaks between rows; avoid within each row */
+  .terms-table {
+    page-break-inside: auto;
+  }
+  .terms-table tr {
+    page-break-inside: avoid;
+  }
   .terms-table td {
     padding: 8pt 10pt;
     font-size: 9.5pt;
@@ -454,10 +598,17 @@ a:hover { border-bottom-color: var(--accent); }
   .terms-table td:first-child { font-size: 9pt; }
   .terms-table tr:nth-child(even) td { background: #F5F4F2; }
 
+  /* Phase table specifically: each of the 7 rows avoids breaking */
+  .terms-table.three-col tr { page-break-inside: avoid; }
+  .terms-table.three-col td:nth-child(2) { display: table-cell; }
+
   /* Parties table */
   .parties-table td { font-size: 9pt; padding: 7pt 0; }
 
-  /* Signature block -- critical: must not split across pages */
+  /* Signature block -- must not split across pages */
+  .sow-section-signatures {
+    page-break-inside: avoid;
+  }
   .sig-block {
     page-break-inside: avoid;
     border-top: 1pt solid #D4D0CA;
@@ -465,7 +616,17 @@ a:hover { border-bottom-color: var(--accent); }
     padding-top: 28pt;
     gap: 40px;
   }
-  /* 1.5pt line per CANVAS spec -- visible enough for ink signature */
+  /* Signature image in print -- 32pt height, pure black, overlaps line */
+  .sig-image {
+    height: 32pt;
+    margin-bottom: -8pt;
+    filter: brightness(0);
+    opacity: 1;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* 1.5pt line per CANVAS spec -- legible enough for ink signature */
   .sig-line {
     height: 1.5pt;
     background: #D4D0CA;
@@ -475,21 +636,60 @@ a:hover { border-bottom-color: var(--accent); }
     background: #D4D0CA;
     opacity: 0.6;
   }
+  .sig-printed-name--filled {
+    height: auto;
+    background: transparent;
+    opacity: 1;
+    font-size: 10pt;
+    color: #111113;
+    font-weight: 600;
+  }
   .sig-name  { font-size: 10pt; color: #111113; }
   .sig-label, .sig-title, .sig-date { color: #6B7280; font-size: 8.5pt; }
+  .sig-date--filled { color: #111113; font-weight: 500; }
+
+  /* Screen-only nav strip is suppressed in print */
+  .sow-screen-nav { display: none !important; }
 
   /* Colophon */
   .sow-colophon {
     border-top: 0.5pt solid #D4D0CA;
     font-size: 7pt;
-    padding: 10pt 0;
+    padding: 10pt 0 0;
     color: #6B7280;
     display: flex;
     justify-content: space-between;
   }
 
+  /* Suppress link styling in print -- URLs visible but unstyled */
+  a {
+    color: #111113;
+    border-bottom: none;
+  }
+
   @page {
     size: letter;
     margin: 0.875in 1in 1in 1.25in;
+  }
+
+  /*
+    Running header for continuation pages.
+    Chrome supports @page :left/:right margin boxes but support varies
+    by version. The @top-center margin box approach is used here;
+    if it doesn't fire in the installed Chrome version, the page-1
+    letterhead is the only treatment (which is acceptable per brief).
+  */
+  @page :first {
+    @top-center { content: none; }
+  }
+
+  @page {
+    @top-center {
+      content: "Arc\2019kin Endeavors  \00B7  Statement of Work  \00B7  2026-05-01";
+      font-family: 'JetBrains Mono', 'Menlo', 'Monaco', monospace;
+      font-size: 7pt;
+      color: #6B7280;
+      letter-spacing: 0.06em;
+    }
   }
 }

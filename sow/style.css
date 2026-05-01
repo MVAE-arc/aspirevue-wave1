@@ -210,6 +210,20 @@ a:hover { border-bottom-color: var(--accent); }
 }
 .sow-section p:last-child { margin-bottom: 0; }
 
+/* SOW list -- bulleted scope items, mirrors paragraph register */
+.sow-list {
+  max-width: 65ch;
+  margin: 0 0 16px 0;
+  padding-left: 22px;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+}
+.sow-list li {
+  margin-bottom: 6px;
+  color: var(--fg);
+}
+.sow-list li::marker { color: var(--subtle); }
+
 /* Engagement summary sits directly after header -- no eyebrow */
 .sow-summary { padding-top: 32px; }
 
@@ -422,6 +436,13 @@ a:hover { border-bottom-color: var(--accent); }
     max-width: 100%;
     margin-bottom: 8pt;
   }
+  .sow-list {
+    font-size: 10pt;
+    max-width: 100%;
+    margin-bottom: 8pt;
+    padding-left: 18pt;
+  }
+  .sow-list li { margin-bottom: 4pt; }
 
   /* Tables -- all must avoid page-break within */
   .terms-table { page-break-inside: avoid; }

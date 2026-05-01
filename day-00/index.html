@@ -287,6 +287,30 @@ button { font: inherit; color: inherit; background: none; border: none; padding:
   display: flex;
   flex-direction: column;
   gap: 4px;
+  transition: transform 240ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .trust-node:hover { transform: translateX(3px); }
+}
+.trust-node-label {
+  position: relative;
+  display: inline-block;
+}
+.trust-node-label::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  width: 4px;
+  height: 1px;
+  background: var(--accent-ember);
+  opacity: 0;
+  transform: translateY(-50%) scaleX(0);
+  transform-origin: right;
+  transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .trust-node:hover .trust-node-label::before { opacity: 1; transform: translateY(-50%) scaleX(1); }
 }
 .trust-node-label {
   font-family: var(--font-mono);
@@ -318,6 +342,14 @@ button { font: inherit; color: inherit; background: none; border: none; padding:
   stroke: var(--fg-primary);
   fill: none;
   stroke-width: 0.5;
+  transform-origin: center;
+  animation: wireframe-rotate 90s linear infinite;
+}
+@keyframes wireframe-rotate {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wireframe-motif svg { animation: none; }
 }
 
 /* ===== RIGHT PANE — FORM RAIL ===== */
@@ -341,21 +373,24 @@ button { font: inherit; color: inherit; background: none; border: none; padding:
   font-size: 13px;
   letter-spacing: 0.04em;
   color: var(--fg-primary);
-  opacity: 0.32;
+  opacity: 0.55;
   user-select: none;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: opacity 220ms var(--ease-out);
+  animation: step-fade-in 540ms var(--ease-out) both;
 }
-.step-node[aria-current="step"] { opacity: 1; }
-.step-node:hover { opacity: 0.7; }
-.step-node-name {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  text-transform: none;
-  display: none;
+.step-node:nth-child(1) { animation-delay: 80ms; }
+.step-node:nth-child(2) { animation-delay: 130ms; }
+.step-node:nth-child(3) { animation-delay: 180ms; }
+.step-node:nth-child(4) { animation-delay: 230ms; }
+.step-node:nth-child(5) { animation-delay: 280ms; }
+@keyframes step-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 0.55; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .step-node { animation: none; opacity: 0.55; transform: none; }
 }
 
 .right-heading {
@@ -368,6 +403,7 @@ button { font: inherit; color: inherit; background: none; border: none; padding:
   margin-bottom: 12px;
   text-transform: uppercase;
 }
+.ember-dot { color: var(--accent-ember); }
 .right-sub {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -384,7 +420,12 @@ button { font: inherit; color: inherit; background: none; border: none; padding:
   margin-bottom: 36px;
   display: flex;
   flex-direction: column;
+  transition: border-color 280ms var(--ease-out);
 }
+@media (hover: hover) and (pointer: fine) {
+  .form-shell:hover { border-color: color-mix(in oklch, var(--accent-ember) 32%, var(--hairline)); }
+}
+.form-shell:focus-within { border-color: color-mix(in oklch, var(--accent-ember) 48%, var(--hairline)); }
 .form-shell-header {
   display: flex;
   align-items: center;
@@ -405,8 +446,30 @@ button { font: inherit; color: inherit; background: none; border: none; padding:
 .status-dot {
   width: 6px; height: 6px;
   background: var(--accent-ember);
-  box-shadow: 0 0 8px var(--accent-ember);
   border-radius: 50%;
+  position: relative;
+  box-shadow: 0 0 8px var(--accent-ember);
+  animation: dot-pulse 2.4s var(--ease-out) infinite;
+}
+@keyframes dot-pulse {
+  0% {
+    box-shadow:
+      0 0 0 0 color-mix(in oklch, var(--accent-ember) 55%, transparent),
+      0 0 8px var(--accent-ember);
+  }
+  70% {
+    box-shadow:
+      0 0 0 14px color-mix(in oklch, var(--accent-ember) 0%, transparent),
+      0 0 8px var(--accent-ember);
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 color-mix(in oklch, var(--accent-ember) 0%, transparent),
+      0 0 8px var(--accent-ember);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .status-dot { animation: none; }
 }
 .status-text {
   font-family: var(--font-mono);
@@ -438,49 +501,6 @@ button { font: inherit; color: inherit; background: none; border: none; padding:
 [data-theme="dark"] .form-embed-area iframe {
   filter: invert(0.92) hue-rotate(180deg);
 }
-
-/* ===== POLARITY-FLIP CTA ===== */
-.arckin-cta {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--fg-primary);
-  padding: 8px 0;
-  cursor: pointer;
-  overflow: hidden;
-  transition: transform 100ms var(--ease-out);
-  align-self: flex-end;
-}
-.arckin-cta:active { transform: scale(0.98); }
-.arckin-cta-label {
-  position: relative;
-  z-index: 2;
-  transition: color 220ms var(--ease-out);
-}
-.arckin-cta-arrow {
-  position: relative;
-  z-index: 2;
-  transition: transform 220ms var(--ease-out);
-}
-.arckin-cta:hover .arckin-cta-arrow { transform: translateX(4px); }
-.arckin-cta::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--accent-ember);
-  clip-path: inset(0 100% 0 0);
-  transition: clip-path 320ms var(--ease-out);
-  z-index: 1;
-}
-.arckin-cta:hover::before { clip-path: inset(0 0 0 0); }
-.arckin-cta:hover .arckin-cta-label,
-.arckin-cta:hover .arckin-cta-arrow { color: var(--bg-canvas); }
 
 /* ===== MONUMENTAL WORDMARK CLOSER ===== */
 .wordmark-closer {
@@ -649,16 +669,16 @@ footer {
     <section class="pane pane--right themable" aria-labelledby="form-heading">
       <div class="right-section-label arrive">(THE BRIEF)</div>
 
-      <nav class="step-rail arrive d1" aria-label="Form sections">
-        <a class="step-node" href="#form-shell" aria-current="step" data-step="1">(01)</a>
-        <a class="step-node" href="#form-shell" data-step="2">(02)</a>
-        <a class="step-node" href="#form-shell" data-step="3">(03)</a>
-        <a class="step-node" href="#form-shell" data-step="4">(04)</a>
-        <a class="step-node" href="#form-shell" data-step="5">(05)</a>
-      </nav>
+      <div class="step-rail arrive d1" aria-hidden="true">
+        <span class="step-node">(01)</span>
+        <span class="step-node">(02)</span>
+        <span class="step-node">(03)</span>
+        <span class="step-node">(04)</span>
+        <span class="step-node">(05)</span>
+      </div>
 
-      <h2 class="right-heading arrive d2" id="form-heading">Five sections.</h2>
-      <div class="right-sub arrive d2">Start wherever feels most alive.</div>
+      <h2 class="right-heading arrive d2" id="form-heading">Five sections<span class="ember-dot">.</span></h2>
+      <div class="right-sub arrive d2">Start wherever feels most alive. Submit any section on its own.</div>
 
       <div class="form-shell themable arrive d3" id="form-shell">
         <div class="form-shell-header">
@@ -674,10 +694,6 @@ footer {
         </div>
       </div>
 
-      <a class="arckin-cta" href="#form-shell" aria-label="Jump to form">
-        <span class="arckin-cta-label">Begin intake</span>
-        <span class="arckin-cta-arrow" aria-hidden="true">→</span>
-      </a>
     </section>
 
   </main>
@@ -705,17 +721,6 @@ footer {
       var next = current === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
       try { localStorage.setItem('arckin_theme', next); } catch (e) {}
-    });
-  })();
-
-  // Step rail: visual active-state cycle on click (iframe contents are cross-origin)
-  (function () {
-    var nodes = document.querySelectorAll('.step-node');
-    nodes.forEach(function (node) {
-      node.addEventListener('click', function () {
-        nodes.forEach(function (n) { n.removeAttribute('aria-current'); });
-        node.setAttribute('aria-current', 'step');
-      });
     });
   })();
 

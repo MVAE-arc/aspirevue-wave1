@@ -2,7 +2,7 @@
 
 /*
   /sow/style.css -- Arc'kin Endeavors -- AspireVue V5 SOW
-  Letterhead edition -- 2026-05-01.
+  Letterhead edition -- 2026-05-02 (revised payment cadence per 5/2 working agreement).
   Extends Wave 1 token system. Self-contained (no @import).
   Token source: /companions/style.css -- if companions tokens change, update :root below.
   CSS em-dash doctrine: @charset UTF-8 on line 1; no non-ASCII in CSS comments.
@@ -685,7 +685,7 @@ a:hover { border-bottom-color: var(--accent); }
 
   @page {
     @top-center {
-      content: "Arc\2019kin Endeavors  \00B7  Statement of Work  \00B7  2026-05-01";
+      content: "Arc\2019kin Endeavors  \00B7  Statement of Work  \00B7  2026-05-02";
       font-family: 'JetBrains Mono', 'Menlo', 'Monaco', monospace;
       font-size: 7pt;
       color: #6B7280;

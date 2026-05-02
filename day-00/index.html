@@ -377,9 +377,17 @@ button { font: inherit; color: inherit; background: none; border: none; padding:
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
+  text-align: left;
   gap: 5px;
   opacity: 0.62;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
   animation: step-fade-in 540ms var(--ease-out) both;
+  transition:
+    opacity 240ms var(--ease-out),
+    transform 240ms var(--ease-out),
+    color 240ms var(--ease-out);
 }
 .step-node:nth-child(1) { animation-delay: 80ms; }
 .step-node:nth-child(2) { animation-delay: 130ms; }
@@ -390,6 +398,7 @@ button { font: inherit; color: inherit; background: none; border: none; padding:
   font-family: var(--font-mono);
   font-size: 13px;
   letter-spacing: 0.04em;
+  transition: color 240ms var(--ease-out);
 }
 .step-node-label {
   font-family: var(--font-mono);
@@ -399,13 +408,41 @@ button { font: inherit; color: inherit; background: none; border: none; padding:
   color: var(--fg-muted);
   max-width: 13ch;
   line-height: 1.5;
+  transition: color 240ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .step-node:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+  .step-node:hover .step-node-num,
+  .step-node:hover .step-node-label {
+    color: var(--accent-ember);
+  }
+}
+.step-node:focus-visible {
+  opacity: 1;
+}
+.step-node:focus-visible .step-node-num,
+.step-node:focus-visible .step-node-label {
+  color: var(--accent-ember);
+}
+.step-node:active {
+  transform: translateY(0);
 }
 @keyframes step-fade-in {
   from { opacity: 0; transform: translateY(4px); }
   to   { opacity: 0.62; transform: translateY(0); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .step-node { animation: none; opacity: 0.62; transform: none; }
+  .step-node {
+    animation: none;
+    opacity: 0.62;
+    transform: none;
+    transition: opacity 240ms var(--ease-out), color 240ms var(--ease-out);
+  }
+  .step-node:hover { transform: none; }
+  .step-node:active { transform: none; }
 }
 
 
@@ -704,28 +741,28 @@ footer {
     <section class="pane pane--right themable" aria-labelledby="form-heading">
       <div class="right-section-label arrive">(THE BRIEF)</div>
 
-      <div class="step-rail arrive d1" aria-hidden="true">
-        <span class="step-node">
+      <nav class="step-rail arrive d1" aria-label="Section quick-jump">
+        <button class="step-node" type="button" data-tally-section="1">
           <span class="step-node-num">(01)</span>
           <span class="step-node-label">Identity<br>&amp; Vision</span>
-        </span>
-        <span class="step-node">
+        </button>
+        <button class="step-node" type="button" data-tally-section="2">
           <span class="step-node-num">(02)</span>
           <span class="step-node-label">Workflows<br>&amp; Automations</span>
-        </span>
-        <span class="step-node">
+        </button>
+        <button class="step-node" type="button" data-tally-section="3">
           <span class="step-node-num">(03)</span>
           <span class="step-node-label">Agents<br>&amp; Roles</span>
-        </span>
-        <span class="step-node">
+        </button>
+        <button class="step-node" type="button" data-tally-section="4">
           <span class="step-node-num">(04)</span>
           <span class="step-node-label">Current<br>State</span>
-        </span>
-        <span class="step-node">
+        </button>
+        <button class="step-node" type="button" data-tally-section="5">
           <span class="step-node-num">(05)</span>
           <span class="step-node-label">Open<br>Questions</span>
-        </span>
-      </div>
+        </button>
+      </nav>
 
       <h2 class="right-heading arrive d2" id="form-heading">Five sections<span class="ember-dot">.</span></h2>
       <div class="right-sub arrive d2">Start wherever feels most alive. Submit any section on its own.</div>
@@ -791,6 +828,117 @@ footer {
       i = (i + 1) % seeds.length;
       turb.setAttribute('seed', seeds[i]);
     }, 100);
+  })();
+
+  // Section quick-jump rail → snap parent viewport to a Tally form section.
+  // Cross-origin iframe blocks DOM access, so we use pre-calibrated Y-fractions
+  // (measured 2026-05-01 against tally.so/embed/Me8EBg at 360/768/1280/1920),
+  // tiered by the iframe's reported content height since totalH correlates
+  // with internal layout width.
+  (function () {
+    var formShell = document.getElementById('form-shell');
+    if (!formShell) return;
+    var iframe = formShell.querySelector('iframe');
+    if (!iframe) return;
+    var buttons = document.querySelectorAll('.step-node[data-tally-section]');
+    if (!buttons.length) return;
+
+    var PAD = 64;
+    // Tiered by iframe content height. Each fraction = sectionHeaderY / totalH.
+    // Mobile tier sourced from 360-wide standalone (totalH ≈ 6985).
+    // Standard tier averages 636-wide and 768-wide standalone (totalH ≈ 5800–5950),
+    // which covers both the two-column desktop pane (~636) and single-column
+    // tablet (~720) renderings the parent actually produces.
+    // Wide tier covers any rendering above 1024-equivalent layout (rarely reached
+    // because the right-pane max-width caps iframe width on real viewports).
+    var FRACTION_TIERS = [
+      { minH: 6300, fractions: [0.02548, 0.18369, 0.43764, 0.78167, 0.93701] },
+      { minH: 5650, fractions: [0.02006, 0.18741, 0.43154, 0.77740, 0.93868] },
+      { minH: 0,    fractions: [0.01923, 0.18375, 0.43062, 0.77163, 0.93616] }
+    ];
+    function pickFractions(h) {
+      for (var i = 0; i < FRACTION_TIERS.length; i++) {
+        if (h >= FRACTION_TIERS[i].minH) return FRACTION_TIERS[i].fractions;
+      }
+      return FRACTION_TIERS[FRACTION_TIERS.length - 1].fractions;
+    }
+
+    var formReady = false;
+    var pendingSection = null;
+
+    function reduceMotion() {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    function scrollParentTo(y, smooth) {
+      window.scrollTo({ top: Math.max(0, y), behavior: smooth ? 'smooth' : 'auto' });
+    }
+
+    function snap(n) {
+      var rect = iframe.getBoundingClientRect();
+      var iframeTop = rect.top + window.scrollY;
+      var iframeH = rect.height;
+      var smooth = !reduceMotion();
+      if (iframeH < 200) {
+        var shellTop = formShell.getBoundingClientRect().top + window.scrollY;
+        scrollParentTo(shellTop - PAD, smooth);
+        return;
+      }
+      var fractions = pickFractions(iframeH);
+      var targetY = iframeTop + (fractions[n] * iframeH) - PAD;
+      scrollParentTo(targetY, smooth);
+      // Move keyboard focus into the iframe after the scroll begins. Cross-origin
+      // forbids focusing a specific field; focusing the iframe element brings
+      // tab order into the form for keyboard users.
+      var delay = smooth ? 320 : 0;
+      setTimeout(function () {
+        try { iframe.focus({ preventScroll: true }); } catch (_) {}
+      }, delay);
+    }
+
+    window.addEventListener('message', function (e) {
+      if (!e.data || typeof e.data !== 'string') return;
+      var msg;
+      try { msg = JSON.parse(e.data); } catch (_) { return; }
+      if (msg && (msg.event === 'Tally.FormLoaded' || msg.event === 'Tally.FormPageView')) {
+        if (!formReady) {
+          formReady = true;
+          if (pendingSection !== null) {
+            var n = pendingSection;
+            pendingSection = null;
+            requestAnimationFrame(function () { snap(n); });
+          }
+        }
+      }
+    });
+
+    // Safety: if FormLoaded never arrives but the iframe has a sized height,
+    // mark ready after 4s so the rail still works.
+    setTimeout(function () {
+      if (!formReady && iframe.getBoundingClientRect().height > 200) {
+        formReady = true;
+        if (pendingSection !== null) {
+          var n = pendingSection;
+          pendingSection = null;
+          snap(n);
+        }
+      }
+    }, 4000);
+
+    Array.prototype.forEach.call(buttons, function (btn) {
+      btn.addEventListener('click', function () {
+        var n = parseInt(btn.getAttribute('data-tally-section'), 10) - 1;
+        if (isNaN(n) || n < 0 || n > 4) return;
+        if (!formReady) {
+          pendingSection = n;
+          // Give immediate feedback: scroll to the form's top edge while waiting.
+          var shellTop = formShell.getBoundingClientRect().top + window.scrollY;
+          scrollParentTo(shellTop - PAD, !reduceMotion());
+          return;
+        }
+        snap(n);
+      });
+    });
   })();
 </script>
 

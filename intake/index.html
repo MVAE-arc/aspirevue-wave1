@@ -929,6 +929,20 @@ var INTAKE_DATA = {
 
   container.innerHTML = html;
 
+  // Append Tally embed loader after writing embed div to DOM.
+  // data-tally-src stays inert without this; matches /day-00/ pattern.
+  (function() {
+    var w = "https://tally.so/widgets/embed.js";
+    if (typeof Tally !== 'undefined') { Tally.loadEmbeds(); return; }
+    if (document.querySelector('script[src="' + w + '"]')) return;
+    var s = document.createElement('script');
+    s.src = w;
+    s.onload = s.onerror = function() {
+      if (typeof Tally !== 'undefined') Tally.loadEmbeds();
+    };
+    document.body.appendChild(s);
+  })();
+
   // Wire autosave cue
   wireSaveCue();
 })();

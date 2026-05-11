@@ -44,7 +44,7 @@ function ruledLines(count) {
 function buildHtml(data) {
   const sections = data.sections || [];
 
-  // Section number mapping per CANVAS §10:
+  // Section number mapping:
   // Inventory => 01, Sharp Pains => 01, Chronic Bleeds => 01,
   // Patterns => 02, Triggers => 02, Memory => 03, Open Questions => no numeral
   function getLayerNumeral(sec) {

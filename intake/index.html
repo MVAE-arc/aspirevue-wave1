@@ -798,7 +798,7 @@ footer {
 
 <script>
 // ===== INTAKE DATA =====
-// Embedded at build time from data.yaml. SIGNAL edits data.yaml; this block regenerates.
+// Embedded at build time from data.yaml. Edit data.yaml; this block regenerates.
 var INTAKE_DATA = {
   sections: [
     {
@@ -878,7 +878,7 @@ var INTAKE_DATA = {
     {
       section_id: "open-questions",
       title: "Open Questions",
-      layer_label: "ideation feedstock for ATLAS",
+      layer_label: "ideation & synthesis",
       preamble: "The section with no wrong answers. Anything you’ve been sitting with — things you haven’t figured out how to ask, things you want to know in thirty days that you don’t know now.",
       prompts: [
         { id: "oq-01", text: "Is there something about your practice — how it runs, where it’s going, what it needs — that you haven’t been able to put into a clear question yet? Take a shot at it here.", sub_label: "What you’re not sure how to ask" },
@@ -923,13 +923,14 @@ var INTAKE_DATA = {
     html += '</section>';
   }
 
-  // Tally embed at bottom
-  html += '<div id="tally-embed-area" style="margin-top:40px;padding-top:32px;border-top:1px solid var(--hairline);">';
-  html += '<div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--fg-muted);margin-bottom:16px;">(SUBMIT ALL)</div>';
-  html += '<div data-tally-src="https://tally.so/embed/' + INTAKE_DATA.tally_form_id + '?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" style="min-height:80px;display:flex;align-items:center;justify-content:flex-start;">';
-  html += '<span style="font-family:var(--font-mono);font-size:10px;color:var(--fg-faint);letter-spacing:0.12em;text-transform:uppercase;">';
-  html += '&#9888; Tally form ID pending. Replace PLACEHOLDER_TALLY_FORM_ID in data.yaml once the form is created.';
-  html += '</span></div></div>';
+  // Tally embed at bottom — only renders the submit row when a real form ID is wired.
+  var hasTallyId = INTAKE_DATA.tally_form_id && INTAKE_DATA.tally_form_id.indexOf('PLACEHOLDER') === -1;
+  if (hasTallyId) {
+    html += '<div id="tally-embed-area" style="margin-top:40px;padding-top:32px;border-top:1px solid var(--hairline);">';
+    html += '<div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--fg-muted);margin-bottom:16px;">(SUBMIT ALL)</div>';
+    html += '<div data-tally-src="https://tally.so/embed/' + INTAKE_DATA.tally_form_id + '?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" style="min-height:80px;"></div>';
+    html += '</div>';
+  }
 
   container.innerHTML = html;
 

@@ -1,15 +1,15 @@
 # /intake/data.yaml
 # Single source of truth for the AspireVue Day 00 intake kit.
-# HTML and PDF both render from this file. SIGNAL edits prompts here once.
-# Schema version: 1.0 — CIRCUIT 2026-05-10
+# HTML and PDF both render from this file. Edit prompts here once.
+# Schema version: 1.0 — 2026-05-10
 
 meta:
   title: "Day 00 Intake — AspireVue"
   version: "1.0"
   larry_facing_url: "https://mvae-arc.github.io/aspirevue-wave1/intake/"
   returns_url: "https://mvae-arc.github.io/aspirevue-wave1/intake/"
-  # CIRCUIT NOTE: returns_url is the GDrive folder path or direct PDF URL once
-  # Boss confirms the GDrive folder structure. Placeholder until Boss creates the folder.
+  # NOTE: returns_url is the GDrive folder path or direct PDF URL once
+  # the GDrive folder structure is confirmed. Placeholder until then.
 
 build_order_diagram:
   nodes:
@@ -42,7 +42,7 @@ shared_strings:
   section_counter_template: "{current} of {total}"
   return_later_text: "You can return to any section. Sloppy is fine."
   tally_form_id: "PLACEHOLDER_TALLY_FORM_ID"
-  # FORGE: replace tally_form_id with the live Tally embed ID once the form is created.
+  # Replace tally_form_id with the live Tally embed ID once the form is created.
 
 left_pane:
   title: "Intake."
@@ -182,7 +182,7 @@ sections:
 
   - section_id: "open-questions"
     title: "Open Questions"
-    layer_label: "ideation feedstock for ATLAS"
+    layer_label: "ideation & synthesis"
     preamble: "The section with no wrong answers. Anything you've been sitting with — things you haven't figured out how to ask, things you want to know in thirty days that you don't know now."
     prompts:
       - id: "oq-01"

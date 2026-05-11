@@ -89,11 +89,11 @@ function buildHtml(data) {
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=block" rel="stylesheet">
 <style>
 @charset "UTF-8";
-
-/* Font embedding via @font-face — font-display: block guarantees render before Puppeteer captures */
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=block');
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 

@@ -41,7 +41,7 @@ shared_strings:
   auto_save_label: "autosaved"
   section_counter_template: "{current} of {total}"
   return_later_text: "You can return to any section. Sloppy is fine."
-  tally_form_id: "PLACEHOLDER_TALLY_FORM_ID"
+  tally_form_id: "aQKAL9"
   # Replace tally_form_id with the live Tally embed ID once the form is created.
 
 left_pane:

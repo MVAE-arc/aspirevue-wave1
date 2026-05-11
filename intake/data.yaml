@@ -1,0 +1,199 @@
+# /intake/data.yaml
+# Single source of truth for the AspireVue Day 00 intake kit.
+# HTML and PDF both render from this file. SIGNAL edits prompts here once.
+# Schema version: 1.0 — CIRCUIT 2026-05-10
+
+meta:
+  title: "Day 00 Intake — AspireVue"
+  version: "1.0"
+  larry_facing_url: "https://mvae-arc.github.io/aspirevue-wave1/intake/"
+  returns_url: "https://mvae-arc.github.io/aspirevue-wave1/intake/"
+  # CIRCUIT NOTE: returns_url is the GDrive folder path or direct PDF URL once
+  # Boss confirms the GDrive folder structure. Placeholder until Boss creates the folder.
+
+build_order_diagram:
+  nodes:
+    - id: "layer-0"
+      label: "Layer 0"
+      sublabel: "Audit"
+      active: true
+    - id: "layer-1"
+      label: "Layer 1"
+      sublabel: "Skills"
+      active: false
+    - id: "layer-2"
+      label: "Layer 2"
+      sublabel: "Automations"
+      active: false
+    - id: "layer-3"
+      label: "Layer 3"
+      sublabel: "Memory"
+      active: false
+  # Render rules: vertical four-node list, no arrows, ember marker on active: true node,
+  # 0.72 opacity on inactive nodes. Placed in left pane below trust-stack, above wireframe motif.
+  # Dashboard (Layer 4) is NOT in this diagram — it's a V5 Day 31-60 deliverable.
+
+shared_strings:
+  save_indicator_text: "saved {time}"
+  save_indicator_prefix: "saved"
+  submit_button_text: "Submit section"
+  submit_all_button_text: "Submit all sections"
+  auto_save_label: "autosaved"
+  section_counter_template: "{current} of {total}"
+  return_later_text: "You can return to any section. Sloppy is fine."
+  tally_form_id: "PLACEHOLDER_TALLY_FORM_ID"
+  # FORGE: replace tally_form_id with the live Tally embed ID once the form is created.
+
+left_pane:
+  title: "Intake."
+  title_em: "In your words."
+  prose:
+    - "Seven sections. Start wherever feels most alive — there's no right order. Each answer stands on its own."
+    - "You can return to any section. Sloppy is fine. The point is your thinking, not the polish."
+
+trust_stack:
+  - label: "(RECEIVED)"
+    desc: "It lands within minutes."
+  - label: "(LOGGED)"
+    desc: "Added to Day 1 shaping in the background."
+  - label: "(DAY 1 READY)"
+    desc: "Come back. Add more. Both are fine."
+
+sections:
+  - section_id: "inventory"
+    title: "Inventory"
+    layer_label: "Layer 0 — Audit"
+    layer_numeral: "01"
+    preamble: "Before anything else, a read of what's already running. You've built a real stack — tools, contexts, rhythms — and this section maps it before we map the gaps."
+    prompts:
+      - id: "inv-01"
+        text: "Walk me through the tools you're running day-to-day — Claude, Plaud, Obsidian, anything else you'd miss if it disappeared. Not an exhaustive list; just the ones that are actually in the rotation."
+        sub_label: "Tools & surfaces"
+      - id: "inv-02"
+        text: "You mentioned a 14-file Claude stack. What's in there — rough categories is fine. And if there's a voice OS or system prompt you're running alongside it, describe that too."
+        sub_label: "Context stack"
+      - id: "inv-03"
+        text: "What does a standard client week look like operationally? Not the coaching itself — the work that runs the week. Prep, documentation, follow-through, whatever the rhythm is."
+        sub_label: "Recurring rituals"
+      - id: "inv-04"
+        text: "Where does Claude actually show up in your work right now? What are you asking it? Where does it do the job, and where does it fall short?"
+        sub_label: "Claude surfaces"
+
+  - section_id: "sharp-pains"
+    title: "Sharp Pains"
+    layer_label: "feeds Layers 1–3"
+    layer_numeral: "01"
+    preamble: "What's actually broken this week. Not chronic background noise — the specific friction you've run into recently enough to still be annoyed about it."
+    prompts:
+      - id: "sp-01"
+        text: "What has slowed you down or stopped you cold in the last five working days? Name it as specifically as you can."
+        sub_label: "Current-week friction"
+      - id: "sp-02"
+        text: "Of the friction you just named, which one costs you the most — time, attention, client quality, or something else?"
+        sub_label: "Where it costs you most"
+      - id: "sp-03"
+        text: "Have you already tried to fix it? What happened?"
+        sub_label: "What you've already tried"
+      - id: "sp-04"
+        text: "Is there a problem you've solved more than twice that showed up again? Describe it."
+        sub_label: "The one that keeps coming back"
+
+  - section_id: "chronic-bleeds"
+    title: "Chronic Bleeds"
+    layer_label: "feeds Layers 1–3"
+    layer_numeral: "01"
+    preamble: "Slow leaks. The stuff you've stopped noticing because it's always been there — but it's still costing you something every week."
+    prompts:
+      - id: "cb-01"
+        text: "What work do you do manually every single time, without questioning it?"
+        sub_label: "Invisible friction"
+      - id: "cb-02"
+        text: "Where do you lose the thread between sessions — between a recording and a document, between a client conversation and the follow-up, between your own thinking and what you can actually find later?"
+        sub_label: "Where context drops"
+      - id: "cb-03"
+        text: "What takes you longer than it should? Not because of a one-time problem — because of how the work is currently structured."
+        sub_label: "The slow tax"
+      - id: "cb-04"
+        text: "When you sit down to do focused work, what do you end up doing instead? Where does the time actually go before you get to the thing that matters?"
+        sub_label: "What you do instead of the real work"
+
+  - section_id: "patterns"
+    title: "Patterns"
+    layer_label: "Layer 1 — Skills feedstock"
+    layer_numeral: "02"
+    preamble: "Not the unique situations — the ones that repeat. Work shapes that show up more than three times a week, enough that you've developed a feel for how they go."
+    prompts:
+      - id: "pat-01"
+        text: "What types of work do you find yourself doing over and over — same basic shape, even if the content changes? Think about the last two weeks."
+        sub_label: "Repeating work shapes"
+      - id: "pat-02"
+        text: "Is there a way you approach a specific kind of problem that you'd describe as distinctly yours — a read, a reframe, an order of operations that works for you and wouldn't work the same way for someone else?"
+        sub_label: "Signature moves"
+      - id: "pat-03"
+        text: "Beyond 'executive coach' — what roles do you actually occupy in a given client week? Strategist, analyst, sounding board, writer, something else?"
+        sub_label: "Roles you occupy"
+      - id: "pat-04"
+        text: "What's a judgment call you make repeatedly? Not a hard decision — a well-worn one. The kind where you already know the answer before you've finished thinking through it."
+        sub_label: "Where the same decision keeps coming up"
+      - id: "pat-05"
+        text: "If you were describing your approach to a brand-new client, what's the one thing you'd say that you don't bother explaining to clients who've been with you for a while?"
+        sub_label: "What you'd explain differently"
+
+  - section_id: "triggers"
+    title: "Triggers"
+    layer_label: "Layer 2 — Automations feedstock"
+    layer_numeral: "02"
+    preamble: "Patterns with a clear on-ramp. A specific condition arrives, and a specific sequence of work begins. Describe the condition — not what tool should handle it."
+    prompts:
+      - id: "tr-01"
+        text: "What kinds of events or arrivals reliably kick off a defined sequence of work? A new client decision, a recording that just synced, an email that requires a specific type of response?"
+        sub_label: "Stable inputs"
+      - id: "tr-02"
+        text: "After that sequence runs, what does the result look like? A document, an email, an updated file, a follow-up scheduled?"
+        sub_label: "Predictable outputs"
+      - id: "tr-03"
+        text: "Are there things you hold in your head until a specific condition is met — and when that condition arrives, you act? Describe the condition and what it releases."
+        sub_label: "Conditions you wait for"
+      - id: "tr-04"
+        text: "Where in your current workflow do you act as the relay — passing something from one place to another, doing nothing except the move itself?"
+        sub_label: "Where the handoff is manual but shouldn't be"
+
+  - section_id: "memory"
+    title: "Memory"
+    layer_label: "Layer 3 — Obsidian/retrieval feedstock"
+    layer_numeral: "03"
+    preamble: "What you store, where it lives, and whether you can find it when you need it. The gap between what you've captured and what you can actually retrieve is usually the real problem."
+    prompts:
+      - id: "mem-01"
+        text: "Where does information about your clients and your practice actually live right now? Not where you'd like it to live — where it actually lands."
+        sub_label: "Where you store things"
+      - id: "mem-02"
+        text: "Name one piece of information you regularly need that takes too long to locate, or that you often can't find at all."
+        sub_label: "What you can't find when you need it"
+      - id: "mem-03"
+        text: "When you return to a client after a gap — a few days, a week — what do you have to reconstruct from scratch? What doesn't carry forward automatically?"
+        sub_label: "Context that drops between sessions"
+      - id: "mem-04"
+        text: "What knowledge about how you work, how you read clients, or how you make decisions exists only inside your own head and hasn't been captured anywhere?"
+        sub_label: "What lives only in your head"
+      - id: "mem-05"
+        text: "You're using Plaud to capture voice. What's getting recorded? What do you wish was also being captured that currently isn't?"
+        sub_label: "What Plaud is capturing vs. what it isn't"
+
+  - section_id: "open-questions"
+    title: "Open Questions"
+    layer_label: "ideation feedstock for ATLAS"
+    preamble: "The section with no wrong answers. Anything you've been sitting with — things you haven't figured out how to ask, things you want to know in thirty days that you don't know now."
+    prompts:
+      - id: "oq-01"
+        text: "Is there something about your practice — how it runs, where it's going, what it needs — that you haven't been able to put into a clear question yet? Take a shot at it here."
+        sub_label: "What you're not sure how to ask"
+      - id: "oq-02"
+        text: "If we're sixty days into this and you look back at today, what do you most want to have figured out by then?"
+        sub_label: "What you'd want to know in 30 days"
+      - id: "oq-03"
+        text: "Is there a part of how your practice operates that you've been putting off thinking about? What is it?"
+        sub_label: "What you've been avoiding"
+      - id: "oq-04"
+        text: "If you knew the technical side was handled, what's the thing you'd want your practice to do that it can't do right now?"
+        sub_label: "What you'd build if you knew it would work"

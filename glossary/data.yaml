@@ -1,0 +1,455 @@
+# Glossary-Source.yaml
+# AspireVue OS — Master Glossary of Key Terms & Phrases
+# Source YAML consumed by FORGE for HTML rendering
+# Wiki-links: [[Glossary-Source]] | [[2026-05-11-Sessions-1-2-Summary]]
+# Last updated: 2026-05-12
+
+header:
+  title: "Glossary"
+  subtitle: >
+    This page collects the vocabulary we use most. It exists as a shared reference — not
+    a primer — so that when a term comes up in a working session, we're using the same
+    definition and can move on. It will grow as the stack grows; check back when something
+    new gets introduced.
+
+clusters:
+
+  # ─────────────────────────────────────────────
+  # 1. INTERFACE LAYER
+  # ─────────────────────────────────────────────
+  - id: interface
+    label: "Interface Layer"
+    subhead: "Where you meet the system."
+    terms:
+
+      - term: "IDE"
+        expansion: "Integrated Development Environment"
+        definition: >
+          A full-featured editor for writing and running code — file tree, terminal,
+          extensions, and model integrations all in one window.
+        in_practice: null
+        cross_refs: ["CLI", "GUI", "Antigravity"]
+
+      - term: "GUI"
+        expansion: "Graphical User Interface"
+        definition: >
+          Any interface driven by buttons, menus, and windows rather than typed commands.
+          Easier to discover; usually slower to operate than a CLI once you know the verbs.
+        in_practice: null
+        cross_refs: ["CLI", "IDE"]
+
+      - term: "CLI"
+        expansion: "Command-Line Interface"
+        definition: >
+          A keyboard-only way to operate a tool — no buttons or menus, just typed commands
+          and their output. Faster than a GUI once you know the verbs; less discoverable
+          until you do.
+        in_practice: null
+        cross_refs: ["GUI", "IDE"]
+
+      - term: "Plugin"
+        expansion: null
+        definition: >
+          An add-on that extends a tool's base functionality without changing the core
+          application. In Obsidian, plugins add features like database views, calendar
+          integrations, and publishing.
+        in_practice: >
+          The Obsidian vault runs on a curated plugin set. "Core plugin" means it ships
+          with Obsidian by default; "community plugin" means it's third-party. Core plugins
+          are stable; community plugins vary.
+        cross_refs: ["Obsidian", "Vault"]
+
+      - term: "Mobile (Remote Control & Dispatch)"
+        expansion: null
+        definition: >
+          Using the Claude mobile app to kick off tasks, monitor progress, and respond to
+          agent output from a phone. Not a limited version of the desktop — the phone is
+          often the primary entry point when you're away from the workstation.
+        in_practice: >
+          Larry's primary device for initiating work is the phone. The pattern: record
+          a Plaud note, route it to the right agent, review the output on the Claude app
+          before the next session or meeting starts.
+        cross_refs: ["Claude Chat", "Claude Code GUI"]
+
+  # ─────────────────────────────────────────────
+  # 2. ENVIRONMENT LAYER
+  # ─────────────────────────────────────────────
+  - id: environment
+    label: "Environment Layer"
+    subhead: "The specific places work happens."
+    terms:
+
+      - term: "Antigravity"
+        expansion: null
+        definition: >
+          Google's IDE. Built to work with Claude Code CLI natively, so you can run
+          terminal commands and model interactions inside the same editor window.
+        in_practice: >
+          Primary IDE in the stack. When work is being done that requires both editing
+          files and talking to Claude, it's happening here.
+        cross_refs: ["IDE", "Claude Code CLI"]
+
+      - term: "Claude Code CLI"
+        expansion: null
+        definition: >
+          The command-line version of Claude Code. Runs inside a terminal or an IDE like
+          Antigravity and gives Claude direct access to files, folders, and system tools on
+          your machine. Faster than the chat interface for anything involving file editing
+          or multi-step tasks.
+        in_practice: null
+        cross_refs: ["CLI", "Antigravity", "Claude Code GUI", "Tools / Tool Use"]
+
+      - term: "Claude Code GUI"
+        expansion: null
+        definition: >
+          The desktop app version of Claude Code. Same underlying capability as the CLI
+          but wrapped in a visual interface — useful for people who aren't working in a
+          terminal yet or who want to keep CLI and UI side by side.
+        in_practice: null
+        cross_refs: ["GUI", "Claude Code CLI"]
+
+      - term: "Claude Chat"
+        expansion: null
+        definition: >
+          The standard Claude conversation interface at claude.ai — browser or mobile app.
+          This is where most people start; it doesn't have the file-system access that
+          Claude Code has, but it handles the full range of conversational and
+          reasoning tasks.
+        in_practice: >
+          Larry's current primary interface for building and testing custom templates.
+          The "My Space" custom templates live here.
+        cross_refs: ["Claude Code CLI", "Session", "Mobile (Remote Control & Dispatch)"]
+
+      - term: "Claude CoWork"
+        expansion: null
+        definition: >
+          A multi-agent collaboration mode inside Claude where multiple agents can work
+          on shared tasks in a coordinated way. Each agent has a defined role; they
+          communicate through a shared task surface rather than running independently.
+        in_practice: null
+        cross_refs: ["Agent Teams", "Agents", "Sub-Agents"]
+
+      - term: "Claude in Chrome"
+        expansion: null
+        definition: >
+          A browser extension that brings Claude into Chrome without switching tabs.
+          Claude reads the current page and responds in context — useful for summarizing,
+          drafting replies, or extracting information from what's on screen.
+        in_practice: null
+        cross_refs: ["Claude Chat", "Tools / Tool Use"]
+
+      - term: "Claude in Obsidian"
+        expansion: null
+        definition: >
+          An integration pattern — Claude accessible from within the Obsidian vault via
+          plugin. Claude reads note content and can write back to the vault, so
+          conversations are grounded in your actual knowledge base rather than a blank
+          context window.
+        in_practice: null
+        cross_refs: ["Obsidian", "Vault", "Plugin", "Memory"]
+
+      - term: "Google Gemini"
+        expansion: null
+        definition: >
+          Google's primary AI assistant, available at gemini.google.com and inside Google
+          Workspace (Docs, Gmail, Meet). Shares the same underlying model family as
+          Google AI Studio but is the consumer-facing product.
+        in_practice: null
+        cross_refs: ["Google AI Studio"]
+
+      - term: "Google AI Studio"
+        expansion: null
+        definition: >
+          Google's developer-facing interface for the Gemini model family. Used for
+          prototyping prompts, testing API calls, and accessing model capabilities before
+          embedding them in a workflow or application.
+        in_practice: null
+        cross_refs: ["Google Gemini", "API"]
+
+      - term: "Obsidian"
+        expansion: null
+        definition: >
+          A local-first note-taking and knowledge management app. Everything lives in
+          plain text Markdown files on your own machine — no proprietary format, no
+          mandatory cloud sync. The folder containing those files is called the vault.
+        in_practice: >
+          The vault is the AspireVue OS's memory and knowledge spine. Agent outputs,
+          session summaries, project notes, and templates all live here.
+        cross_refs: ["Vault", "Plugin", "Wiki-link", "Canvas", "NOW doc"]
+
+  # ─────────────────────────────────────────────
+  # 3. MODEL LAYER
+  # ─────────────────────────────────────────────
+  - id: model
+    label: "Model Layer"
+    subhead: "What's running underneath."
+    terms:
+
+      - term: "Tokens"
+        expansion: null
+        definition: >
+          The unit a model uses to measure and process text. Roughly 750 words equals
+          about 1,000 tokens; the model thinks in tokens, not words or characters.
+        in_practice: null
+        cross_refs: ["Context Window", "Usage"]
+
+      - term: "Context"
+        expansion: null
+        definition: >
+          Everything the model can currently "see" — the conversation history, any files
+          or documents you've loaded, and the system instructions in effect. The model's
+          responses are shaped entirely by what's in this context.
+        in_practice: >
+          When you start a new conversation, context resets. Anything from a prior session
+          that the model needs to know has to be re-loaded — either manually or through
+          a memory system.
+        cross_refs: ["Context Window", "Session", "Memory", "Tokens"]
+
+      - term: "Context Window"
+        expansion: null
+        definition: >
+          The maximum amount of text a model can hold in a single session, measured in
+          tokens. When it fills up, older content gets compressed or dropped — the model
+          may paraphrase earlier exchanges rather than quote them exactly, and fine detail
+          can drift. In practice, ~70% full is the signal to wrap a session and start fresh
+          to keep output quality consistent.
+        in_practice: >
+          The Claude Code CLI displays context window percentage during long sessions.
+          When it approaches that threshold, current work gets summarized and a new
+          session picks up from there — no loss of direction, just a clean slate.
+        cross_refs: ["Context", "Session", "Tokens", "Prompt Caching"]
+
+      - term: "Session"
+        expansion: null
+        definition: >
+          A single uninterrupted conversation with the model. Context builds up within
+          a session and resets when a new one starts. Sessions don't automatically
+          carry memory forward unless a memory system is configured to do so.
+        in_practice: >
+          Each working block with the AspireVue OS is effectively a session. The
+          session summary at the end of every block captures what needs to carry forward
+          before context clears.
+        cross_refs: ["Context Window", "Context", "Memory"]
+
+      - term: "Usage"
+        expansion: null
+        definition: >
+          The measured consumption of model capacity — tracked in tokens on API plans,
+          or against a message limit on subscription plans. Different models cost different
+          amounts; more capable models consume more per call.
+        in_practice: null
+        cross_refs: ["Tokens", "API"]
+
+      - term: "Prompt Caching"
+        expansion: null
+        definition: >
+          A feature that stores frequently-used context (like a long system prompt or a
+          large reference document) so the model doesn't re-process it on every call.
+          Reduces cost and latency when the same instructions appear in many requests.
+        in_practice: null
+        cross_refs: ["Context Window", "Tokens", "API"]
+
+  # ─────────────────────────────────────────────
+  # 4. CAPABILITY LAYER
+  # ─────────────────────────────────────────────
+  - id: capability
+    label: "Capability Layer"
+    subhead: "What the model can do beyond chat."
+    terms:
+
+      - term: "Agents"
+        expansion: null
+        definition: >
+          A model configured to take sequences of actions — not just answer a question,
+          but plan steps, call tools, read files, and complete a goal with minimal
+          hand-holding between steps.
+        in_practice: >
+          The morning orientation workflow is an agent: it scrapes email, pulls the
+          calendar, surfaces project status, and assembles a brief — all in one run,
+          triggered by a single button press.
+        cross_refs: ["Sub-Agents", "Agent Teams", "Tools / Tool Use", "Skills", "Hooks"]
+
+      - term: "Sub-Agents"
+        expansion: null
+        definition: >
+          An agent spawned by another agent to handle a focused part of a larger task.
+          The parent agent delegates and reassembles; the sub-agent executes and returns.
+          Different from Agent Teams, which is a persistent multi-role infrastructure —
+          sub-agents are disposable task-runners within a single run.
+        in_practice: null
+        cross_refs: ["Agents", "Agent Teams"]
+
+      - term: "Agent Teams"
+        expansion: null
+        definition: >
+          A persistent multi-agent setup where specialists share a task list and pick up
+          work as it comes in. The team holds context across runs; each agent has a
+          defined role. Different from spinning up a sub-agent for one task — the team
+          is always there, ready to claim work.
+        in_practice: >
+          As the AspireVue OS matures, standing agent teams handle recurring work
+          categories — clinical summaries, BD conversations, ideation scoring — without
+          needing to be rebuilt each time.
+        cross_refs: ["Agents", "Sub-Agents", "Skills", "Hooks"]
+
+      - term: "Skills"
+        expansion: null
+        definition: >
+          Packaged sets of instructions that an agent loads before starting a specific
+          type of task. A skill tells the agent how to approach a category of work —
+          what rules apply, what format to use, what to avoid. Think of it as a
+          standing brief, not a prompt you type each time.
+        in_practice: >
+          A skill called before drafting client-facing copy might specify register, banned
+          phrases, structural variety, and accuracy rules — so the agent loads a consistent
+          standard rather than improvising every time. The same pattern applies to research,
+          intake, summarization, or any recurring work category.
+        cross_refs: ["Agents", "System Instructions", "Slash Commands"]
+
+      - term: "Memory"
+        expansion: null
+        definition: >
+          A mechanism for persisting information across sessions. Without memory, every
+          new conversation starts blank. With it, the agent recalls prior decisions,
+          user preferences, and project context without being re-briefed each time.
+        in_practice: >
+          The AspireVue OS uses a file-based memory system inside Obsidian. Session
+          summaries and decision logs write to that memory so the next session picks up
+          with full context rather than starting cold.
+        cross_refs: ["Context", "Session", "Vault", "Obsidian"]
+
+      - term: "Tools / Tool Use"
+        expansion: null
+        definition: >
+          The ability to call external functions during a conversation — read a file,
+          run a search, send a request to an API, write to a calendar. The model decides
+          when a tool is needed and calls it mid-response.
+        in_practice: null
+        cross_refs: ["Agents", "MCP", "API", "Hooks"]
+
+      - term: "Slash Commands"
+        expansion: null
+        definition: >
+          Typed shortcuts that trigger predefined behaviors — e.g., "/compact" to
+          compress session history when the context window gets tight, or "/clear" to
+          reset. Available in Claude Code CLI; the specific commands depend on what's
+          configured.
+        in_practice: null
+        cross_refs: ["CLI", "Context Window", "Skills"]
+
+      - term: "Hooks"
+        expansion: null
+        definition: >
+          Automated triggers that fire at defined points in an agent's lifecycle — before
+          a task starts, after it completes, when a tool is called. Used to enforce
+          consistent behavior (like always loading a skill before certain types of output)
+          without relying on the agent to remember.
+        in_practice: null
+        cross_refs: ["Agents", "Agent Teams", "Skills", "Tools / Tool Use"]
+
+  # ─────────────────────────────────────────────
+  # 5. INTEGRATION LAYER
+  # ─────────────────────────────────────────────
+  - id: integration
+    label: "Integration Layer"
+    subhead: "How the system reaches outside itself."
+    terms:
+
+      - term: "API"
+        expansion: "Application Programming Interface"
+        definition: >
+          A defined channel for one piece of software to talk to another — structured
+          requests in, structured responses out. When Claude connects to Gmail or Google
+          Calendar, it's going through those services' APIs.
+        in_practice: null
+        cross_refs: ["MCP", "Tools / Tool Use"]
+
+      - term: "MCP"
+        expansion: "Model Context Protocol"
+        definition: >
+          An open standard for connecting AI models to external tools, data sources, and
+          services in a consistent way. Instead of building a one-off integration for
+          every tool, MCP provides a common interface — the model speaks MCP, and any
+          MCP-compatible server can respond. Gmail, Google Calendar, Obsidian, and others
+          have MCP servers.
+        in_practice: >
+          MCP connections are how the morning orientation workflow reaches into Gmail and
+          Google Calendar. Larry's Outlook/Gmail question from Session 1 is an MCP
+          scoping question — which server to configure depends on which service holds
+          the live calendar.
+        cross_refs: ["API", "Tools / Tool Use", "Agents"]
+
+      - term: "System Instructions"
+        expansion: null
+        definition: >
+          A set of operating principles loaded into an agent at the start of every
+          session, governing how it behaves across all of its work — tone, format,
+          constraints, priorities. Also called "system prompt" or "custom instructions"
+          depending on the interface. These can be tiered: global instructions that
+          apply everywhere, and task-specific instructions that apply only to certain
+          types of work.
+        in_practice: >
+          Larry's custom template in the Claude app is a system instruction — it tells
+          the model how to handle every "AspireVue meeting" recording before it reads
+          a single word of the transcript.
+        cross_refs: ["Agents", "Skills", "Session"]
+
+  # ─────────────────────────────────────────────
+  # 6. VAULT LAYER
+  # ─────────────────────────────────────────────
+  - id: vault
+    label: "Vault Layer"
+    subhead: "Where your knowledge lives."
+    terms:
+
+      - term: "Vault"
+        expansion: null
+        definition: >
+          The folder that Obsidian treats as your knowledge base — all notes, templates,
+          attachments, and configurations live inside it. Obsidian reads the vault as a
+          unified graph, not just a pile of files.
+        in_practice: >
+          The AspireVue OS vault holds session summaries, agent memory, project notes,
+          trigger-word logs, and workflow templates. Nothing important lives only in a
+          chat window; it gets written to the vault so it persists.
+        cross_refs: ["Obsidian", "Wiki-link", "Canvas", "NOW doc", "Plugin"]
+
+      - term: "Wiki-link"
+        expansion: null
+        definition: >
+          The "[[Note Name]]" syntax that creates a clickable, bidirectional connection
+          between two notes. Click it to navigate; the linked note also shows all
+          notes that point to it. This is the connective tissue that makes a vault
+          navigable as a knowledge graph rather than just a folder of files.
+        in_practice: >
+          Session summaries are wiki-linked to the relevant project note, the promise
+          ledger, and the NOW doc. That's what makes a summary findable from three
+          different entry points without duplicating it.
+        cross_refs: ["Vault", "Obsidian", "Canvas"]
+
+      - term: "Canvas"
+        expansion: null
+        definition: >
+          Obsidian's native node-and-edge visual surface for mapping architecture,
+          workflows, and relationships. You place notes, text blocks, and images as
+          nodes; draw edges between them to show connections. Each canvas is a
+          .canvas file in the vault.
+        in_practice: >
+          The Plaud workflow overview you received after Session 1 was built as a
+          Canvas — nodes for each step in the flow, edges showing the routing logic.
+          It's a live document, not a screenshot.
+        cross_refs: ["Vault", "Obsidian", "Wiki-link"]
+
+      - term: "NOW doc"
+        expansion: null
+        definition: >
+          A single always-live document inside the vault that surfaces what is active
+          right now — top priorities, hot threads, next moves. Not a to-do list; more
+          like a cockpit readout. The exact update cadence is something each operator
+          tunes — some refresh it at the end of a working block, some at the start of
+          the next one, some both.
+        in_practice: >
+          In the AspireVue OS, the NOW doc is the daily anchor — open it first, work
+          from there. When the system is running well, you don't have to remember where
+          you left off; it's already named.
+        cross_refs: ["Vault", "Obsidian", "Wiki-link", "Memory"]

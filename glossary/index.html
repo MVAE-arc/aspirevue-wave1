@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AspireVue · Glossary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+  (function(){
+    try {
+      var stored = localStorage.getItem('arckin_theme');
+      var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var theme = stored || (systemDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  })();
+</script>
+<style>
+@charset "UTF-8";
+
+/* ===== TOKEN SYSTEM ===== */
+:root {
+  --font-display: 'Syne', 'Space Grotesk', sans-serif;
+  --font-sans:    'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Menlo', 'Monaco', monospace;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  --grain-opacity: 0.15;
+  --max-w: 960px;
+  --page-pad: 28px;
+}
+
+[data-theme="dark"] {
+  --bg-canvas:          #1c1c1c;
+  --bg-pane:            #212121;
+  --fg-primary:         #B0BEC5;
+  --fg-muted:           rgba(176, 190, 197, 0.45);
+  --fg-faint:           rgba(176, 190, 197, 0.18);
+  --accent-ember:       #FFAB40;
+  --hairline:           #263238;
+  --grain-opacity:      0.15;
+  --accent-ember-flash: rgba(255, 171, 64, 0.08);
+}
+
+[data-theme="light"] {
+  --bg-canvas:          #F4F1EC;
+  --bg-pane:            #EDEBE6;
+  --fg-primary:         #263238;
+  --fg-muted:           rgba(38, 50, 56, 0.55);
+  --fg-faint:           rgba(38, 50, 56, 0.18);
+  --accent-ember:       #B8590A;
+  --hairline:           rgba(38, 50, 56, 0.22);
+  --grain-opacity:      0.10;
+  --accent-ember-flash: rgba(184, 89, 10, 0.07);
+}
+
+/* ===== RESET ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  background: var(--bg-canvas);
+  color: var(--fg-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.65;
+  font-weight: 400;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition:
+    background-color 320ms var(--ease-out),
+    color 320ms var(--ease-out);
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: none; padding: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent-ember); outline-offset: 3px; border-radius: 2px; }
+:focus:not(:focus-visible) { outline: none; }
+
+.themable {
+  transition:
+    background-color 320ms var(--ease-out),
+    color 320ms var(--ease-out),
+    border-color 320ms var(--ease-out);
+}
+
+/* ===== GRAIN MEMBRANE ===== */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: overlay;
+  transition: opacity 320ms var(--ease-out);
+}
+.grain-overlay svg { width: 100%; height: 100%; display: block; }
+
+/* ===== ARRIVE ANIMATION ===== */
+@keyframes arrive {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.arrive { animation: arrive 540ms var(--ease-out) both; }
+.d1 { animation-delay: 60ms; }
+.d2 { animation-delay: 140ms; }
+.d3 { animation-delay: 220ms; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  .arrive { animation: none; opacity: 1; transform: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* ===== PAGE FRAME ===== */
+.page {
+  position: relative;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--page-pad);
+  z-index: 1;
+}
+
+/* ===== NAV ===== */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.nav-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-brand-divider {
+  color: var(--accent-ember);
+  opacity: 0.55;
+  transition: opacity 200ms var(--ease-out);
+}
+.nav-brand-product { color: var(--fg-primary); opacity: 0.9; }
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+.nav-back {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  transition: color 200ms var(--ease-out);
+}
+.nav-back:hover { color: var(--fg-primary); }
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.10em;
+  user-select: none;
+  transition: transform 100ms var(--ease-out);
+}
+.theme-toggle:active { transform: scale(0.97); }
+.theme-toggle-opt {
+  color: var(--fg-primary);
+  opacity: 0.32;
+  transition: opacity 220ms var(--ease-out);
+}
+.theme-toggle:hover .theme-toggle-opt { opacity: 0.55; }
+[data-theme="light"] .theme-toggle-opt[data-opt="light"],
+[data-theme="dark"]  .theme-toggle-opt[data-opt="dark"]  { opacity: 1; }
+
+/* ===== GLOSSARY HERO ===== */
+.glossary-hero {
+  padding: 64px 0 48px;
+}
+
+.glossary-hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-ember);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.glossary-hero-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(40px, 5.2vw, 64px);
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--fg-primary);
+  margin-bottom: 24px;
+}
+
+.glossary-hero-subtitle {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--fg-primary);
+  opacity: 0.88;
+  max-width: 56ch;
+  margin-bottom: 24px;
+}
+
+.glossary-hero-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.meta-sep {
+  color: var(--accent-ember);
+  opacity: 0.55;
+}
+
+/* ===== MOBILE CLUSTER JUMP STRIP (hidden on desktop) ===== */
+.cluster-jump-strip {
+  display: none;
+}
+
+/* ===== GLOSSARY SHELL ===== */
+.glossary-shell {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 0;
+  border-top: 1px solid var(--hairline);
+  margin-top: 8px;
+}
+
+/* ===== CLUSTER NAV ===== */
+.cluster-nav {
+  position: relative;
+}
+
+.cluster-nav-inner {
+  position: sticky;
+  top: 24px;
+  padding: 32px 24px 32px 0;
+  border-right: 1px solid var(--hairline);
+}
+
+.cluster-nav-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  opacity: 0.55;
+  margin-bottom: 20px;
+}
+
+.cluster-nav-item {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--fg-muted);
+  padding: 7px 0 7px 10px;
+  margin-left: -10px;
+  border-left: 2px solid transparent;
+  transition: color 180ms var(--ease-out), border-color 180ms var(--ease-out);
+  text-decoration: none;
+  line-height: 1.3;
+}
+
+.cluster-nav-item:hover {
+  color: var(--fg-primary);
+}
+
+.cluster-nav-item.active {
+  color: var(--accent-ember);
+  border-left-color: var(--accent-ember);
+}
+
+/* ===== GLOSSARY CONTENT ===== */
+.glossary-content {
+  padding: 0 0 0 48px;
+}
+
+/* ===== CLUSTER SECTION ===== */
+.cluster-section {
+  padding-top: 72px;
+  padding-bottom: 56px;
+  scroll-margin-top: 24px;
+}
+
+.cluster-rule {
+  width: 100%;
+  height: 1px;
+  background: var(--hairline);
+  margin-bottom: 28px;
+}
+
+.cluster-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.cluster-heading {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(22px, 2.4vw, 28px);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  text-transform: uppercase;
+  color: var(--fg-primary);
+  margin-bottom: 12px;
+}
+
+.cluster-subhead {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--fg-muted);
+  max-width: 52ch;
+  margin-bottom: 40px;
+}
+
+/* ===== TERM BLOCK ===== */
+.term-block {
+  padding: 28px 0 0;
+}
+
+.term-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  color: var(--fg-primary);
+  line-height: 1.2;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 10px;
+}
+
+.term-expansion {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--fg-muted);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.term-definition {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--fg-primary);
+  opacity: 0.88;
+  max-width: 60ch;
+  margin-top: 10px;
+}
+
+.term-practice-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-ember);
+  display: block;
+  margin-top: 20px;
+  margin-bottom: 6px;
+}
+
+.term-practice-body {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.70;
+  color: var(--fg-muted);
+  max-width: 60ch;
+}
+
+/* ===== CROSS-REFS ===== */
+.cross-refs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.cross-ref-pill {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  border: 1px solid var(--hairline);
+  padding: 3px 8px;
+  text-decoration: none;
+  transition: color 180ms var(--ease-out), border-color 180ms var(--ease-out);
+}
+
+.cross-ref-pill:hover {
+  color: var(--accent-ember);
+  border-color: var(--accent-ember);
+}
+
+/* ===== TERM DIVIDER ===== */
+.term-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--hairline);
+  margin-top: 28px;
+}
+
+.term-block:last-child .term-divider {
+  display: none;
+}
+
+/* ===== TERM FLASH ===== */
+@keyframes term-flash {
+  0%   { background-color: transparent; }
+  25%  { background-color: var(--accent-ember-flash); }
+  100% { background-color: transparent; }
+}
+
+.term-highlight {
+  animation: term-flash 400ms var(--ease-out) both;
+  border-radius: 2px;
+}
+
+/* ===== WORDMARK CLOSER ===== */
+.wordmark-closer {
+  position: relative;
+  margin-top: 24px;
+  padding: 56px 0 32px;
+  border-top: 1px solid var(--hairline);
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+.wordmark-ticker {
+  display: flex;
+  width: max-content;
+  animation: ticker-slide 32s linear infinite;
+  will-change: transform;
+}
+.wordmark-ticker-item {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(72px, 13vw, 168px);
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  color: var(--fg-primary);
+  opacity: 0.09;
+  white-space: nowrap;
+  line-height: 1;
+  flex-shrink: 0;
+  padding-right: 0.4em;
+}
+.wordmark-ticker-item .sep {
+  color: var(--accent-ember);
+  opacity: 0.55;
+  padding: 0 0.15em;
+}
+[data-theme="light"] .wordmark-ticker-item { opacity: 0.07; }
+@keyframes ticker-slide {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wordmark-ticker { animation: none; transform: translateX(-2vw); }
+}
+
+/* ===== FOOTER ===== */
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 0 32px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 960px) {
+  .glossary-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .cluster-nav {
+    display: none;
+  }
+
+  .glossary-content {
+    padding: 0;
+  }
+
+  .cluster-jump-strip {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 16px 0 20px;
+    border-bottom: 1px solid var(--hairline);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cluster-jump-strip::-webkit-scrollbar { display: none; }
+
+  .cluster-jump-chip {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    border: 1px solid var(--hairline);
+    padding: 5px 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    text-decoration: none;
+    transition: color 180ms var(--ease-out), border-color 180ms var(--ease-out);
+  }
+
+  .cluster-jump-chip:hover,
+  .cluster-jump-chip:focus-visible {
+    color: var(--accent-ember);
+    border-color: var(--accent-ember);
+  }
+}
+
+@media (max-width: 540px) {
+  :root { --page-pad: 18px; }
+
+  .cluster-section {
+    padding-top: 56px;
+    padding-bottom: 40px;
+  }
+
+  .glossary-hero {
+    padding: 48px 0 36px;
+  }
+
+  .nav-back { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- GRAIN MEMBRANE -->
+<div class="grain-overlay" aria-hidden="true">
+  <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <filter id="grain-noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch" seed="7"/>
+      <feColorMatrix type="matrix" values="
+        0 0 0 0 0
+        0 0 0 0 0
+        0 0 0 0 0
+        0 0 0 0.9 0"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#grain-noise)"/>
+  </svg>
+</div>
+
+<div class="page">
+
+  <!-- NAV -->
+  <nav class="nav themable" role="navigation" aria-label="Page navigation">
+    <div class="nav-brand">
+      <span>Arc'kin</span>
+      <span class="nav-brand-divider">&#8212;</span>
+      <span class="nav-brand-product">AspireVue</span>
+    </div>
+    <div class="nav-controls">
+      <a class="nav-back" href="../day-00/">(DAY 00)</a>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle color scheme">
+        <span class="theme-toggle-opt" data-opt="light">(LIGHT)</span>
+        <span class="theme-toggle-opt" data-opt="dark">(DARK)</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <header class="glossary-hero arrive">
+    <span class="glossary-hero-eyebrow">(MASTER GLOSSARY)</span>
+    <h1 class="glossary-hero-title arrive d1">Glossary</h1>
+    <p class="glossary-hero-subtitle arrive d2">
+      This page collects the vocabulary we use most. It exists as a shared reference &#8212; not
+      a primer &#8212; so that when a term comes up in a working session, we&#8217;re using the same
+      definition and can move on. It will grow as the stack grows; check back when something
+      new gets introduced.
+    </p>
+    <div class="glossary-hero-meta arrive d3">
+      <span>(34 terms)</span>
+      <span class="meta-sep" aria-hidden="true">&#183;</span>
+      <span>(6 clusters)</span>
+      <span class="meta-sep" aria-hidden="true">&#183;</span>
+      <span>(Reference &#183; Read only)</span>
+    </div>
+  </header>
+
+  <!-- MOBILE CLUSTER JUMP STRIP -->
+  <div class="cluster-jump-strip" role="navigation" aria-label="Jump to cluster">
+    <a class="cluster-jump-chip" href="#cluster-interface">Interface</a>
+    <a class="cluster-jump-chip" href="#cluster-environment">Environment</a>
+    <a class="cluster-jump-chip" href="#cluster-model">Model</a>
+    <a class="cluster-jump-chip" href="#cluster-capability">Capability</a>
+    <a class="cluster-jump-chip" href="#cluster-integration">Integration</a>
+    <a class="cluster-jump-chip" href="#cluster-vault">Vault</a>
+  </div>
+
+  <!-- MAIN SHELL -->
+  <div class="glossary-shell">
+
+    <!-- STICKY CLUSTER NAV -->
+    <aside class="cluster-nav" aria-label="Jump to cluster">
+      <div class="cluster-nav-inner">
+        <div class="cluster-nav-label">Clusters</div>
+        <nav aria-label="Cluster navigation">
+          <a class="cluster-nav-item active" href="#cluster-interface" data-target="#cluster-interface">Interface Layer</a>
+          <a class="cluster-nav-item" href="#cluster-environment" data-target="#cluster-environment">Environment Layer</a>
+          <a class="cluster-nav-item" href="#cluster-model" data-target="#cluster-model">Model Layer</a>
+          <a class="cluster-nav-item" href="#cluster-capability" data-target="#cluster-capability">Capability Layer</a>
+          <a class="cluster-nav-item" href="#cluster-integration" data-target="#cluster-integration">Integration Layer</a>
+          <a class="cluster-nav-item" href="#cluster-vault" data-target="#cluster-vault">Vault Layer</a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- TERM CONTENT -->
+    <main class="glossary-content" id="main-content">
+
+      <!-- ═══════════════════════════════ -->
+      <!-- CLUSTER 1 — INTERFACE LAYER    -->
+      <!-- ═══════════════════════════════ -->
+      <section class="cluster-section" id="cluster-interface" aria-labelledby="cluster-heading-interface">
+
+        <div class="cluster-rule" aria-hidden="true"></div>
+        <span class="cluster-eyebrow">(01 / 06) Interface Layer</span>
+        <h2 class="cluster-heading" id="cluster-heading-interface">Interface Layer</h2>
+        <p class="cluster-subhead">Where you meet the system.</p>
+
+        <div class="term-block" id="term-ide">
+          <div class="term-name">
+            <span>IDE</span>
+            <span class="term-expansion">&#8212; Integrated Development Environment</span>
+          </div>
+          <p class="term-definition">
+            A full-featured editor for writing and running code &#8212; file tree, terminal,
+            extensions, and model integrations all in one window.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-cli">CLI</a>
+            <a class="cross-ref-pill" href="#term-gui">GUI</a>
+            <a class="cross-ref-pill" href="#term-antigravity">Antigravity</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-gui">
+          <div class="term-name">
+            <span>GUI</span>
+            <span class="term-expansion">&#8212; Graphical User Interface</span>
+          </div>
+          <p class="term-definition">
+            Any interface driven by buttons, menus, and windows rather than typed commands.
+            Easier to discover; usually slower to operate than a CLI once you know the verbs.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-cli">CLI</a>
+            <a class="cross-ref-pill" href="#term-ide">IDE</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-cli">
+          <div class="term-name">
+            <span>CLI</span>
+            <span class="term-expansion">&#8212; Command-Line Interface</span>
+          </div>
+          <p class="term-definition">
+            A keyboard-only way to operate a tool &#8212; no buttons or menus, just typed commands
+            and their output. Faster than a GUI once you know the verbs; less discoverable
+            until you do.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-gui">GUI</a>
+            <a class="cross-ref-pill" href="#term-ide">IDE</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-plugin">
+          <div class="term-name">
+            <span>Plugin</span>
+          </div>
+          <p class="term-definition">
+            An add-on that extends a tool&#8217;s base functionality without changing the core
+            application. In Obsidian, plugins add features like database views, calendar
+            integrations, and publishing.
+          </p>
+          <span class="term-practice-label">(In practice)</span>
+          <p class="term-practice-body">
+            The Obsidian vault runs on a curated plugin set. &#8220;Core plugin&#8221; means it ships
+            with Obsidian by default; &#8220;community plugin&#8221; means it&#8217;s third-party. Core plugins
+            are stable; community plugins vary.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-obsidian">Obsidian</a>
+            <a class="cross-ref-pill" href="#term-vault">Vault</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-mobile">
+          <div class="term-name">
+            <span>Mobile (Remote Control &amp; Dispatch)</span>
+          </div>
+          <p class="term-definition">
+            Using the Claude mobile app to kick off tasks, monitor progress, and respond to
+            agent output from a phone. Not a limited version of the desktop &#8212; the phone is
+            often the primary entry point when you&#8217;re away from the workstation.
+          </p>
+          <span class="term-practice-label">(In practice)</span>
+          <p class="term-practice-body">
+            Larry&#8217;s primary device for initiating work is the phone. The pattern: record
+            a Plaud note, route it to the right agent, review the output on the Claude app
+            before the next session or meeting starts.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-claude-chat">Claude Chat</a>
+            <a class="cross-ref-pill" href="#term-claude-code-gui">Claude Code GUI</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+      </section>
+
+      <!-- ═══════════════════════════════ -->
+      <!-- CLUSTER 2 — ENVIRONMENT LAYER  -->
+      <!-- ═══════════════════════════════ -->
+      <section class="cluster-section" id="cluster-environment" aria-labelledby="cluster-heading-environment">
+
+        <div class="cluster-rule" aria-hidden="true"></div>
+        <span class="cluster-eyebrow">(02 / 06) Environment Layer</span>
+        <h2 class="cluster-heading" id="cluster-heading-environment">Environment Layer</h2>
+        <p class="cluster-subhead">The specific places work happens.</p>
+
+        <div class="term-block" id="term-antigravity">
+          <div class="term-name">
+            <span>Antigravity</span>
+          </div>
+          <p class="term-definition">
+            Google&#8217;s IDE. Built to work with Claude Code CLI natively, so you can run
+            terminal commands and model interactions inside the same editor window.
+          </p>
+          <span class="term-practice-label">(In practice)</span>
+          <p class="term-practice-body">
+            Primary IDE in the stack. When work is being done that requires both editing
+            files and talking to Claude, it&#8217;s happening here.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-ide">IDE</a>
+            <a class="cross-ref-pill" href="#term-claude-code-cli">Claude Code CLI</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-claude-code-cli">
+          <div class="term-name">
+            <span>Claude Code CLI</span>
+          </div>
+          <p class="term-definition">
+            The command-line version of Claude Code. Runs inside a terminal or an IDE like
+            Antigravity and gives Claude direct access to files, folders, and system tools on
+            your machine. Faster than the chat interface for anything involving file editing
+            or multi-step tasks.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-cli">CLI</a>
+            <a class="cross-ref-pill" href="#term-antigravity">Antigravity</a>
+            <a class="cross-ref-pill" href="#term-claude-code-gui">Claude Code GUI</a>
+            <a class="cross-ref-pill" href="#term-tools-tool-use">Tools / Tool Use</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-claude-code-gui">
+          <div class="term-name">
+            <span>Claude Code GUI</span>
+          </div>
+          <p class="term-definition">
+            The desktop app version of Claude Code. Same underlying capability as the CLI
+            but wrapped in a visual interface &#8212; useful for people who aren&#8217;t working in a
+            terminal yet or who want to keep CLI and UI side by side.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-gui">GUI</a>
+            <a class="cross-ref-pill" href="#term-claude-code-cli">Claude Code CLI</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-claude-chat">
+          <div class="term-name">
+            <span>Claude Chat</span>
+          </div>
+          <p class="term-definition">
+            The standard Claude conversation interface at claude.ai &#8212; browser or mobile app.
+            This is where most people start; it doesn&#8217;t have the file-system access that
+            Claude Code has, but it handles the full range of conversational and
+            reasoning tasks.
+          </p>
+          <span class="term-practice-label">(In practice)</span>
+          <p class="term-practice-body">
+            Larry&#8217;s current primary interface for building and testing custom templates.
+            The &#8220;My Space&#8221; custom templates live here.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-claude-code-cli">Claude Code CLI</a>
+            <a class="cross-ref-pill" href="#term-session">Session</a>
+            <a class="cross-ref-pill" href="#term-mobile">Mobile (Remote Control &amp; Dispatch)</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-claude-cowork">
+          <div class="term-name">
+            <span>Claude CoWork</span>
+          </div>
+          <p class="term-definition">
+            A multi-agent collaboration mode inside Claude where multiple agents can work
+            on shared tasks in a coordinated way. Each agent has a defined role; they
+            communicate through a shared task surface rather than running independently.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-agent-teams">Agent Teams</a>
+            <a class="cross-ref-pill" href="#term-agents">Agents</a>
+            <a class="cross-ref-pill" href="#term-sub-agents">Sub-Agents</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-claude-in-chrome">
+          <div class="term-name">
+            <span>Claude in Chrome</span>
+          </div>
+          <p class="term-definition">
+            A browser extension that brings Claude into Chrome without switching tabs.
+            Claude reads the current page and responds in context &#8212; useful for summarizing,
+            drafting replies, or extracting information from what&#8217;s on screen.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-claude-chat">Claude Chat</a>
+            <a class="cross-ref-pill" href="#term-tools-tool-use">Tools / Tool Use</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-claude-in-obsidian">
+          <div class="term-name">
+            <span>Claude in Obsidian</span>
+          </div>
+          <p class="term-definition">
+            An integration pattern &#8212; Claude accessible from within the Obsidian vault via
+            plugin. Claude reads note content and can write back to the vault, so
+            conversations are grounded in your actual knowledge base rather than a blank
+            context window.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-obsidian">Obsidian</a>
+            <a class="cross-ref-pill" href="#term-vault">Vault</a>
+            <a class="cross-ref-pill" href="#term-plugin">Plugin</a>
+            <a class="cross-ref-pill" href="#term-memory">Memory</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-google-gemini">
+          <div class="term-name">
+            <span>Google Gemini</span>
+          </div>
+          <p class="term-definition">
+            Google&#8217;s primary AI assistant, available at gemini.google.com and inside Google
+            Workspace (Docs, Gmail, Meet). Shares the same underlying model family as
+            Google AI Studio but is the consumer-facing product.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-google-ai-studio">Google AI Studio</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-google-ai-studio">
+          <div class="term-name">
+            <span>Google AI Studio</span>
+          </div>
+          <p class="term-definition">
+            Google&#8217;s developer-facing interface for the Gemini model family. Used for
+            prototyping prompts, testing API calls, and accessing model capabilities before
+            embedding them in a workflow or application.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-google-gemini">Google Gemini</a>
+            <a class="cross-ref-pill" href="#term-api">API</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-obsidian">
+          <div class="term-name">
+            <span>Obsidian</span>
+          </div>
+          <p class="term-definition">
+            A local-first note-taking and knowledge management app. Everything lives in
+            plain text Markdown files on your own machine &#8212; no proprietary format, no
+            mandatory cloud sync. The folder containing those files is called the vault.
+          </p>
+          <span class="term-practice-label">(In practice)</span>
+          <p class="term-practice-body">
+            The vault is the AspireVue OS&#8217;s memory and knowledge spine. Agent outputs,
+            session summaries, project notes, and templates all live here.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-vault">Vault</a>
+            <a class="cross-ref-pill" href="#term-plugin">Plugin</a>
+            <a class="cross-ref-pill" href="#term-wiki-link">Wiki-link</a>
+            <a class="cross-ref-pill" href="#term-canvas">Canvas</a>
+            <a class="cross-ref-pill" href="#term-now-doc">NOW doc</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+      </section>
+
+      <!-- ═══════════════════════════════ -->
+      <!-- CLUSTER 3 — MODEL LAYER        -->
+      <!-- ═══════════════════════════════ -->
+      <section class="cluster-section" id="cluster-model" aria-labelledby="cluster-heading-model">
+
+        <div class="cluster-rule" aria-hidden="true"></div>
+        <span class="cluster-eyebrow">(03 / 06) Model Layer</span>
+        <h2 class="cluster-heading" id="cluster-heading-model">Model Layer</h2>
+        <p class="cluster-subhead">What&#8217;s running underneath.</p>
+
+        <div class="term-block" id="term-tokens">
+          <div class="term-name">
+            <span>Tokens</span>
+          </div>
+          <p class="term-definition">
+            The unit a model uses to measure and process text. Roughly 750 words equals
+            about 1,000 tokens; the model thinks in tokens, not words or characters.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-context-window">Context Window</a>
+            <a class="cross-ref-pill" href="#term-usage">Usage</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-context">
+          <div class="term-name">
+            <span>Context</span>
+          </div>
+          <p class="term-definition">
+            Everything the model can currently &#8220;see&#8221; &#8212; the conversation history, any files
+            or documents you&#8217;ve loaded, and the system instructions in effect. The model&#8217;s
+            responses are shaped entirely by what&#8217;s in this context.
+          </p>
+          <span class="term-practice-label">(In practice)</span>
+          <p class="term-practice-body">
+            When you start a new conversation, context resets. Anything from a prior session
+            that the model needs to know has to be re-loaded &#8212; either manually or through
+            a memory system.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-context-window">Context Window</a>
+            <a class="cross-ref-pill" href="#term-session">Session</a>
+            <a class="cross-ref-pill" href="#term-memory">Memory</a>
+            <a class="cross-ref-pill" href="#term-tokens">Tokens</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-context-window">
+          <div class="term-name">
+            <span>Context Window</span>
+          </div>
+          <p class="term-definition">
+            The maximum amount of text a model can hold in a single session, measured in
+            tokens. When it fills up, older content gets compressed or dropped &#8212; the model
+            may paraphrase earlier exchanges rather than quote them exactly, and fine detail
+            can drift. In practice, ~70% full is the signal to wrap a session and start fresh
+            to keep output quality consistent.
+          </p>
+          <span class="term-practice-label">(In practice)</span>
+          <p class="term-practice-body">
+            The Claude Code CLI displays context window percentage during long sessions.
+            When it approaches that threshold, current work gets summarized and a new
+            session picks up from there &#8212; no loss of direction, just a clean slate.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-context">Context</a>
+            <a class="cross-ref-pill" href="#term-session">Session</a>
+            <a class="cross-ref-pill" href="#term-tokens">Tokens</a>
+            <a class="cross-ref-pill" href="#term-prompt-caching">Prompt Caching</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-session">
+          <div class="term-name">
+            <span>Session</span>
+          </div>
+          <p class="term-definition">
+            A single uninterrupted conversation with the model. Context builds up within
+            a session and resets when a new one starts. Sessions don&#8217;t automatically
+            carry memory forward unless a memory system is configured to do so.
+          </p>
+          <span class="term-practice-label">(In practice)</span>
+          <p class="term-practice-body">
+            Each working block with the AspireVue OS is effectively a session. The
+            session summary at the end of every block captures what needs to carry forward
+            before context clears.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-context-window">Context Window</a>
+            <a class="cross-ref-pill" href="#term-context">Context</a>
+            <a class="cross-ref-pill" href="#term-memory">Memory</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-usage">
+          <div class="term-name">
+            <span>Usage</span>
+          </div>
+          <p class="term-definition">
+            The measured consumption of model capacity &#8212; tracked in tokens on API plans,
+            or against a message limit on subscription plans. Different models cost different
+            amounts; more capable models consume more per call.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-tokens">Tokens</a>
+            <a class="cross-ref-pill" href="#term-api">API</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-prompt-caching">
+          <div class="term-name">
+            <span>Prompt Caching</span>
+          </div>
+          <p class="term-definition">
+            A feature that stores frequently-used context (like a long system prompt or a
+            large reference document) so the model doesn&#8217;t re-process it on every call.
+            Reduces cost and latency when the same instructions appear in many requests.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-context-window">Context Window</a>
+            <a class="cross-ref-pill" href="#term-tokens">Tokens</a>
+            <a class="cross-ref-pill" href="#term-api">API</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+      </section>
+
+      <!-- ═══════════════════════════════ -->
+      <!-- CLUSTER 4 — CAPABILITY LAYER   -->
+      <!-- ═══════════════════════════════ -->
+      <section class="cluster-section" id="cluster-capability" aria-labelledby="cluster-heading-capability">
+
+        <div class="cluster-rule" aria-hidden="true"></div>
+        <span class="cluster-eyebrow">(04 / 06) Capability Layer</span>
+        <h2 class="cluster-heading" id="cluster-heading-capability">Capability Layer</h2>
+        <p class="cluster-subhead">What the model can do beyond chat.</p>
+
+        <div class="term-block" id="term-agents">
+          <div class="term-name">
+            <span>Agents</span>
+          </div>
+          <p class="term-definition">
+            A model configured to take sequences of actions &#8212; not just answer a question,
+            but plan steps, call tools, read files, and complete a goal with minimal
+            hand-holding between steps.
+          </p>
+          <span class="term-practice-label">(In practice)</span>
+          <p class="term-practice-body">
+            The morning orientation workflow is an agent: it scrapes email, pulls the
+            calendar, surfaces project status, and assembles a brief &#8212; all in one run,
+            triggered by a single button press.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-sub-agents">Sub-Agents</a>
+            <a class="cross-ref-pill" href="#term-agent-teams">Agent Teams</a>
+            <a class="cross-ref-pill" href="#term-tools-tool-use">Tools / Tool Use</a>
+            <a class="cross-ref-pill" href="#term-skills">Skills</a>
+            <a class="cross-ref-pill" href="#term-hooks">Hooks</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-sub-agents">
+          <div class="term-name">
+            <span>Sub-Agents</span>
+          </div>
+          <p class="term-definition">
+            An agent spawned by another agent to handle a focused part of a larger task.
+            The parent agent delegates and reassembles; the sub-agent executes and returns.
+            Different from Agent Teams, which is a persistent multi-role infrastructure &#8212;
+            sub-agents are disposable task-runners within a single run.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-agents">Agents</a>
+            <a class="cross-ref-pill" href="#term-agent-teams">Agent Teams</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-agent-teams">
+          <div class="term-name">
+            <span>Agent Teams</span>
+          </div>
+          <p class="term-definition">
+            A persistent multi-agent setup where specialists share a task list and pick up
+            work as it comes in. The team holds context across runs; each agent has a
+            defined role. Different from spinning up a sub-agent for one task &#8212; the team
+            is always there, ready to claim work.
+          </p>
+          <span class="term-practice-label">(In practice)</span>
+          <p class="term-practice-body">
+            As the AspireVue OS matures, standing agent teams handle recurring work
+            categories &#8212; clinical summaries, BD conversations, ideation scoring &#8212; without
+            needing to be rebuilt each time.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-agents">Agents</a>
+            <a class="cross-ref-pill" href="#term-sub-agents">Sub-Agents</a>
+            <a class="cross-ref-pill" href="#term-skills">Skills</a>
+            <a class="cross-ref-pill" href="#term-hooks">Hooks</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-skills">
+          <div class="term-name">
+            <span>Skills</span>
+          </div>
+          <p class="term-definition">
+            Packaged sets of instructions that an agent loads before starting a specific
+            type of task. A skill tells the agent how to approach a category of work &#8212;
+            what rules apply, what format to use, what to avoid. Think of it as a
+            standing brief, not a prompt you type each time.
+          </p>
+          <span class="term-practice-label">(In practice)</span>
+          <p class="term-practice-body">
+            A skill called before drafting client-facing copy might specify register, banned
+            phrases, structural variety, and accuracy rules &#8212; so the agent loads a consistent
+            standard rather than improvising every time. The same pattern applies to research,
+            intake, summarization, or any recurring work category.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-agents">Agents</a>
+            <a class="cross-ref-pill" href="#term-system-instructions">System Instructions</a>
+            <a class="cross-ref-pill" href="#term-slash-commands">Slash Commands</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-memory">
+          <div class="term-name">
+            <span>Memory</span>
+          </div>
+          <p class="term-definition">
+            A mechanism for persisting information across sessions. Without memory, every
+            new conversation starts blank. With it, the agent recalls prior decisions,
+            user preferences, and project context without being re-briefed each time.
+          </p>
+          <span class="term-practice-label">(In practice)</span>
+          <p class="term-practice-body">
+            The AspireVue OS uses a file-based memory system inside Obsidian. Session
+            summaries and decision logs write to that memory so the next session picks up
+            with full context rather than starting cold.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-context">Context</a>
+            <a class="cross-ref-pill" href="#term-session">Session</a>
+            <a class="cross-ref-pill" href="#term-vault">Vault</a>
+            <a class="cross-ref-pill" href="#term-obsidian">Obsidian</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-tools-tool-use">
+          <div class="term-name">
+            <span>Tools / Tool Use</span>
+          </div>
+          <p class="term-definition">
+            The ability to call external functions during a conversation &#8212; read a file,
+            run a search, send a request to an API, write to a calendar. The model decides
+            when a tool is needed and calls it mid-response.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-agents">Agents</a>
+            <a class="cross-ref-pill" href="#term-mcp">MCP</a>
+            <a class="cross-ref-pill" href="#term-api">API</a>
+            <a class="cross-ref-pill" href="#term-hooks">Hooks</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-slash-commands">
+          <div class="term-name">
+            <span>Slash Commands</span>
+          </div>
+          <p class="term-definition">
+            Typed shortcuts that trigger predefined behaviors &#8212; e.g., &#8220;/compact&#8221; to
+            compress session history when the context window gets tight, or &#8220;/clear&#8221; to
+            reset. Available in Claude Code CLI; the specific commands depend on what&#8217;s
+            configured.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-cli">CLI</a>
+            <a class="cross-ref-pill" href="#term-context-window">Context Window</a>
+            <a class="cross-ref-pill" href="#term-skills">Skills</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-hooks">
+          <div class="term-name">
+            <span>Hooks</span>
+          </div>
+          <p class="term-definition">
+            Automated triggers that fire at defined points in an agent&#8217;s lifecycle &#8212; before
+            a task starts, after it completes, when a tool is called. Used to enforce
+            consistent behavior (like always loading a skill before certain types of output)
+            without relying on the agent to remember.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-agents">Agents</a>
+            <a class="cross-ref-pill" href="#term-agent-teams">Agent Teams</a>
+            <a class="cross-ref-pill" href="#term-skills">Skills</a>
+            <a class="cross-ref-pill" href="#term-tools-tool-use">Tools / Tool Use</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+      </section>
+
+      <!-- ═══════════════════════════════ -->
+      <!-- CLUSTER 5 — INTEGRATION LAYER  -->
+      <!-- ═══════════════════════════════ -->
+      <section class="cluster-section" id="cluster-integration" aria-labelledby="cluster-heading-integration">
+
+        <div class="cluster-rule" aria-hidden="true"></div>
+        <span class="cluster-eyebrow">(05 / 06) Integration Layer</span>
+        <h2 class="cluster-heading" id="cluster-heading-integration">Integration Layer</h2>
+        <p class="cluster-subhead">How the system reaches outside itself.</p>
+
+        <div class="term-block" id="term-api">
+          <div class="term-name">
+            <span>API</span>
+            <span class="term-expansion">&#8212; Application Programming Interface</span>
+          </div>
+          <p class="term-definition">
+            A defined channel for one piece of software to talk to another &#8212; structured
+            requests in, structured responses out. When Claude connects to Gmail or Google
+            Calendar, it&#8217;s going through those services&#8217; APIs.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-mcp">MCP</a>
+            <a class="cross-ref-pill" href="#term-tools-tool-use">Tools / Tool Use</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-mcp">
+          <div class="term-name">
+            <span>MCP</span>
+            <span class="term-expansion">&#8212; Model Context Protocol</span>
+          </div>
+          <p class="term-definition">
+            An open standard for connecting AI models to external tools, data sources, and
+            services in a consistent way. Instead of building a one-off integration for
+            every tool, MCP provides a common interface &#8212; the model speaks MCP, and any
+            MCP-compatible server can respond. Gmail, Google Calendar, Obsidian, and others
+            have MCP servers.
+          </p>
+          <span class="term-practice-label">(In practice)</span>
+          <p class="term-practice-body">
+            MCP connections are how the morning orientation workflow reaches into Gmail and
+            Google Calendar. Larry&#8217;s Outlook/Gmail question from Session 1 is an MCP
+            scoping question &#8212; which server to configure depends on which service holds
+            the live calendar.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-api">API</a>
+            <a class="cross-ref-pill" href="#term-tools-tool-use">Tools / Tool Use</a>
+            <a class="cross-ref-pill" href="#term-agents">Agents</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-system-instructions">
+          <div class="term-name">
+            <span>System Instructions</span>
+          </div>
+          <p class="term-definition">
+            A set of operating principles loaded into an agent at the start of every
+            session, governing how it behaves across all of its work &#8212; tone, format,
+            constraints, priorities. Also called &#8220;system prompt&#8221; or &#8220;custom instructions&#8221;
+            depending on the interface. These can be tiered: global instructions that
+            apply everywhere, and task-specific instructions that apply only to certain
+            types of work.
+          </p>
+          <span class="term-practice-label">(In practice)</span>
+          <p class="term-practice-body">
+            Larry&#8217;s custom template in the Claude app is a system instruction &#8212; it tells
+            the model how to handle every &#8220;AspireVue meeting&#8221; recording before it reads
+            a single word of the transcript.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-agents">Agents</a>
+            <a class="cross-ref-pill" href="#term-skills">Skills</a>
+            <a class="cross-ref-pill" href="#term-session">Session</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+      </section>
+
+      <!-- ═══════════════════════════════ -->
+      <!-- CLUSTER 6 — VAULT LAYER        -->
+      <!-- ═══════════════════════════════ -->
+      <section class="cluster-section" id="cluster-vault" aria-labelledby="cluster-heading-vault">
+
+        <div class="cluster-rule" aria-hidden="true"></div>
+        <span class="cluster-eyebrow">(06 / 06) Vault Layer</span>
+        <h2 class="cluster-heading" id="cluster-heading-vault">Vault Layer</h2>
+        <p class="cluster-subhead">Where your knowledge lives.</p>
+
+        <div class="term-block" id="term-vault">
+          <div class="term-name">
+            <span>Vault</span>
+          </div>
+          <p class="term-definition">
+            The folder that Obsidian treats as your knowledge base &#8212; all notes, templates,
+            attachments, and configurations live inside it. Obsidian reads the vault as a
+            unified graph, not just a pile of files.
+          </p>
+          <span class="term-practice-label">(In practice)</span>
+          <p class="term-practice-body">
+            The AspireVue OS vault holds session summaries, agent memory, project notes,
+            trigger-word logs, and workflow templates. Nothing important lives only in a
+            chat window; it gets written to the vault so it persists.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-obsidian">Obsidian</a>
+            <a class="cross-ref-pill" href="#term-wiki-link">Wiki-link</a>
+            <a class="cross-ref-pill" href="#term-canvas">Canvas</a>
+            <a class="cross-ref-pill" href="#term-now-doc">NOW doc</a>
+            <a class="cross-ref-pill" href="#term-plugin">Plugin</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-wiki-link">
+          <div class="term-name">
+            <span>Wiki-link</span>
+          </div>
+          <p class="term-definition">
+            The &#8220;[[Note Name]]&#8221; syntax that creates a clickable, bidirectional connection
+            between two notes. Click it to navigate; the linked note also shows all
+            notes that point to it. This is the connective tissue that makes a vault
+            navigable as a knowledge graph rather than just a folder of files.
+          </p>
+          <span class="term-practice-label">(In practice)</span>
+          <p class="term-practice-body">
+            Session summaries are wiki-linked to the relevant project note, the promise
+            ledger, and the NOW doc. That&#8217;s what makes a summary findable from three
+            different entry points without duplicating it.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-vault">Vault</a>
+            <a class="cross-ref-pill" href="#term-obsidian">Obsidian</a>
+            <a class="cross-ref-pill" href="#term-canvas">Canvas</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-canvas">
+          <div class="term-name">
+            <span>Canvas</span>
+          </div>
+          <p class="term-definition">
+            Obsidian&#8217;s native node-and-edge visual surface for mapping architecture,
+            workflows, and relationships. You place notes, text blocks, and images as
+            nodes; draw edges between them to show connections. Each canvas is a
+            .canvas file in the vault.
+          </p>
+          <span class="term-practice-label">(In practice)</span>
+          <p class="term-practice-body">
+            The Plaud workflow overview you received after Session 1 was built as a
+            Canvas &#8212; nodes for each step in the flow, edges showing the routing logic.
+            It&#8217;s a live document, not a screenshot.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-vault">Vault</a>
+            <a class="cross-ref-pill" href="#term-obsidian">Obsidian</a>
+            <a class="cross-ref-pill" href="#term-wiki-link">Wiki-link</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+        <div class="term-block" id="term-now-doc">
+          <div class="term-name">
+            <span>NOW doc</span>
+          </div>
+          <p class="term-definition">
+            A single always-live document inside the vault that surfaces what is active
+            right now &#8212; top priorities, hot threads, next moves. Not a to-do list; more
+            like a cockpit readout. The exact update cadence is something each operator
+            tunes &#8212; some refresh it at the end of a working block, some at the start of
+            the next one, some both.
+          </p>
+          <span class="term-practice-label">(In practice)</span>
+          <p class="term-practice-body">
+            In the AspireVue OS, the NOW doc is the daily anchor &#8212; open it first, work
+            from there. When the system is running well, you don&#8217;t have to remember where
+            you left off; it&#8217;s already named.
+          </p>
+          <div class="cross-refs" aria-label="Related terms">
+            <a class="cross-ref-pill" href="#term-vault">Vault</a>
+            <a class="cross-ref-pill" href="#term-obsidian">Obsidian</a>
+            <a class="cross-ref-pill" href="#term-wiki-link">Wiki-link</a>
+            <a class="cross-ref-pill" href="#term-memory">Memory</a>
+          </div>
+          <div class="term-divider" aria-hidden="true"></div>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div><!-- /.glossary-shell -->
+
+  <!-- WORDMARK CLOSER -->
+  <div class="wordmark-closer themable" aria-hidden="true">
+    <div class="wordmark-ticker">
+      <span class="wordmark-ticker-item">Arc'kin Endeavors<span class="sep">&#183;</span></span>
+      <span class="wordmark-ticker-item">Arc'kin Endeavors<span class="sep">&#183;</span></span>
+      <span class="wordmark-ticker-item">Arc'kin Endeavors<span class="sep">&#183;</span></span>
+      <span class="wordmark-ticker-item">Arc'kin Endeavors<span class="sep">&#183;</span></span>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="themable">
+    <div class="footer-meta">Arc'kin Endeavors &#183; AspireVue &#183; Glossary</div>
+    <div class="footer-meta">2026</div>
+  </footer>
+
+</div><!-- /.page -->
+
+<script>
+// Edit data.yaml; this block regenerates.
+var GLOSSARY_DATA = {
+  header: {
+    title: "Glossary",
+    subtitle: "This page collects the vocabulary we use most. It exists as a shared reference — not a primer — so that when a term comes up in a working session, we’re using the same definition and can move on. It will grow as the stack grows; check back when something new gets introduced."
+  },
+  clusters: [
+    { id: "interface", label: "Interface Layer", subhead: "Where you meet the system.", term_count: 5 },
+    { id: "environment", label: "Environment Layer", subhead: "The specific places work happens.", term_count: 9 },
+    { id: "model", label: "Model Layer", subhead: "What’s running underneath.", term_count: 6 },
+    { id: "capability", label: "Capability Layer", subhead: "What the model can do beyond chat.", term_count: 8 },
+    { id: "integration", label: "Integration Layer", subhead: "How the system reaches outside itself.", term_count: 3 },
+    { id: "vault", label: "Vault Layer", subhead: "Where your knowledge lives.", term_count: 4 }
+  ]
+};
+
+// Hard-coded slug map — authoritative per source table.
+// One term has a hand-overridden slug: Mobile (Remote Control & Dispatch) -> term-mobile
+var SLUG_MAP = {
+  "IDE": "term-ide",
+  "GUI": "term-gui",
+  "CLI": "term-cli",
+  "Plugin": "term-plugin",
+  "Mobile (Remote Control & Dispatch)": "term-mobile",
+  "Antigravity": "term-antigravity",
+  "Claude Code CLI": "term-claude-code-cli",
+  "Claude Code GUI": "term-claude-code-gui",
+  "Claude Chat": "term-claude-chat",
+  "Claude CoWork": "term-claude-cowork",
+  "Claude in Chrome": "term-claude-in-chrome",
+  "Claude in Obsidian": "term-claude-in-obsidian",
+  "Google Gemini": "term-google-gemini",
+  "Google AI Studio": "term-google-ai-studio",
+  "Obsidian": "term-obsidian",
+  "Tokens": "term-tokens",
+  "Context": "term-context",
+  "Context Window": "term-context-window",
+  "Session": "term-session",
+  "Usage": "term-usage",
+  "Prompt Caching": "term-prompt-caching",
+  "Agents": "term-agents",
+  "Sub-Agents": "term-sub-agents",
+  "Agent Teams": "term-agent-teams",
+  "Skills": "term-skills",
+  "Memory": "term-memory",
+  "Tools / Tool Use": "term-tools-tool-use",
+  "Slash Commands": "term-slash-commands",
+  "Hooks": "term-hooks",
+  "API": "term-api",
+  "MCP": "term-mcp",
+  "System Instructions": "term-system-instructions",
+  "Vault": "term-vault",
+  "Wiki-link": "term-wiki-link",
+  "Canvas": "term-canvas",
+  "NOW doc": "term-now-doc"
+};
+
+// ===== THEME TOGGLE =====
+(function () {
+  var btn = document.querySelector('[data-theme-toggle]');
+  if (!btn) return;
+  btn.addEventListener('click', function () {
+    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('arckin_theme', next); } catch (e) {}
+  });
+})();
+
+// ===== GRAIN SHIMMER =====
+(function () {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var turb = document.querySelector('#grain-noise feTurbulence');
+  if (!turb) return;
+  var seeds = [3, 11, 19, 27, 41, 53, 67, 73];
+  var i = 0;
+  setInterval(function () {
+    i = (i + 1) % seeds.length;
+    turb.setAttribute('seed', seeds[i]);
+  }, 100);
+})();
+
+// ===== CLUSTER NAV ACTIVE STATE =====
+(function () {
+  var sections = document.querySelectorAll('.cluster-section[id]');
+  var navItems = document.querySelectorAll('.cluster-nav-item[data-target]');
+  if (!sections.length || !navItems.length) return;
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        navItems.forEach(function (item) { item.classList.remove('active'); });
+        var match = document.querySelector('.cluster-nav-item[data-target="#' + entry.target.id + '"]');
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-10% 0px -80% 0px', threshold: 0 });
+
+  sections.forEach(function (s) { observer.observe(s); });
+})();
+
+// ===== CROSS-REF FLASH =====
+(function () {
+  document.querySelectorAll('.cross-ref-pill').forEach(function (link) {
+    link.addEventListener('click', function () {
+      var targetId = this.getAttribute('href').slice(1);
+      var target = document.getElementById(targetId);
+      if (!target) return;
+      target.classList.remove('term-highlight');
+      void target.offsetWidth;
+      target.classList.add('term-highlight');
+      target.addEventListener('animationend', function () {
+        target.classList.remove('term-highlight');
+      }, { once: true });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -683,6 +683,12 @@ footer {
 }
 .intake-submit-btn:active { transform: scale(0.98); }
 .intake-submit-btn:focus-visible { outline: 2px solid var(--accent-ember); outline-offset: 3px; }
+.intake-submit-btn[disabled] { cursor: progress; opacity: 0.85; }
+.intake-submit-btn[disabled]:hover { background: var(--bg-canvas); color: var(--fg-primary); }
+.intake-submit-btn--sent { background: var(--accent-ember); color: var(--bg-canvas); cursor: default; }
+.intake-submit-btn--sent:hover { background: var(--accent-ember); color: var(--bg-canvas); }
+.intake-submit-status.intake-submit-status--error { border-left-color: #c0392b; }
+.intake-submit-status.intake-submit-status--error .intake-submit-status-title { color: #c0392b; }
 .intake-submit-btn-arrow {
   font-family: var(--font-display);
   font-size: 14px;
@@ -1001,15 +1007,15 @@ var INTAKE_DATA = {
     html += '</section>';
   }
 
-  // Submit block — direct mailto + .md download (Tally embed retired 2026-05-14 per Boss redline).
+  // Submit block — cross-origin POST to Tally form aQKAL9 respond endpoint + parallel .md download.
   html += '<div class="intake-submit-area" id="intake-submit-area">';
   html += '<span class="intake-submit-eyebrow">(SUBMIT INTAKE)</span>';
-  html += '<button type="button" id="intake-submit-btn" class="intake-submit-btn" aria-label="Submit intake responses">';
-  html += '<span>Send to Michael</span><span class="intake-submit-btn-arrow" aria-hidden="true">→</span>';
+  html += '<button type="button" id="intake-submit-btn" class="intake-submit-btn" aria-label="Submit intake to Michael">';
+  html += '<span class="intake-submit-btn-label">Send to Michael</span><span class="intake-submit-btn-arrow" aria-hidden="true">→</span>';
   html += '</button>';
-  html += '<span class="intake-submit-helper">A copy of your responses will download as a Markdown file, and an email draft will open addressed to Michael. Send the email — that completes the submit.</span>';
+  html += '<span class="intake-submit-helper">One click and your responses are sent straight to Michael — no email, no attachment, nothing else to do. A copy of your answers also downloads to your device as a Markdown file for your own records.</span>';
   html += '<div class="intake-submit-status" id="intake-submit-status" role="status" aria-live="polite">';
-  html += '<div class="intake-submit-status-title">(SUBMITTED)</div>';
+  html += '<div class="intake-submit-status-title" id="intake-submit-status-title">(SENT)</div>';
   html += '<div class="intake-submit-status-body" id="intake-submit-status-body"></div>';
   html += '</div>';
   html += '</div>';
@@ -1022,13 +1028,66 @@ var INTAKE_DATA = {
 })();
 
 // ===== SUBMIT HANDLER =====
-var INTAKE_RECIPIENT = 'mvl@arckin.io';
-var MAILTO_BODY_CEILING = 1800; // safe URL ceiling across major mail clients
+var TALLY_FORM_ID = 'aQKAL9';
+var TALLY_RESPOND_URL = 'https://api.tally.so/forms/' + TALLY_FORM_ID + '/respond';
+var INTAKE_RECIPIENT = 'mvl@arckin.io'; // documentation only — Tally form delivers to whatever is configured in the form settings
+
+// Tally blockGroupUuids in prompt-order — mirrors data.yaml tally_block_uuids.
+// Order = sections.prompts flat: inv-01..04, sp-01..04, cb-01..04, pat-01..05, tr-01..04, mem-01..05, oq-01..04
+var TALLY_BLOCK_UUIDS = [
+  '4eacbb7a-0cd8-4fac-95bb-aea6dbe305ff', 'b1cb3bc6-2657-45ac-ab5e-5e3669d6dc8e',
+  'bd2d4219-8987-4838-ae7a-ffe3f7cee825', '9641cdf2-26f6-4c26-9259-6c50ecafdfde',
+  'f4cc2f6c-68f9-4b3a-bc5a-9154b9ea7da2', '862c81d9-70a3-4852-b3d7-e45026d4d4cc',
+  '1f69a581-3bb0-41e5-b484-811896672e58', '272ba4bb-9a3c-4c48-820c-e9197738fd45',
+  'f73a5fc2-d27e-43de-a2a4-d7ff9d61ebae', '35666e1c-6951-4fdf-a782-6c2a0bee6598',
+  '636ae929-1189-4361-98f5-4e817cc1f758', 'cdcec120-ea3a-46da-971e-b2058ebfc0e5',
+  'd159abda-93ad-44d4-899b-50075c93a166', 'b7ec2e5f-92e7-4e82-ba5a-4fdea99350b5',
+  'a5c42e80-8b07-430c-8fef-b6464243d5ee', '90ed17d8-dfbc-479b-bb01-712857209a2c',
+  '91966f84-6a83-4d63-8252-6cde4fc298f1', 'bbca3b21-e518-49c5-885f-bfe18eb20b31',
+  '5a137fd9-abbc-4115-8ed6-9fd6605ce3d6', 'fd1d15a8-5550-4813-8d45-8b19e9db9ebd',
+  '0b152f49-6db7-4663-b498-ec1f1a781b2e', 'c95c064a-4f3e-4ad8-a5d6-6dc394e2516e',
+  '5ec51ad2-902f-4b1a-9b02-243d5157835f', 'a71f5ff3-de12-4004-afa4-5e6afe6fa511',
+  '5927d808-550e-4b0f-a0a3-317d07378ff8', 'b3b70560-7828-4a71-b856-a628f598b41d',
+  '039f1ec2-e317-4705-a99b-43607943ceba', 'af2a66c1-36f1-4516-91a8-29e5e0b1e79e',
+  'b507d4c6-0395-43f3-b27c-4915b54bf748', 'f5f8d666-6c42-4908-ac12-50f31f173987'
+];
+
+function uuidv4() {
+  if (window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID();
+  // RFC4122-compliant fallback
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = (Math.random() * 16) | 0, v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
+function getFlatPrompts() {
+  var flat = [];
+  var sections = INTAKE_DATA.sections;
+  for (var s = 0; s < sections.length; s++) {
+    for (var p = 0; p < sections[s].prompts.length; p++) {
+      flat.push({ section: sections[s], prompt: sections[s].prompts[p] });
+    }
+  }
+  return flat;
+}
+
+function buildTallyResponses() {
+  var responses = {};
+  var flat = getFlatPrompts();
+  for (var i = 0; i < flat.length; i++) {
+    var uuid = TALLY_BLOCK_UUIDS[i];
+    if (!uuid) continue;
+    var el = document.getElementById(flat[i].prompt.id);
+    var answer = el ? el.value.trim() : '';
+    if (answer) responses[uuid] = answer;
+  }
+  return responses;
+}
 
 function buildIntakeMarkdown() {
   var lines = [];
-  var today = new Date();
-  var iso = today.toISOString().split('T')[0];
+  var iso = new Date().toISOString().split('T')[0];
   lines.push('# AspireVue — Day 00 Intake');
   lines.push('');
   lines.push('**Submitted:** ' + iso);
@@ -1036,7 +1095,6 @@ function buildIntakeMarkdown() {
   lines.push('');
   lines.push('---');
   lines.push('');
-
   var sections = INTAKE_DATA.sections;
   for (var s = 0; s < sections.length; s++) {
     var sec = sections[s];
@@ -1073,20 +1131,66 @@ function downloadMarkdown(text, filename) {
   setTimeout(function () { URL.revokeObjectURL(url); }, 1200);
 }
 
-function openMailto(to, subject, body) {
-  var url = 'mailto:' + encodeURIComponent(to)
-    + '?subject=' + encodeURIComponent(subject)
-    + '&body=' + encodeURIComponent(body);
-  window.location.href = url;
+function submitToTally() {
+  var payload = {
+    sessionUuid: uuidv4(),
+    respondentUuid: uuidv4(),
+    responses: buildTallyResponses(),
+    captchas: {},
+    isCompleted: true,
+    password: null
+  };
+  return fetch(TALLY_RESPOND_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then(function (res) {
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  });
 }
 
-function showSubmitStatus(htmlBody) {
+function showSubmitStatus(htmlBody, isError) {
   var box = document.getElementById('intake-submit-status');
   var body = document.getElementById('intake-submit-status-body');
+  var title = document.getElementById('intake-submit-status-title');
   if (!box || !body) return;
   body.innerHTML = htmlBody;
+  if (isError) {
+    box.classList.add('intake-submit-status--error');
+    if (title) title.textContent = '(SUBMIT FAILED)';
+  } else {
+    box.classList.remove('intake-submit-status--error');
+    if (title) title.textContent = '(SENT)';
+  }
   box.classList.add('visible');
   box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function setSubmitting(btn, label) {
+  btn.disabled = true;
+  var labelEl = btn.querySelector('.intake-submit-btn-label');
+  var arrowEl = btn.querySelector('.intake-submit-btn-arrow');
+  if (labelEl) labelEl.textContent = label;
+  if (arrowEl) arrowEl.textContent = '…';
+}
+
+function setSent(btn) {
+  btn.disabled = true;
+  btn.classList.add('intake-submit-btn--sent');
+  var labelEl = btn.querySelector('.intake-submit-btn-label');
+  var arrowEl = btn.querySelector('.intake-submit-btn-arrow');
+  if (labelEl) labelEl.textContent = 'Sent';
+  if (arrowEl) arrowEl.textContent = '✓';
+}
+
+function resetSubmit(btn) {
+  btn.disabled = false;
+  btn.classList.remove('intake-submit-btn--sent');
+  var labelEl = btn.querySelector('.intake-submit-btn-label');
+  var arrowEl = btn.querySelector('.intake-submit-btn-arrow');
+  if (labelEl) labelEl.textContent = 'Send to Michael';
+  if (arrowEl) arrowEl.textContent = '→';
 }
 
 function wireSubmit() {
@@ -1094,32 +1198,33 @@ function wireSubmit() {
   if (!btn) return;
 
   btn.addEventListener('click', function () {
-    var md = buildIntakeMarkdown();
+    if (btn.disabled) return;
+
     var iso = new Date().toISOString().split('T')[0];
     var filename = 'aspirevue-intake-' + iso + '.md';
-    var subject = 'AspireVue Day 00 Intake — ' + iso;
 
-    downloadMarkdown(md, filename);
+    setSubmitting(btn, 'Sending');
 
-    var emailBody;
-    var wasTruncated = md.length > MAILTO_BODY_CEILING;
-    if (wasTruncated) {
-      emailBody = 'AspireVue Day 00 Intake responses are attached as ' + filename + '.\n\n'
-        + 'The intake exceeded the email URL length limit, so the full Markdown has been downloaded to your device. Please attach that file before sending — no need to retype anything.\n\n'
-        + 'Submitted from: https://mvae-arc.github.io/aspirevue-wave1/intake/\nDate: ' + iso;
-    } else {
-      emailBody = md;
-    }
+    // Parallel: receipt download for Larry's records — independent of backend.
+    try {
+      var md = buildIntakeMarkdown();
+      downloadMarkdown(md, filename);
+    } catch (e) { /* receipt is parallel; do not block submit on download errors */ }
 
-    openMailto(INTAKE_RECIPIENT, subject, emailBody);
-
-    var statusHtml;
-    if (wasTruncated) {
-      statusHtml = 'Your intake downloaded as <strong>' + filename + '</strong>. An email draft to <strong>' + INTAKE_RECIPIENT + '</strong> is opening — attach the file and send to complete the submit. Your autosaved responses stay in this browser; you can return any time.';
-    } else {
-      statusHtml = 'Your intake downloaded as <strong>' + filename + '</strong> and an email draft to <strong>' + INTAKE_RECIPIENT + '</strong> is opening with your responses inline. Send the email to complete the submit. Your autosaved responses stay in this browser; you can return any time.';
-    }
-    showSubmitStatus(statusHtml);
+    // Primary: direct cross-origin POST to Tally form aQKAL9 respond endpoint.
+    submitToTally().then(function () {
+      setSent(btn);
+      showSubmitStatus(
+        'Your intake was sent to Michael. A copy of your answers also downloaded to your device as <strong>' + filename + '</strong> for your records. Nothing else to do.',
+        false
+      );
+    }).catch(function (err) {
+      resetSubmit(btn);
+      showSubmitStatus(
+        'Submission failed (' + (err && err.message ? err.message : 'network error') + '). Your answers downloaded to your device as <strong>' + filename + '</strong> — please email that file to <strong>' + INTAKE_RECIPIENT + '</strong> and Michael will take it from there. Your autosaved entries remain in this browser; you can also retry the submit.',
+        true
+      );
+    });
   });
 }
 

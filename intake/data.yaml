@@ -41,13 +41,49 @@ shared_strings:
   auto_save_label: "autosaved"
   section_counter_template: "{current} of {total}"
   return_later_text: "You can return to any section. Sloppy is fine."
-  # tally_form_id retired 2026-05-14 — Tally free-tier embed carried unavoidable
-  # "Made with Tally" branding that linked to the operator's internal account
-  # page, plus the embed's own "Next" UI conflicted with the page-level submit.
-  # Submit path now: direct mailto + .md download (handled in index.html).
-  # Recipient: mvl@arckin.io. If/when a backend pipeline replaces this, restore
-  # a form_id here and update the submit handler.
+  # Submit architecture (2026-05-14 PM, final):
+  # AspireVue-branded page (left pane brand, right pane 27 textareas + autosave)
+  # is Larry's visible surface. On submit, the 27 responses are POSTed directly
+  # to Tally form aQKAL9's respond endpoint as a true cross-origin submission.
+  # Tally collects + emails operator. Parallel .md download triggers on submit
+  # as Larry's local copy (Tally free-tier doesn't auto-respond to submitter).
+  tally_form_id: "aQKAL9"
+  tally_respond_url: "https://api.tally.so/forms/aQKAL9/respond"
   intake_recipient: "mvl@arckin.io"
+  # Tally blockGroupUuids in prompt-order, sourced 2026-05-14 from Tally form
+  # __NEXT_DATA__ schema. Order matches sections.prompts flat order:
+  # inv-01..04, sp-01..04, cb-01..04, pat-01..05, tr-01..04, mem-01..05, oq-01..04.
+  tally_block_uuids:
+    - "4eacbb7a-0cd8-4fac-95bb-aea6dbe305ff"  # inv-01 Tools & surfaces
+    - "b1cb3bc6-2657-45ac-ab5e-5e3669d6dc8e"  # inv-02 Context stack
+    - "bd2d4219-8987-4838-ae7a-ffe3f7cee825"  # inv-03 Recurring rituals
+    - "9641cdf2-26f6-4c26-9259-6c50ecafdfde"  # inv-04 Claude surfaces
+    - "f4cc2f6c-68f9-4b3a-bc5a-9154b9ea7da2"  # sp-01 Current-week friction
+    - "862c81d9-70a3-4852-b3d7-e45026d4d4cc"  # sp-02 Where it costs you most
+    - "1f69a581-3bb0-41e5-b484-811896672e58"  # sp-03 What you've already tried
+    - "272ba4bb-9a3c-4c48-820c-e9197738fd45"  # sp-04 The one that keeps coming back
+    - "f73a5fc2-d27e-43de-a2a4-d7ff9d61ebae"  # cb-01 Invisible friction
+    - "35666e1c-6951-4fdf-a782-6c2a0bee6598"  # cb-02 Where context drops
+    - "636ae929-1189-4361-98f5-4e817cc1f758"  # cb-03 The slow tax
+    - "cdcec120-ea3a-46da-971e-b2058ebfc0e5"  # cb-04 What you do instead
+    - "d159abda-93ad-44d4-899b-50075c93a166"  # pat-01 Repeating work shapes
+    - "b7ec2e5f-92e7-4e82-ba5a-4fdea99350b5"  # pat-02 Signature moves
+    - "a5c42e80-8b07-430c-8fef-b6464243d5ee"  # pat-03 Roles you occupy
+    - "90ed17d8-dfbc-479b-bb01-712857209a2c"  # pat-04 Same decision recurring
+    - "91966f84-6a83-4d63-8252-6cde4fc298f1"  # pat-05 What you'd explain differently
+    - "bbca3b21-e518-49c5-885f-bfe18eb20b31"  # tr-01 Stable inputs
+    - "5a137fd9-abbc-4115-8ed6-9fd6605ce3d6"  # tr-02 Predictable outputs
+    - "fd1d15a8-5550-4813-8d45-8b19e9db9ebd"  # tr-03 Conditions you wait for
+    - "0b152f49-6db7-4663-b498-ec1f1a781b2e"  # tr-04 Manual handoff that shouldn't be
+    - "c95c064a-4f3e-4ad8-a5d6-6dc394e2516e"  # mem-01 Where you store things
+    - "5ec51ad2-902f-4b1a-9b02-243d5157835f"  # mem-02 Can't find when needed
+    - "a71f5ff3-de12-4004-afa4-5e6afe6fa511"  # mem-03 Context that drops between sessions
+    - "5927d808-550e-4b0f-a0a3-317d07378ff8"  # mem-04 Lives only in your head
+    - "b3b70560-7828-4a71-b856-a628f598b41d"  # mem-05 Plaud capture vs. uncapture
+    - "039f1ec2-e317-4705-a99b-43607943ceba"  # oq-01 What you're not sure how to ask
+    - "af2a66c1-36f1-4516-91a8-29e5e0b1e79e"  # oq-02 30-day horizon
+    - "b507d4c6-0395-43f3-b27c-4915b54bf748"  # oq-03 What you've been avoiding
+    - "f5f8d666-6c42-4908-ac12-50f31f173987"  # oq-04 What you'd build if it would work
 
 left_pane:
   title: "Intake."

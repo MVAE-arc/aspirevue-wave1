@@ -41,8 +41,13 @@ shared_strings:
   auto_save_label: "autosaved"
   section_counter_template: "{current} of {total}"
   return_later_text: "You can return to any section. Sloppy is fine."
-  tally_form_id: "aQKAL9"
-  # Replace tally_form_id with the live Tally embed ID once the form is created.
+  # tally_form_id retired 2026-05-14 — Tally free-tier embed carried unavoidable
+  # "Made with Tally" branding that linked to the operator's internal account
+  # page, plus the embed's own "Next" UI conflicted with the page-level submit.
+  # Submit path now: direct mailto + .md download (handled in index.html).
+  # Recipient: mvl@arckin.io. If/when a backend pipeline replaces this, restore
+  # a form_id here and update the submit handler.
+  intake_recipient: "mvl@arckin.io"
 
 left_pane:
   title: "Intake."

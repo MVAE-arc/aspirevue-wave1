@@ -646,6 +646,84 @@ footer {
   .pane--right { padding-left: 20px; padding-right: 20px; }
   .nav-back { display: none; }
 }
+
+/* ===== SUBMIT INTAKE BLOCK ===== */
+.intake-submit-area {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--hairline);
+}
+.intake-submit-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 16px;
+  display: block;
+}
+.intake-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-primary);
+  background: var(--bg-canvas);
+  border: 1px solid var(--accent-ember);
+  padding: 16px 26px;
+  cursor: pointer;
+  transition: background-color 220ms var(--ease-out), color 220ms var(--ease-out), transform 100ms var(--ease-out);
+}
+.intake-submit-btn:hover {
+  background: var(--accent-ember);
+  color: var(--bg-canvas);
+}
+.intake-submit-btn:active { transform: scale(0.98); }
+.intake-submit-btn:focus-visible { outline: 2px solid var(--accent-ember); outline-offset: 3px; }
+.intake-submit-btn-arrow {
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0;
+  opacity: 0.8;
+}
+.intake-submit-helper {
+  display: block;
+  margin-top: 14px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  max-width: 52ch;
+  line-height: 1.6;
+}
+.intake-submit-status {
+  display: none;
+  margin-top: 28px;
+  padding: 18px 22px;
+  border-left: 2px solid var(--accent-ember);
+  background: var(--bg-pane);
+}
+.intake-submit-status.visible { display: block; animation: arrive 540ms var(--ease-out) both; }
+.intake-submit-status-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-ember);
+  margin-bottom: 10px;
+}
+.intake-submit-status-body {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--fg-primary);
+  opacity: 0.9;
+}
+.intake-submit-status-body strong { color: var(--fg-primary); opacity: 1; font-weight: 500; }
 </style>
 </head>
 <body>
@@ -923,39 +1001,127 @@ var INTAKE_DATA = {
     html += '</section>';
   }
 
-  // Tally embed at bottom — only renders the submit row when a real form ID is wired.
-  var hasTallyId = INTAKE_DATA.tally_form_id && INTAKE_DATA.tally_form_id.indexOf('PLACEHOLDER') === -1;
-  if (hasTallyId) {
-    html += '<div id="tally-embed-area" style="margin-top:40px;padding-top:32px;border-top:1px solid var(--hairline);">';
-    html += '<div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--fg-muted);margin-bottom:16px;">(SUBMIT ALL)</div>';
-    html += '<iframe data-tally-src="https://tally.so/embed/' + INTAKE_DATA.tally_form_id + '?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="320" frameborder="0" marginheight="0" marginwidth="0" referrerpolicy="strict-origin-when-cross-origin" title="AspireVue Intake — Submit" style="min-height:320px;display:block;"></iframe>';
-    html += '</div>';
-  }
+  // Submit block — direct mailto + .md download (Tally embed retired 2026-05-14 per Boss redline).
+  html += '<div class="intake-submit-area" id="intake-submit-area">';
+  html += '<span class="intake-submit-eyebrow">(SUBMIT INTAKE)</span>';
+  html += '<button type="button" id="intake-submit-btn" class="intake-submit-btn" aria-label="Submit intake responses">';
+  html += '<span>Send to Michael</span><span class="intake-submit-btn-arrow" aria-hidden="true">→</span>';
+  html += '</button>';
+  html += '<span class="intake-submit-helper">A copy of your responses will download as a Markdown file, and an email draft will open addressed to Michael. Send the email — that completes the submit.</span>';
+  html += '<div class="intake-submit-status" id="intake-submit-status" role="status" aria-live="polite">';
+  html += '<div class="intake-submit-status-title">(SUBMITTED)</div>';
+  html += '<div class="intake-submit-status-body" id="intake-submit-status-body"></div>';
+  html += '</div>';
+  html += '</div>';
 
   container.innerHTML = html;
 
-  // Append Tally embed loader after writing embed iframe to DOM.
-  // Mirrors /day-00/ pattern: prefers Tally.loadEmbeds(), falls back to manual src-set on iframe[data-tally-src]:not([src]).
-  (function() {
-    var w = "https://tally.so/widgets/embed.js";
-    var inflate = function() {
-      if (typeof Tally !== 'undefined') { Tally.loadEmbeds(); return; }
-      var pending = document.querySelectorAll('iframe[data-tally-src]:not([src])');
-      for (var i = 0; i < pending.length; i++) {
-        pending[i].src = pending[i].getAttribute('data-tally-src');
-      }
-    };
-    if (typeof Tally !== 'undefined') { inflate(); return; }
-    if (document.querySelector('script[src="' + w + '"]')) { inflate(); return; }
-    var s = document.createElement('script');
-    s.src = w;
-    s.onload = s.onerror = inflate;
-    document.body.appendChild(s);
-  })();
-
+  wireSubmit();
   // Wire autosave cue
   wireSaveCue();
 })();
+
+// ===== SUBMIT HANDLER =====
+var INTAKE_RECIPIENT = 'mvl@arckin.io';
+var MAILTO_BODY_CEILING = 1800; // safe URL ceiling across major mail clients
+
+function buildIntakeMarkdown() {
+  var lines = [];
+  var today = new Date();
+  var iso = today.toISOString().split('T')[0];
+  lines.push('# AspireVue — Day 00 Intake');
+  lines.push('');
+  lines.push('**Submitted:** ' + iso);
+  lines.push('**Source:** https://mvae-arc.github.io/aspirevue-wave1/intake/');
+  lines.push('');
+  lines.push('---');
+  lines.push('');
+
+  var sections = INTAKE_DATA.sections;
+  for (var s = 0; s < sections.length; s++) {
+    var sec = sections[s];
+    lines.push('## ' + sec.title);
+    lines.push('');
+    lines.push('_' + sec.layer_label + '_');
+    lines.push('');
+    for (var p = 0; p < sec.prompts.length; p++) {
+      var prompt = sec.prompts[p];
+      var el = document.getElementById(prompt.id);
+      var answer = el ? el.value.trim() : '';
+      lines.push('### ' + prompt.sub_label + ' (' + prompt.id + ')');
+      lines.push('');
+      lines.push('> ' + prompt.text);
+      lines.push('');
+      lines.push(answer ? answer : '_[no response]_');
+      lines.push('');
+    }
+    lines.push('---');
+    lines.push('');
+  }
+  return lines.join('\n');
+}
+
+function downloadMarkdown(text, filename) {
+  var blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function () { URL.revokeObjectURL(url); }, 1200);
+}
+
+function openMailto(to, subject, body) {
+  var url = 'mailto:' + encodeURIComponent(to)
+    + '?subject=' + encodeURIComponent(subject)
+    + '&body=' + encodeURIComponent(body);
+  window.location.href = url;
+}
+
+function showSubmitStatus(htmlBody) {
+  var box = document.getElementById('intake-submit-status');
+  var body = document.getElementById('intake-submit-status-body');
+  if (!box || !body) return;
+  body.innerHTML = htmlBody;
+  box.classList.add('visible');
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function wireSubmit() {
+  var btn = document.getElementById('intake-submit-btn');
+  if (!btn) return;
+
+  btn.addEventListener('click', function () {
+    var md = buildIntakeMarkdown();
+    var iso = new Date().toISOString().split('T')[0];
+    var filename = 'aspirevue-intake-' + iso + '.md';
+    var subject = 'AspireVue Day 00 Intake — ' + iso;
+
+    downloadMarkdown(md, filename);
+
+    var emailBody;
+    var wasTruncated = md.length > MAILTO_BODY_CEILING;
+    if (wasTruncated) {
+      emailBody = 'AspireVue Day 00 Intake responses are attached as ' + filename + '.\n\n'
+        + 'The intake exceeded the email URL length limit, so the full Markdown has been downloaded to your device. Please attach that file before sending — no need to retype anything.\n\n'
+        + 'Submitted from: https://mvae-arc.github.io/aspirevue-wave1/intake/\nDate: ' + iso;
+    } else {
+      emailBody = md;
+    }
+
+    openMailto(INTAKE_RECIPIENT, subject, emailBody);
+
+    var statusHtml;
+    if (wasTruncated) {
+      statusHtml = 'Your intake downloaded as <strong>' + filename + '</strong>. An email draft to <strong>' + INTAKE_RECIPIENT + '</strong> is opening — attach the file and send to complete the submit. Your autosaved responses stay in this browser; you can return any time.';
+    } else {
+      statusHtml = 'Your intake downloaded as <strong>' + filename + '</strong> and an email draft to <strong>' + INTAKE_RECIPIENT + '</strong> is opening with your responses inline. Send the email to complete the submit. Your autosaved responses stay in this browser; you can return any time.';
+    }
+    showSubmitStatus(statusHtml);
+  });
+}
 
 function escHtml(str) {
   if (!str) return '';

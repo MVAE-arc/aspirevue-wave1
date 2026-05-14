@@ -41,12 +41,16 @@ shared_strings:
   auto_save_label: "autosaved"
   section_counter_template: "{current} of {total}"
   return_later_text: "You can return to any section. Sloppy is fine."
-  # tally_form_id retired 2026-05-14 — Tally free-tier embed carried unavoidable
-  # "Made with Tally" branding that linked to the operator's internal account
-  # page, plus the embed's own "Next" UI conflicted with the page-level submit.
-  # Submit path now: direct mailto + .md download (handled in index.html).
-  # Recipient: mvl@arckin.io. If/when a backend pipeline replaces this, restore
-  # a form_id here and update the submit handler.
+  # Tally hosted form aQKAL9 IS the intake surface. Boss-locked 2026-05-14 PM.
+  # /intake/index.html on this repo redirects to https://tally.so/r/aQKAL9.
+  # Tally handles rendering, autosave, validation, submission, and email
+  # delivery to the operator (configured in the Tally form itself, not here).
+  # The 27 textarea / 30 prompt content in this YAML is retained for reference
+  # — it documents the Tally form's structure and is the canonical source for
+  # the companion PDF (generate-pdf.js). Edits to prompt content should still
+  # happen here; Tally form fields are maintained in parallel by the operator.
+  tally_form_id: "aQKAL9"
+  tally_form_url: "https://tally.so/r/aQKAL9"
   intake_recipient: "mvl@arckin.io"
 
 left_pane:

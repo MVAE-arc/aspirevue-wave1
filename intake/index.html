@@ -5,1204 +5,142 @@
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AspireVue · Intake</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta http-equiv="refresh" content="0; url=https://tally.so/r/aQKAL9">
+<link rel="canonical" href="https://tally.so/r/aQKAL9">
 <script>
-  (function(){
+  (function () {
     try {
       var stored = localStorage.getItem('arckin_theme');
       var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      var theme = stored || (systemDark ? 'dark' : 'light');
-      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.setAttribute('data-theme', stored || (systemDark ? 'dark' : 'light'));
     } catch (e) {
       document.documentElement.setAttribute('data-theme', 'dark');
     }
   })();
 </script>
 <style>
-@charset "UTF-8";
-
-/* ===== TOKEN SYSTEM ===== */
-:root {
-  --font-display: 'Syne', 'Space Grotesk', sans-serif;
-  --font-sans:    'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
-  --font-mono:    'JetBrains Mono', 'Menlo', 'Monaco', monospace;
-
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-
-  --grain-opacity: 0.15;
-  --max-w: 1280px;
-  --page-pad: 28px;
-}
-
-[data-theme="dark"] {
-  --bg-canvas: #1c1c1c;
-  --bg-pane:   #212121;
-  --fg-primary: #B0BEC5;
-  --fg-muted:   rgba(176, 190, 197, 0.45);
-  --fg-faint:   rgba(176, 190, 197, 0.18);
-  --accent-ember: #FFAB40;
-  --hairline:   #263238;
-  --grain-opacity: 0.15;
-}
-
-[data-theme="light"] {
-  --bg-canvas: #F4F1EC;
-  --bg-pane:   #EDEBE6;
-  --fg-primary: #263238;
-  --fg-muted:   rgba(38, 50, 56, 0.55);
-  --fg-faint:   rgba(38, 50, 56, 0.18);
-  --accent-ember: #B8590A;
-  --hairline:   rgba(38, 50, 56, 0.22);
-  --grain-opacity: 0.10;
-}
-
-/* ===== RESET ===== */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
-body {
-  background: var(--bg-canvas);
-  color: var(--fg-primary);
-  font-family: var(--font-sans);
-  font-size: 14px;
-  line-height: 1.65;
-  font-weight: 400;
-  min-height: 100vh;
-  overflow-x: hidden;
-  transition:
-    background-color 320ms var(--ease-out),
-    color 320ms var(--ease-out);
-}
-a { color: inherit; text-decoration: none; }
-button { font: inherit; color: inherit; background: none; border: none; padding: 0; cursor: pointer; }
-:focus-visible { outline: 2px solid var(--accent-ember); outline-offset: 3px; border-radius: 2px; }
-:focus:not(:focus-visible) { outline: none; }
-
-.themable {
-  transition:
-    background-color 320ms var(--ease-out),
-    color 320ms var(--ease-out),
-    border-color 320ms var(--ease-out);
-}
-
-/* ===== GRAIN MEMBRANE ===== */
-.grain-overlay {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 9999;
-  pointer-events: none;
-  opacity: var(--grain-opacity);
-  mix-blend-mode: overlay;
-  transition: opacity 320ms var(--ease-out);
-}
-.grain-overlay svg { width: 100%; height: 100%; display: block; }
-
-/* ===== ARRIVE ANIMATION ===== */
-@keyframes arrive {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.arrive { animation: arrive 540ms var(--ease-out) both; }
-.d1 { animation-delay: 60ms; }
-.d2 { animation-delay: 140ms; }
-.d3 { animation-delay: 220ms; }
-.d4 { animation-delay: 300ms; }
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-  .arrive { animation: none; opacity: 1; transform: none; }
-  html { scroll-behavior: auto; }
-}
-
-/* ===== PAGE FRAME ===== */
-.page {
-  position: relative;
-  max-width: var(--max-w);
-  margin: 0 auto;
-  padding: 0 var(--page-pad);
-  z-index: 1;
-}
-
-/* ===== NAV ===== */
-.nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 22px 0;
-  border-bottom: 1px solid var(--hairline);
-}
-.nav-brand {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-  user-select: none;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.nav-brand-divider {
-  color: var(--accent-ember);
-  opacity: 0.55;
-  transition: opacity 200ms var(--ease-out);
-}
-.nav-brand-product { color: var(--fg-primary); opacity: 0.9; }
-.nav-controls {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-}
-.nav-back {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.10em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-  transition: color 200ms var(--ease-out);
-}
-.nav-back:hover { color: var(--fg-primary); }
-
-.theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.10em;
-  user-select: none;
-  transition: transform 100ms var(--ease-out);
-}
-.theme-toggle:active { transform: scale(0.97); }
-.theme-toggle-opt {
-  color: var(--fg-primary);
-  opacity: 0.32;
-  transition: opacity 220ms var(--ease-out);
-}
-.theme-toggle:hover .theme-toggle-opt { opacity: 0.55; }
-[data-theme="light"] .theme-toggle-opt[data-opt="light"],
-[data-theme="dark"]  .theme-toggle-opt[data-opt="dark"]  { opacity: 1; }
-[data-theme="light"] .theme-toggle:hover .theme-toggle-opt[data-opt="light"],
-[data-theme="dark"]  .theme-toggle:hover .theme-toggle-opt[data-opt="dark"]  { opacity: 1; }
-
-/* ===== TWO-PANE LAYOUT ===== */
-.shell {
-  display: grid;
-  grid-template-columns: 40% 60%;
-  min-height: calc(100vh - 64px);
-  align-items: stretch;
-  margin-top: 8px;
-}
-.pane {
-  position: relative;
-  padding: 56px 40px 40px;
-  display: flex;
-  flex-direction: column;
-}
-.pane--left {
-  background: var(--bg-canvas);
-  border-right: 1px solid var(--hairline);
-  padding-right: 56px;
-}
-.pane--right {
-  background: var(--bg-pane);
-  padding-left: 56px;
-}
-
-/* ===== LEFT PANE — BRAND META ===== */
-.brand-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-}
-.brand-stack-line { display: block; }
-.brand-stack-product { color: var(--fg-primary); }
-.brand-stack-anchor { color: var(--fg-primary); }
-.brand-stack-anchor::after {
-  content: '.';
-  color: var(--accent-ember);
-}
-
-.left-title {
-  margin-top: 56px;
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(40px, 5.2vw, 64px);
-  line-height: 1.0;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  color: var(--fg-primary);
-}
-.left-title em {
-  font-family: var(--font-sans);
-  font-weight: 400;
-  font-style: italic;
-  font-size: clamp(28px, 3.6vw, 44px);
-  letter-spacing: -0.01em;
-  color: var(--accent-ember);
-  text-transform: none;
-  display: block;
-  margin-top: 8px;
-}
-
-.left-prose {
-  margin-top: 32px;
-  font-family: var(--font-sans);
-  font-size: 14px;
-  line-height: 1.75;
-  color: var(--fg-primary);
-  opacity: 0.88;
-  max-width: 52ch;
-}
-.left-prose p + p { margin-top: 14px; }
-
-.hairline-divider {
-  width: 120px;
-  height: 1px;
-  background: var(--hairline);
-  margin: 40px 0 24px;
-}
-
-.trust-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-.trust-node {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  transition: transform 240ms var(--ease-out);
-}
-@media (hover: hover) and (pointer: fine) {
-  .trust-node:hover { transform: translateX(3px); }
-}
-.trust-node-label {
-  position: relative;
-  display: inline-block;
-}
-.trust-node-label::before {
-  content: '';
-  position: absolute;
-  left: -10px;
-  top: 50%;
-  width: 4px;
-  height: 1px;
-  background: var(--accent-ember);
-  opacity: 0;
-  transform: translateY(-50%) scaleX(0);
-  transform-origin: right;
-  transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out);
-}
-@media (hover: hover) and (pointer: fine) {
-  .trust-node:hover .trust-node-label::before { opacity: 1; transform: translateY(-50%) scaleX(1); }
-}
-.trust-node-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--accent-ember);
-}
-.trust-node-desc {
-  font-family: var(--font-sans);
-  font-size: 13px;
-  color: var(--fg-primary);
-  opacity: 0.78;
-  max-width: 38ch;
-}
-
-/* ===== BUILD-ORDER DIAGRAM ===== */
-.build-order {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  opacity: 0.72;
-  padding: 24px 0;
-  margin-top: 40px;
-}
-
-.build-node {
-  display: grid;
-  grid-template-columns: 12px 1fr;
-  grid-template-rows: auto auto;
-  column-gap: 12px;
-  row-gap: 2px;
-  position: relative;
-}
-
-.build-node-connector {
-  position: absolute;
-  left: 5px;
-  top: 20px;
-  width: 1px;
-  height: 28px;
-  background: var(--hairline);
-}
-
-.build-node-marker {
-  grid-column: 1;
-  grid-row: 1 / span 2;
-  width: 4px;
-  height: 4px;
-  border-radius: 0;
-  margin-top: 5px;
-  background: var(--fg-faint);
-  align-self: start;
-  justify-self: center;
-}
-
-.build-node--active .build-node-marker {
-  background: var(--accent-ember);
-}
-
-.build-node-label {
-  grid-column: 2;
-  grid-row: 1;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--fg-faint);
-  line-height: 1.4;
-}
-
-.build-node--active .build-node-label {
-  color: var(--accent-ember);
-}
-
-.build-node-name {
-  grid-column: 2;
-  grid-row: 2;
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--fg-faint);
-  line-height: 1.4;
-  margin-bottom: 16px;
-}
-
-.build-node--active .build-node-name {
-  color: var(--fg-primary);
-}
-
-.build-node:last-child .build-node-name {
-  margin-bottom: 0;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .build-node:hover .build-node-label,
-  .build-node:hover .build-node-name {
+  :root {
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --max-w: 720px;
+  }
+  [data-theme="dark"] {
+    --bg-canvas: #1c1c1c;
+    --fg-primary: #B0BEC5;
+    --fg-muted:   rgba(176, 190, 197, 0.55);
+    --accent-ember: #FFAB40;
+    --hairline:   #263238;
+  }
+  [data-theme="light"] {
+    --bg-canvas: #F4F1EC;
+    --fg-primary: #263238;
+    --fg-muted:   rgba(38, 50, 56, 0.55);
+    --accent-ember: #B8590A;
+    --hairline:   rgba(38, 50, 56, 0.22);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg-canvas);
     color: var(--fg-primary);
-    transition: color 240ms var(--ease-out);
+    font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.65;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    transition: background-color 320ms var(--ease-out), color 320ms var(--ease-out);
   }
-}
-
-/* Wireframe SVG motif */
-.wireframe-motif {
-  margin-top: auto;
-  padding-top: 56px;
-  display: flex;
-  align-items: flex-end;
-  opacity: 0.22;
-}
-.wireframe-motif svg {
-  width: 128px;
-  height: 128px;
-  stroke: var(--fg-primary);
-  fill: none;
-  stroke-width: 0.5;
-  transform-origin: center;
-  animation: wireframe-rotate 90s linear infinite;
-}
-@keyframes wireframe-rotate {
-  to { transform: rotate(360deg); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .wireframe-motif svg { animation: none; }
-}
-
-/* ===== RIGHT PANE — INTAKE SECTIONS ===== */
-.right-pane-header {
-  position: relative;
-  margin-bottom: 8px;
-}
-
-.save-cue {
-  position: sticky;
-  top: 22px;
-  float: right;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-  display: none;
-}
-.save-cue.visible { display: block; }
-
-.right-section-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-  margin-bottom: 24px;
-}
-
-/* ===== SECTION PACING ===== */
-.intake-section {
-  padding-top: 72px;
-  padding-bottom: 56px;
-}
-
-.section-rule {
-  width: 100%;
-  height: 1px;
-  background: var(--hairline);
-  margin-bottom: 32px;
-}
-
-.section-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-  margin-bottom: 20px;
-}
-
-.section-heading {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(22px, 2.4vw, 28px);
-  line-height: 1.08;
-  letter-spacing: -0.015em;
-  text-transform: uppercase;
-  color: var(--fg-primary);
-  margin-bottom: 20px;
-}
-
-.section-prose {
-  font-family: var(--font-sans);
-  font-size: 14px;
-  line-height: 1.75;
-  color: var(--fg-primary);
-  opacity: 0.88;
-  max-width: 56ch;
-  margin-bottom: 16px;
-}
-
-.field-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-  margin-bottom: 16px;
-  display: block;
-}
-
-/* ===== TEXTAREA ===== */
-textarea {
-  min-height: 160px;
-  resize: vertical;
-  width: 100%;
-  background: var(--bg-pane);
-  border: 1px solid var(--hairline);
-  border-radius: 0;
-  padding: 14px 16px;
-  font-family: var(--font-sans);
-  font-size: 14px;
-  line-height: 1.75;
-  color: var(--fg-primary);
-  transition: border-color 220ms var(--ease-out);
-  display: block;
-  margin-bottom: 28px;
-}
-textarea:focus {
-  border-color: color-mix(in oklch, var(--accent-ember) 55%, var(--hairline));
-  outline: none;
-}
-textarea:focus-visible {
-  outline: 2px solid var(--accent-ember);
-  outline-offset: 3px;
-  border-radius: 2px;
-}
-
-.field-wrapper {
-  position: relative;
-  margin-bottom: 4px;
-}
-.char-count {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  color: var(--fg-faint);
-  position: absolute;
-  bottom: 36px;
-  right: 10px;
-  pointer-events: none;
-  display: none;
-}
-.char-count.visible { display: block; }
-
-/* ===== MONUMENTAL WORDMARK CLOSER ===== */
-.wordmark-closer {
-  position: relative;
-  margin-top: 24px;
-  padding: 56px 0 32px;
-  border-top: 1px solid var(--hairline);
-  overflow: hidden;
-  pointer-events: none;
-  user-select: none;
-}
-.wordmark-ticker {
-  display: flex;
-  width: max-content;
-  animation: ticker-slide 32s linear infinite;
-  will-change: transform;
-}
-.wordmark-ticker-item {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(72px, 13vw, 168px);
-  letter-spacing: -0.025em;
-  text-transform: uppercase;
-  color: var(--fg-primary);
-  opacity: 0.09;
-  white-space: nowrap;
-  line-height: 1;
-  flex-shrink: 0;
-  padding-right: 0.4em;
-}
-.wordmark-ticker-item .sep {
-  color: var(--accent-ember);
-  opacity: 0.55;
-  padding: 0 0.15em;
-}
-[data-theme="light"] .wordmark-ticker-item { opacity: 0.07; }
-@keyframes ticker-slide {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(-50%, 0, 0); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .wordmark-ticker { animation: none; transform: translateX(-2vw); }
-}
-
-/* ===== FOOTER ===== */
-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 22px 0 32px;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-.footer-meta {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-}
-
-/* ===== MOBILE ===== */
-@media (max-width: 960px) {
-  .shell {
-    grid-template-columns: 1fr;
-    min-height: 0;
+  .card {
+    max-width: var(--max-w);
+    width: 100%;
+    text-align: left;
+    border: 1px solid var(--hairline);
+    padding: 40px 36px;
   }
-  .pane--left {
-    border-right: none;
-    border-bottom: 1px solid var(--hairline);
-    padding: 40px 24px 32px;
+  .brand {
+    font-family: 'Syne', 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 32px;
   }
-  .pane--right {
-    padding: 40px 24px 32px;
+  .brand-divider { color: var(--accent-ember); opacity: 0.7; margin: 0 8px; }
+  .brand-product { color: var(--fg-primary); opacity: 0.9; }
+  h1 {
+    font-family: 'Syne', 'Space Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
   }
-  .left-title { margin-top: 32px; }
-  .wireframe-motif { display: none; }
-  .intake-section {
-    padding-top: 56px;
-    padding-bottom: 40px;
+  h1 em {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--accent-ember);
+    text-transform: none;
+    display: block;
+    margin-top: 6px;
+    font-size: clamp(20px, 2.8vw, 28px);
   }
-  .nav-controls { gap: 16px; }
-}
-
-@media (max-width: 540px) {
-  :root { --page-pad: 18px; }
-  .pane--left,
-  .pane--right { padding-left: 20px; padding-right: 20px; }
-  .nav-back { display: none; }
-}
-
-/* ===== SUBMIT INTAKE BLOCK ===== */
-.intake-submit-area {
-  margin-top: 40px;
-  padding-top: 32px;
-  border-top: 1px solid var(--hairline);
-}
-.intake-submit-eyebrow {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-  margin-bottom: 16px;
-  display: block;
-}
-.intake-submit-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--fg-primary);
-  background: var(--bg-canvas);
-  border: 1px solid var(--accent-ember);
-  padding: 16px 26px;
-  cursor: pointer;
-  transition: background-color 220ms var(--ease-out), color 220ms var(--ease-out), transform 100ms var(--ease-out);
-}
-.intake-submit-btn:hover {
-  background: var(--accent-ember);
-  color: var(--bg-canvas);
-}
-.intake-submit-btn:active { transform: scale(0.98); }
-.intake-submit-btn:focus-visible { outline: 2px solid var(--accent-ember); outline-offset: 3px; }
-.intake-submit-btn-arrow {
-  font-family: var(--font-display);
-  font-size: 14px;
-  letter-spacing: 0;
-  opacity: 0.8;
-}
-.intake-submit-helper {
-  display: block;
-  margin-top: 14px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-  max-width: 52ch;
-  line-height: 1.6;
-}
-.intake-submit-status {
-  display: none;
-  margin-top: 28px;
-  padding: 18px 22px;
-  border-left: 2px solid var(--accent-ember);
-  background: var(--bg-pane);
-}
-.intake-submit-status.visible { display: block; animation: arrive 540ms var(--ease-out) both; }
-.intake-submit-status-title {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--accent-ember);
-  margin-bottom: 10px;
-}
-.intake-submit-status-body {
-  font-family: var(--font-sans);
-  font-size: 13px;
-  line-height: 1.7;
-  color: var(--fg-primary);
-  opacity: 0.9;
-}
-.intake-submit-status-body strong { color: var(--fg-primary); opacity: 1; font-weight: 500; }
+  p {
+    margin-top: 16px;
+    line-height: 1.7;
+  }
+  a.cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fg-primary);
+    background: transparent;
+    border: 1px solid var(--accent-ember);
+    padding: 14px 22px;
+    text-decoration: none;
+    transition: background-color 220ms var(--ease-out), color 220ms var(--ease-out);
+  }
+  a.cta:hover { background: var(--accent-ember); color: var(--bg-canvas); }
+  .meta {
+    margin-top: 32px;
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
 </style>
 </head>
 <body>
-
-<!-- GRAIN MEMBRANE -->
-<div class="grain-overlay" aria-hidden="true">
-  <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-    <filter id="grain-noise">
-      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch" seed="7"/>
-      <feColorMatrix type="matrix" values="
-        0 0 0 0 0
-        0 0 0 0 0
-        0 0 0 0 0
-        0 0 0 0.9 0"/>
-    </filter>
-    <rect width="100%" height="100%" filter="url(#grain-noise)"/>
-  </svg>
-</div>
-
-<div class="page">
-
-  <!-- NAV -->
-  <nav class="nav themable" role="navigation" aria-label="Page navigation">
-    <div class="nav-brand">
-      <span>Arc'kin</span>
-      <span class="nav-brand-divider">—</span>
-      <span class="nav-brand-product">AspireVue</span>
+  <main class="card">
+    <div class="brand">
+      Arc'kin
+      <span class="brand-divider">—</span>
+      <span class="brand-product">AspireVue</span>
+      <span class="brand-divider">—</span>
+      Intake
     </div>
-    <div class="nav-controls">
-      <a class="nav-back" href="../day-00/">(DAY 00)</a>
-      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle color scheme">
-        <span class="theme-toggle-opt" data-opt="light">(LIGHT)</span>
-        <span class="theme-toggle-opt" data-opt="dark">(DARK)</span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- TWO-PANE SHELL -->
-  <main class="shell">
-
-    <!-- LEFT PANE -->
-    <section class="pane pane--left themable" aria-labelledby="left-title">
-      <div class="brand-stack arrive">
-        <span class="brand-stack-line">Arc'kin —</span>
-        <span class="brand-stack-line brand-stack-product">AspireVue</span>
-        <span class="brand-stack-line brand-stack-anchor">Intake</span>
-      </div>
-
-      <h1 class="left-title arrive d1" id="left-title">
-        Intake.
-        <em>In your words.</em>
-      </h1>
-
-      <div class="left-prose arrive d2">
-        <p>Seven sections. Start wherever feels most alive — there's no right order. Each answer stands on its own.</p>
-        <p>You can return to any section. Sloppy is fine. The point is your thinking, not the polish.</p>
-      </div>
-
-      <div class="hairline-divider arrive d3" aria-hidden="true"></div>
-
-      <div class="trust-stack arrive d3">
-        <div class="trust-node">
-          <span class="trust-node-label">(RECEIVED)</span>
-          <span class="trust-node-desc">It lands within minutes.</span>
-        </div>
-        <div class="trust-node">
-          <span class="trust-node-label">(LOGGED)</span>
-          <span class="trust-node-desc">Added to Day 1 shaping in the background.</span>
-        </div>
-        <div class="trust-node">
-          <span class="trust-node-label">(DAY 1 READY)</span>
-          <span class="trust-node-desc">Come back. Add more. Both are fine.</span>
-        </div>
-      </div>
-
-      <!-- BUILD-ORDER DIAGRAM: inserted between trust-stack and wireframe motif -->
-      <div class="build-order arrive d4" aria-label="Build sequence: Layer 0 through Layer 3">
-        <div class="build-node build-node--active" data-layer="0">
-          <span class="build-node-marker" aria-hidden="true"></span>
-          <span class="build-node-label">LAYER 0</span>
-          <span class="build-node-name">Audit</span>
-          <div class="build-node-connector" aria-hidden="true"></div>
-        </div>
-        <div class="build-node" data-layer="1">
-          <span class="build-node-marker" aria-hidden="true"></span>
-          <span class="build-node-label">LAYER 1</span>
-          <span class="build-node-name">Skills</span>
-          <div class="build-node-connector" aria-hidden="true"></div>
-        </div>
-        <div class="build-node" data-layer="2">
-          <span class="build-node-marker" aria-hidden="true"></span>
-          <span class="build-node-label">LAYER 2</span>
-          <span class="build-node-name">Automations</span>
-          <div class="build-node-connector" aria-hidden="true"></div>
-        </div>
-        <div class="build-node" data-layer="3">
-          <span class="build-node-marker" aria-hidden="true"></span>
-          <span class="build-node-label">LAYER 3</span>
-          <span class="build-node-name">Memory</span>
-          <!-- no connector on last node -->
-        </div>
-      </div>
-
-      <div class="wireframe-motif arrive d4" aria-hidden="true">
-        <svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="64" cy="64" r="56"/>
-          <circle cx="64" cy="64" r="36"/>
-          <circle cx="64" cy="64" r="2" fill="currentColor"/>
-          <line x1="0" y1="64" x2="128" y2="64"/>
-          <line x1="64" y1="0" x2="64" y2="128"/>
-          <line x1="20" y1="20" x2="108" y2="108"/>
-          <line x1="108" y1="20" x2="20" y2="108"/>
-        </svg>
-      </div>
-    </section>
-
-    <!-- RIGHT PANE -->
-    <section class="pane pane--right themable" aria-labelledby="intake-heading">
-
-      <div class="right-pane-header">
-        <div id="save-cue" class="save-cue" aria-live="polite" aria-atomic="true"></div>
-        <div class="right-section-label arrive">(THE INTAKE)</div>
-      </div>
-
-      <div id="intake-form" class="arrive d1">
-        <!-- Sections rendered by JS from embedded data -->
-      </div>
-
-    </section>
-
+    <h1>
+      Intake.
+      <em>Opening your form…</em>
+    </h1>
+    <p>If you are not redirected automatically, use the link below.</p>
+    <a class="cta" href="https://tally.so/r/aQKAL9">
+      <span>Continue to intake</span>
+      <span aria-hidden="true">→</span>
+    </a>
+    <div class="meta">Form hosted at tally.so</div>
   </main>
-
-  <!-- MONUMENTAL WORDMARK CLOSER -->
-  <div class="wordmark-closer themable" aria-hidden="true">
-    <div class="wordmark-ticker">
-      <span class="wordmark-ticker-item">Arc'kin Endeavors<span class="sep">·</span></span>
-      <span class="wordmark-ticker-item">Arc'kin Endeavors<span class="sep">·</span></span>
-      <span class="wordmark-ticker-item">Arc'kin Endeavors<span class="sep">·</span></span>
-      <span class="wordmark-ticker-item">Arc'kin Endeavors<span class="sep">·</span></span>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <footer class="themable">
-    <div class="footer-meta">Arc'kin Endeavors · AspireVue · Intake</div>
-    <div class="footer-meta">2026</div>
-  </footer>
-
-</div>
-
-<script>
-// ===== INTAKE DATA =====
-// Embedded at build time from data.yaml. Edit data.yaml; this block regenerates.
-var INTAKE_DATA = {
-  sections: [
-    {
-      section_id: "inventory",
-      title: "Inventory",
-      layer_label: "Layer 0 — Audit",
-      preamble: "Before anything else, a read of what’s already running. You’ve built a real stack — tools, contexts, rhythms — and this section maps it before we map the gaps.",
-      prompts: [
-        { id: "inv-01", text: "Walk me through the tools you’re running day-to-day — Claude, Plaud, Obsidian, anything else you’d miss if it disappeared. Not an exhaustive list; just the ones that are actually in the rotation.", sub_label: "Tools & surfaces" },
-        { id: "inv-02", text: "You mentioned a 14-file Claude stack. What’s in there — rough categories is fine. And if there’s a voice OS or system prompt you’re running alongside it, describe that too.", sub_label: "Context stack" },
-        { id: "inv-03", text: "What does a standard client week look like operationally? Not the coaching itself — the work that runs the week. Prep, documentation, follow-through, whatever the rhythm is.", sub_label: "Recurring rituals" },
-        { id: "inv-04", text: "Where does Claude actually show up in your work right now? What are you asking it? Where does it do the job, and where does it fall short?", sub_label: "Claude surfaces" }
-      ]
-    },
-    {
-      section_id: "sharp-pains",
-      title: "Sharp Pains",
-      layer_label: "feeds Layers 1–3",
-      preamble: "What’s actually broken this week. Not chronic background noise — the specific friction you’ve run into recently enough to still be annoyed about it.",
-      prompts: [
-        { id: "sp-01", text: "What has slowed you down or stopped you cold in the last five working days? Name it as specifically as you can.", sub_label: "Current-week friction" },
-        { id: "sp-02", text: "Of the friction you just named, which one costs you the most — time, attention, client quality, or something else?", sub_label: "Where it costs you most" },
-        { id: "sp-03", text: "Have you already tried to fix it? What happened?", sub_label: "What you’ve already tried" },
-        { id: "sp-04", text: "Is there a problem you’ve solved more than twice that showed up again? Describe it.", sub_label: "The one that keeps coming back" }
-      ]
-    },
-    {
-      section_id: "chronic-bleeds",
-      title: "Chronic Bleeds",
-      layer_label: "feeds Layers 1–3",
-      preamble: "Slow leaks. The stuff you’ve stopped noticing because it’s always been there — but it’s still costing you something every week.",
-      prompts: [
-        { id: "cb-01", text: "What work do you do manually every single time, without questioning it?", sub_label: "Invisible friction" },
-        { id: "cb-02", text: "Where do you lose the thread between sessions — between a recording and a document, between a client conversation and the follow-up, between your own thinking and what you can actually find later?", sub_label: "Where context drops" },
-        { id: "cb-03", text: "What takes you longer than it should? Not because of a one-time problem — because of how the work is currently structured.", sub_label: "The slow tax" },
-        { id: "cb-04", text: "When you sit down to do focused work, what do you end up doing instead? Where does the time actually go before you get to the thing that matters?", sub_label: "What you do instead of the real work" }
-      ]
-    },
-    {
-      section_id: "patterns",
-      title: "Patterns",
-      layer_label: "Layer 1 — Skills feedstock",
-      preamble: "Not the unique situations — the ones that repeat. Work shapes that show up more than three times a week, enough that you’ve developed a feel for how they go.",
-      prompts: [
-        { id: "pat-01", text: "What types of work do you find yourself doing over and over — same basic shape, even if the content changes? Think about the last two weeks.", sub_label: "Repeating work shapes" },
-        { id: "pat-02", text: "Is there a way you approach a specific kind of problem that you’d describe as distinctly yours — a read, a reframe, an order of operations that works for you and wouldn’t work the same way for someone else?", sub_label: "Signature moves" },
-        { id: "pat-03", text: "Beyond ‘executive coach’ — what roles do you actually occupy in a given client week? Strategist, analyst, sounding board, writer, something else?", sub_label: "Roles you occupy" },
-        { id: "pat-04", text: "What’s a judgment call you make repeatedly? Not a hard decision — a well-worn one. The kind where you already know the answer before you’ve finished thinking through it.", sub_label: "Where the same decision keeps coming up" },
-        { id: "pat-05", text: "If you were describing your approach to a brand-new client, what’s the one thing you’d say that you don’t bother explaining to clients who’ve been with you for a while?", sub_label: "What you’d explain differently" }
-      ]
-    },
-    {
-      section_id: "triggers",
-      title: "Triggers",
-      layer_label: "Layer 2 — Automations feedstock",
-      preamble: "Patterns with a clear on-ramp. A specific condition arrives, and a specific sequence of work begins. Describe the condition — not what tool should handle it.",
-      prompts: [
-        { id: "tr-01", text: "What kinds of events or arrivals reliably kick off a defined sequence of work? A new client decision, a recording that just synced, an email that requires a specific type of response?", sub_label: "Stable inputs" },
-        { id: "tr-02", text: "After that sequence runs, what does the result look like? A document, an email, an updated file, a follow-up scheduled?", sub_label: "Predictable outputs" },
-        { id: "tr-03", text: "Are there things you hold in your head until a specific condition is met — and when that condition arrives, you act? Describe the condition and what it releases.", sub_label: "Conditions you wait for" },
-        { id: "tr-04", text: "Where in your current workflow do you act as the relay — passing something from one place to another, doing nothing except the move itself?", sub_label: "Where the handoff is manual but shouldn’t be" }
-      ]
-    },
-    {
-      section_id: "memory",
-      title: "Memory",
-      layer_label: "Layer 3 — Obsidian/retrieval feedstock",
-      preamble: "What you store, where it lives, and whether you can find it when you need it. The gap between what you’ve captured and what you can actually retrieve is usually the real problem.",
-      prompts: [
-        { id: "mem-01", text: "Where does information about your clients and your practice actually live right now? Not where you’d like it to live — where it actually lands.", sub_label: "Where you store things" },
-        { id: "mem-02", text: "Name one piece of information you regularly need that takes too long to locate, or that you often can’t find at all.", sub_label: "What you can’t find when you need it" },
-        { id: "mem-03", text: "When you return to a client after a gap — a few days, a week — what do you have to reconstruct from scratch? What doesn’t carry forward automatically?", sub_label: "Context that drops between sessions" },
-        { id: "mem-04", text: "What knowledge about how you work, how you read clients, or how you make decisions exists only inside your own head and hasn’t been captured anywhere?", sub_label: "What lives only in your head" },
-        { id: "mem-05", text: "You’re using Plaud to capture voice. What’s getting recorded? What do you wish was also being captured that currently isn’t?", sub_label: "What Plaud is capturing vs. what it isn’t" }
-      ]
-    },
-    {
-      section_id: "open-questions",
-      title: "Open Questions",
-      layer_label: "ideation & synthesis",
-      preamble: "The section with no wrong answers. Anything you’ve been sitting with — things you haven’t figured out how to ask, things you want to know in thirty days that you don’t know now.",
-      prompts: [
-        { id: "oq-01", text: "Is there something about your practice — how it runs, where it’s going, what it needs — that you haven’t been able to put into a clear question yet? Take a shot at it here.", sub_label: "What you’re not sure how to ask" },
-        { id: "oq-02", text: "If we’re sixty days into this and you look back at today, what do you most want to have figured out by then?", sub_label: "What you’d want to know in 30 days" },
-        { id: "oq-03", text: "Is there a part of how your practice operates that you’ve been putting off thinking about? What is it?", sub_label: "What you’ve been avoiding" },
-        { id: "oq-04", text: "If you knew the technical side was handled, what’s the thing you’d want your practice to do that it can’t do right now?", sub_label: "What you’d build if you knew it would work" }
-      ]
-    }
-  ],
-  tally_form_id: "aQKAL9"
-};
-
-// ===== RENDER SECTIONS =====
-(function () {
-  var container = document.getElementById('intake-form');
-  if (!container) return;
-
-  var sections = INTAKE_DATA.sections;
-  var html = '';
-
-  for (var s = 0; s < sections.length; s++) {
-    var sec = sections[s];
-    var sectionNum = String(s + 1).padStart(2, '0');
-
-    html += '<section class="intake-section" id="section-' + sec.section_id + '" aria-labelledby="heading-' + sec.section_id + '">';
-    html += '<div class="section-rule" aria-hidden="true"></div>';
-    html += '<div class="section-label">(' + sectionNum + ' / ' + String(sections.length).padStart(2, '0') + ') ' + sec.layer_label + '</div>';
-    html += '<h2 class="section-heading" id="heading-' + sec.section_id + '">' + sec.title + '</h2>';
-    html += '<p class="section-prose">' + escHtml(sec.preamble) + '</p>';
-
-    for (var p = 0; p < sec.prompts.length; p++) {
-      var prompt = sec.prompts[p];
-      var fieldId = prompt.id;
-
-      html += '<label class="field-label" for="' + fieldId + '">' + escHtml(prompt.sub_label) + '</label>';
-      html += '<p class="section-prose">' + escHtml(prompt.text) + '</p>';
-      html += '<div class="field-wrapper">';
-      html += '<textarea id="' + fieldId + '" name="' + fieldId + '" rows="6" data-section="' + sec.section_id + '" autocomplete="off" spellcheck="true"></textarea>';
-      html += '</div>';
-    }
-
-    html += '</section>';
-  }
-
-  // Submit block — direct mailto + .md download (Tally embed retired 2026-05-14 per Boss redline).
-  html += '<div class="intake-submit-area" id="intake-submit-area">';
-  html += '<span class="intake-submit-eyebrow">(SUBMIT INTAKE)</span>';
-  html += '<button type="button" id="intake-submit-btn" class="intake-submit-btn" aria-label="Submit intake responses">';
-  html += '<span>Send to Michael</span><span class="intake-submit-btn-arrow" aria-hidden="true">→</span>';
-  html += '</button>';
-  html += '<span class="intake-submit-helper">A copy of your responses will download as a Markdown file, and an email draft will open addressed to Michael. Send the email — that completes the submit.</span>';
-  html += '<div class="intake-submit-status" id="intake-submit-status" role="status" aria-live="polite">';
-  html += '<div class="intake-submit-status-title">(SUBMITTED)</div>';
-  html += '<div class="intake-submit-status-body" id="intake-submit-status-body"></div>';
-  html += '</div>';
-  html += '</div>';
-
-  container.innerHTML = html;
-
-  wireSubmit();
-  // Wire autosave cue
-  wireSaveCue();
-})();
-
-// ===== SUBMIT HANDLER =====
-var INTAKE_RECIPIENT = 'mvl@arckin.io';
-var MAILTO_BODY_CEILING = 1800; // safe URL ceiling across major mail clients
-
-function buildIntakeMarkdown() {
-  var lines = [];
-  var today = new Date();
-  var iso = today.toISOString().split('T')[0];
-  lines.push('# AspireVue — Day 00 Intake');
-  lines.push('');
-  lines.push('**Submitted:** ' + iso);
-  lines.push('**Source:** https://mvae-arc.github.io/aspirevue-wave1/intake/');
-  lines.push('');
-  lines.push('---');
-  lines.push('');
-
-  var sections = INTAKE_DATA.sections;
-  for (var s = 0; s < sections.length; s++) {
-    var sec = sections[s];
-    lines.push('## ' + sec.title);
-    lines.push('');
-    lines.push('_' + sec.layer_label + '_');
-    lines.push('');
-    for (var p = 0; p < sec.prompts.length; p++) {
-      var prompt = sec.prompts[p];
-      var el = document.getElementById(prompt.id);
-      var answer = el ? el.value.trim() : '';
-      lines.push('### ' + prompt.sub_label + ' (' + prompt.id + ')');
-      lines.push('');
-      lines.push('> ' + prompt.text);
-      lines.push('');
-      lines.push(answer ? answer : '_[no response]_');
-      lines.push('');
-    }
-    lines.push('---');
-    lines.push('');
-  }
-  return lines.join('\n');
-}
-
-function downloadMarkdown(text, filename) {
-  var blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(function () { URL.revokeObjectURL(url); }, 1200);
-}
-
-function openMailto(to, subject, body) {
-  var url = 'mailto:' + encodeURIComponent(to)
-    + '?subject=' + encodeURIComponent(subject)
-    + '&body=' + encodeURIComponent(body);
-  window.location.href = url;
-}
-
-function showSubmitStatus(htmlBody) {
-  var box = document.getElementById('intake-submit-status');
-  var body = document.getElementById('intake-submit-status-body');
-  if (!box || !body) return;
-  body.innerHTML = htmlBody;
-  box.classList.add('visible');
-  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
-
-function wireSubmit() {
-  var btn = document.getElementById('intake-submit-btn');
-  if (!btn) return;
-
-  btn.addEventListener('click', function () {
-    var md = buildIntakeMarkdown();
-    var iso = new Date().toISOString().split('T')[0];
-    var filename = 'aspirevue-intake-' + iso + '.md';
-    var subject = 'AspireVue Day 00 Intake — ' + iso;
-
-    downloadMarkdown(md, filename);
-
-    var emailBody;
-    var wasTruncated = md.length > MAILTO_BODY_CEILING;
-    if (wasTruncated) {
-      emailBody = 'AspireVue Day 00 Intake responses are attached as ' + filename + '.\n\n'
-        + 'The intake exceeded the email URL length limit, so the full Markdown has been downloaded to your device. Please attach that file before sending — no need to retype anything.\n\n'
-        + 'Submitted from: https://mvae-arc.github.io/aspirevue-wave1/intake/\nDate: ' + iso;
-    } else {
-      emailBody = md;
-    }
-
-    openMailto(INTAKE_RECIPIENT, subject, emailBody);
-
-    var statusHtml;
-    if (wasTruncated) {
-      statusHtml = 'Your intake downloaded as <strong>' + filename + '</strong>. An email draft to <strong>' + INTAKE_RECIPIENT + '</strong> is opening — attach the file and send to complete the submit. Your autosaved responses stay in this browser; you can return any time.';
-    } else {
-      statusHtml = 'Your intake downloaded as <strong>' + filename + '</strong> and an email draft to <strong>' + INTAKE_RECIPIENT + '</strong> is opening with your responses inline. Send the email to complete the submit. Your autosaved responses stay in this browser; you can return any time.';
-    }
-    showSubmitStatus(statusHtml);
-  });
-}
-
-function escHtml(str) {
-  if (!str) return '';
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-// ===== SAVE CUE =====
-function wireSaveCue() {
-  var cue = document.getElementById('save-cue');
-  if (!cue) return;
-
-  var firstKeystroke = false;
-  var saveTimer = null;
-
-  document.addEventListener('input', function (e) {
-    if (e.target.tagName !== 'TEXTAREA') return;
-
-    if (!firstKeystroke) {
-      firstKeystroke = true;
-      cue.classList.add('visible');
-    }
-
-    cue.textContent = '(SAVING...)';
-
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(function () {
-      var now = new Date();
-      var h = now.getHours();
-      var m = now.getMinutes();
-      var ampm = h >= 12 ? 'PM' : 'AM';
-      var h12 = h % 12 || 12;
-      var mm = m < 10 ? '0' + m : String(m);
-      cue.textContent = '(SAVED ' + h12 + ':' + mm + ' ' + ampm + ')';
-      // Persist to localStorage keyed by field id
-      try {
-        var el = e.target;
-        localStorage.setItem('intake_' + el.id, el.value);
-      } catch (_) {}
-    }, 800);
-  });
-
-  // Restore persisted values on load
-  try {
-    var textareas = document.querySelectorAll('textarea[id]');
-    for (var i = 0; i < textareas.length; i++) {
-      var saved = localStorage.getItem('intake_' + textareas[i].id);
-      if (saved) textareas[i].value = saved;
-    }
-  } catch (_) {}
-}
-
-// ===== THEME TOGGLE =====
-(function () {
-  var btn = document.querySelector('[data-theme-toggle]');
-  if (!btn) return;
-  btn.addEventListener('click', function () {
-    var current = document.documentElement.getAttribute('data-theme') || 'dark';
-    var next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    try { localStorage.setItem('arckin_theme', next); } catch (e) {}
-  });
-})();
-
-// ===== GRAIN SHIMMER =====
-(function () {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var turb = document.querySelector('#grain-noise feTurbulence');
-  if (!turb) return;
-  var seeds = [3, 11, 19, 27, 41, 53, 67, 73];
-  var i = 0;
-  setInterval(function () {
-    i = (i + 1) % seeds.length;
-    turb.setAttribute('seed', seeds[i]);
-  }, 100);
-})();
-</script>
-
+  <script>
+    window.location.replace('https://tally.so/r/aQKAL9');
+  </script>
 </body>
 </html>
